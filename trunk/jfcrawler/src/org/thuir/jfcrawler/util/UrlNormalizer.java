@@ -3,6 +3,8 @@ package org.thuir.jfcrawler.util;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
+import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.PageUrl;
 
 /**
@@ -10,6 +12,9 @@ import org.thuir.jfcrawler.data.PageUrl;
  *
  */
 public final class UrlNormalizer {
+	private static final Logger logger = 
+		Logger.getLogger(UrlNormalizer.class);
+
 	private static final String PROTOCOL_HTTP  = "http";
 	private static final String PROTOCOL_HTTPS = "https";
 	private static final String PROTOCOL_FTP   = "ftp";
@@ -35,7 +40,7 @@ public final class UrlNormalizer {
 	private static final String EQUAL      = "=";
 
 	public static void normalizeUrl(PageUrl pageUrl, String url) 
-	throws BadUrlFormatException{
+	throws BadUrlFormatException{		
 		String protocol = null;
 		String host = null;
 		String port = null;
@@ -52,6 +57,7 @@ public final class UrlNormalizer {
 		//Email
 		pointer = urlbuf.indexOf(EMAIL);
 		if(pointer >= 0) {
+			logger.error("bad url:" + url);
 			throw new BadUrlFormatException(
 					UrlNormalizer.class.getName(), "url : " + url);
 		}
@@ -73,6 +79,7 @@ public final class UrlNormalizer {
 		} else if(protocol.equalsIgnoreCase(PROTOCOL_FTP)) {
 			pro = INDEX_FTP;
 		} else {
+			logger.error("bad url:" + url);
 			throw new BadUrlFormatException(
 					UrlNormalizer.class.getName(), "url : " + url);
 		}
@@ -97,6 +104,7 @@ public final class UrlNormalizer {
 				port = PORT[pro];
 
 		} else {
+			logger.error("bad url:" + url);
 			throw new BadUrlFormatException(
 					UrlNormalizer.class.getName(), "url : " + url);
 		}

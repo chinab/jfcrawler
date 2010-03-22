@@ -1,7 +1,7 @@
 package org.thuir.jfcrawler.test;
 
+import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.PageUrl;
-import org.thuir.jfcrawler.util.BadUrlFormatException;
 
 import junit.framework.TestCase;
 
