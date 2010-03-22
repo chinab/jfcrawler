@@ -3,7 +3,6 @@ package org.thuir.jfcrawler.data;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.thuir.jfcrawler.util.BadUrlFormatException;
 import org.thuir.jfcrawler.util.UrlNormalizer;
 
 /**
@@ -35,6 +34,11 @@ public class PageUrl implements Serializable {
 	
 	public PageUrl() {
 		params = new ArrayList<UrlParameter>();
+	}
+	
+	public PageUrl(String url) throws BadUrlFormatException {
+		this();
+		this.generateNormalizedUrl(url);
 	}
 
 	/**
