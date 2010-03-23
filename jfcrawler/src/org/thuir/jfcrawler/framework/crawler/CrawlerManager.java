@@ -29,7 +29,7 @@ public class CrawlerManager {
 		blockingCrawlerQueue = new ArrayBlockingQueue<ICrawler>(maxSize);
 	}
 	
-	public boolean addCrawler(ICrawler crawler) {
+	public synchronized boolean addCrawler(ICrawler crawler) {
 		if( curSize++ < maxSize ) {
 			logger.error("crawler queue is full");
 			return false;

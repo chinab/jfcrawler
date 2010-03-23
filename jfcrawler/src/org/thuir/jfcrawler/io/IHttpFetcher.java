@@ -11,5 +11,7 @@ import org.thuir.jfcrawler.framework.fetcher.FetchingException;
 public interface IHttpFetcher {
 	
 	public void fetchPage(ICrawler crawler, Page page) throws FetchingException;
+	
+	public void stopFetcher();
 
 }
