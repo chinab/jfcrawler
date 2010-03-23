@@ -1,4 +1,4 @@
-package org.thuir.jfcrawler.framework.fetcher;
+package org.thuir.jfcrawler.io.nio;
 
 import java.io.IOException;
 
@@ -6,14 +6,16 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.thuir.jfcrawler.data.Page;
-import org.thuir.jfcrawler.io.nio.FetchContextExchange;
+import org.thuir.jfcrawler.framework.crawler.ICrawler;
+import org.thuir.jfcrawler.framework.fetcher.FetchingException;
+import org.thuir.jfcrawler.io.IHttpFetcher;
 import org.thuir.jfcrawler.util.CrawlerConfiguration;
 
 /**
  * @author ruKyzhc
  *
  */
-public class NonBlockingFetcher implements IFetcher {
+public class NonBlockingFetcher implements IHttpFetcher {
 	private static final Logger logger =
 		Logger.getLogger(NonBlockingFetcher.class);
 	
@@ -45,10 +47,11 @@ public class NonBlockingFetcher implements IFetcher {
 		}
 	}
 
-	private FetcherStatus status = FetcherStatus.UNKNOWN;
+	private NonBlockingFetcherStatus status = NonBlockingFetcherStatus.UNKNOWN;
 
 	@Override
-	public void fetchPage(Page page) throws FetchingException {
+	public void fetchPage(ICrawler crawler, Page page) 
+	throws FetchingException {
 		if(client == null) {
 			logger.fatal("HttpClient has not been deployed.");
 			throw new FetchingException(status);
@@ -58,7 +61,7 @@ public class NonBlockingFetcher implements IFetcher {
 		exchange.setURL(page.getPageUrl().getUrl());
 
 		try {
-			status = FetcherStatus.SENDING_EXCHANGE;
+			status = NonBlockingFetcherStatus.SENDING_EXCHANGE;
 			client.send(exchange);
 		} catch (IOException e) {
 			logger.error("Error [" + 

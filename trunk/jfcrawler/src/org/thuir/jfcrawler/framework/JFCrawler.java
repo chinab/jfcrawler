@@ -6,14 +6,12 @@ package org.thuir.jfcrawler.framework;
  */
 public class JFCrawler {
 	public JFCrawler() {
-		
 	}
 	
 	public void initialize() {
 	}
 	
 	public void start() {
-		
 	}
 	
 	public static void main(String[] args) {

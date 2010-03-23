@@ -1,10 +1,10 @@
-package org.thuir.jfcrawler.framework.fetcher;
+package org.thuir.jfcrawler.io.nio;
 
 /**
  * @author ruKyzhc
  *
  */
-public enum FetcherStatus {
+public enum NonBlockingFetcherStatus {
 	UNKNOWN,
 	
 	INITIALIZING,

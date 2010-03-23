@@ -1,6 +1,6 @@
 package org.thuir.jfcrawler.framework.fetcher;
 
-import org.thuir.jfcrawler.data.Page;
+import org.thuir.jfcrawler.framework.crawler.ICrawler;
 
 /**
  * @author ruKyzhc
@@ -8,6 +8,8 @@ import org.thuir.jfcrawler.data.Page;
  */
 public interface IFetcher {
 	
-	public void fetchPage(Page page) throws FetchingException;
+	public boolean isFetching();
+
+	public void startCrawler(ICrawler crawler);
 
 }

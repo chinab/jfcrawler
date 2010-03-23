@@ -5,9 +5,9 @@ import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.PageUrl;
 import org.thuir.jfcrawler.framework.extractor.IExtractor;
 import org.thuir.jfcrawler.framework.fetcher.FetchingException;
-import org.thuir.jfcrawler.framework.fetcher.IFetcher;
 import org.thuir.jfcrawler.framework.filter.IFilter;
 import org.thuir.jfcrawler.framework.frontier.IFrontier;
+import org.thuir.jfcrawler.io.IHttpFetcher;
 
 /**
  * @author ruKyzhc
@@ -44,23 +44,25 @@ public class CrawlingUnit implements ICrawler {
 	}
 
 	@Override
-	public void fetch(IFetcher fetcher) {
+	public void fetch(IHttpFetcher fetcher) {
 		if(curPage == null)
 			return;
 		
 		try {
-			fetcher.fetchPage(curPage);
+			fetcher.fetchPage(this, curPage);
 		} catch (FetchingException e) {
-			//TODO
+			logger.error("Error [" + e.getMessage() + 
+					"] occurs when crawling [" + 
+					curPage.getPageUrl().getUrl() + "], status [" + 
+					e.getFetcherStatus().name() + "]");
 		}		
 	}
 
 	@Override
 	public void preFetch() {
-		PageUrl url; 
+		PageUrl url;
 		if(filter.shouldVisit(url = frontier.getNextUrl())) {
 			curPage = new Page(url);
-			curPage.setCrawler(this);
 		} else {
 			curPage = null;
 		}

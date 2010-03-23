@@ -42,5 +42,12 @@ public class CrawlerConfiguration {
 	public static int getMaxTimeout() {
 		return maxTimeout;
 	}
+	
+	//crawler unit
+	private static int maxCrawlingUnit =
+		config.getInt("maxCrawlingUnit", 100);
+	public static int getMaxCrawlingUnit() {
+		return maxCrawlingUnit;
+	}
 
 }
