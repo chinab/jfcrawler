@@ -1,5 +1,6 @@
 package org.thuir.jfcrawler.framework.fetcher;
 
+import org.thuir.jfcrawler.io.nio.NonBlockingFetcherStatus;
 import org.thuir.jfcrawler.util.AbstractJFCrawlerException;
 
 /**
@@ -9,22 +10,22 @@ import org.thuir.jfcrawler.util.AbstractJFCrawlerException;
 public class FetchingException extends AbstractJFCrawlerException {
 	private static final long serialVersionUID = -9024367626545224043L;
 	
-	private FetcherStatus fetcherStatus = null;
+	private NonBlockingFetcherStatus fetcherStatus = null;
 	
-	public FetchingException(FetcherStatus status) {
+	public FetchingException(NonBlockingFetcherStatus status) {
 		this.fetcherStatus = status;
 	}
 	
 	/**
 	 * @return the fetcherStatus
 	 */
-	public FetcherStatus getFetcherStatus() {
+	public NonBlockingFetcherStatus getFetcherStatus() {
 		return fetcherStatus;
 	}
 	/**
 	 * @param fetcherStatus the fetcherStatus to set
 	 */
-	public void setFetcherStatus(FetcherStatus fetcherStatus) {
+	public void setFetcherStatus(NonBlockingFetcherStatus fetcherStatus) {
 		this.fetcherStatus = fetcherStatus;
 	}
 

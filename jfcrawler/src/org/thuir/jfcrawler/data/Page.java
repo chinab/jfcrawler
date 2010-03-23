@@ -1,7 +1,5 @@
 package org.thuir.jfcrawler.data;
 
-import org.thuir.jfcrawler.framework.crawler.ICrawler;
-
 /**
  * @author ruKyzhc
  *
@@ -12,8 +10,6 @@ public class Page {
 	
 	private String html = null;
 	
-	private ICrawler crawler = null;
-	
 	public Page() {
 		
 	}
@@ -21,10 +17,6 @@ public class Page {
 	public Page(PageUrl url) {
 		this();
 		this.url = url;
-	}
-	
-	public void setCrawler(ICrawler crawler) {
-		this.crawler = crawler;
 	}
 	
 	public void setPageUrl(PageUrl url) {
@@ -41,6 +33,5 @@ public class Page {
 	
 	public void load(String html) {
 		this.html = html;
-		this.crawler.postFetch(this);
 	}
 }

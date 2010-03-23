@@ -2,28 +2,33 @@ package org.thuir.jfcrawler.framework.fetcher;
 
 import org.apache.log4j.Logger;
 import org.thuir.jfcrawler.framework.crawler.ICrawler;
+import org.thuir.jfcrawler.io.IHttpFetcher;
+import org.thuir.jfcrawler.io.nio.NonBlockingFetcher;
 
 /**
  * @author ruKyzhc
  *
  */
-public class FetchingThread extends Thread {
+public class FetchingThread extends Thread implements IFetcher {
 	private static final Logger logger =
 		Logger.getLogger(FetchingThread.class.getName());
-	
-	private final static int CHECKING_INTERVAL = 10000;
-	
+
+	private final static int DEFAULT_INTERVAL = 10000;
+
 	private static int threadCount = 0;
 	private final int threadId = threadCount++;
 
-	private static IFetcher fetcher = null;
+	private Boolean isFetching = false;
+
+	private static IHttpFetcher fetcher = null;
 	static {
 		fetcher = new NonBlockingFetcher();
 	}
-	
+
 	private ICrawler crawler = null;
-	
-	public void setCrawler(ICrawler crawler) {
+
+	@Override
+	public void startCrawler(ICrawler crawler) {
 		this.crawler = crawler;
 	}
 
@@ -31,16 +36,27 @@ public class FetchingThread extends Thread {
 	public void run() {
 		logger.info("Fetching Thread [" + threadId + "] starts to working.");
 		while(true) {
-			if(crawler == null) {
-				try {
-					Thread.sleep(CHECKING_INTERVAL);
-					continue;
-				} catch (InterruptedException e) {
+			synchronized(isFetching) {
+				if(crawler != null) {
+					isFetching = true;
+					crawler.preFetch();
+					crawler.fetch(fetcher);
+				} else {
+					try {
+						isFetching = false;
+						Thread.sleep(DEFAULT_INTERVAL);
+					} catch (InterruptedException e) {
+					}
 				}
 			}
-			crawler.preFetch();
-			crawler.fetch(fetcher);
 		}
 	}
-	
+
+	@Override
+	public boolean isFetching() {
+		synchronized(isFetching) {
+			return isFetching;
+		}
+	}
+
 }
