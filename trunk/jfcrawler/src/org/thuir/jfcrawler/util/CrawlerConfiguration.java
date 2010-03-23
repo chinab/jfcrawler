@@ -50,4 +50,11 @@ public class CrawlerConfiguration {
 		return maxCrawlingUnit;
 	}
 
+	//fetching thread
+	private static int defaultInterval =
+		config.getInt("defaultInterval", 10000);
+	public static int getDefaultInterval() {
+		return defaultInterval;
+	}
+
 }

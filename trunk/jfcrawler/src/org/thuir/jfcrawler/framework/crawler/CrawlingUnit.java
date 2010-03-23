@@ -5,6 +5,7 @@ import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.PageUrl;
 import org.thuir.jfcrawler.framework.extractor.IExtractor;
 import org.thuir.jfcrawler.framework.fetcher.FetchingException;
+import org.thuir.jfcrawler.framework.fetcher.IFetcher;
 import org.thuir.jfcrawler.framework.filter.IFilter;
 import org.thuir.jfcrawler.framework.frontier.IFrontier;
 import org.thuir.jfcrawler.io.IHttpFetcher;
@@ -24,6 +25,10 @@ public class CrawlingUnit implements ICrawler {
 	private Boolean isCrawling = false;
 
 	private Page curPage = null;
+
+	private CrawlerEventListener listener;
+
+	private IFetcher fetcher;
 
 	public void setFilter(IFilter filter) {
 		this.filter = filter;
@@ -72,6 +77,9 @@ public class CrawlingUnit implements ICrawler {
 	public void postFetch(Page page) {
 		frontier.scheduleNewUrls(
 				extractor.extractUrls(page));
+		
+		CrawlerEvent event = new CrawlerEvent(fetcher);
+		listener.onCrawlingFinish(event);
 	}
 
 	@Override
@@ -86,6 +94,16 @@ public class CrawlingUnit implements ICrawler {
 		synchronized(isCrawling) {
 			isCrawling = b;
 		}
+	}
+
+	@Override
+	public void addCrawlerEventListener(CrawlerEventListener listener) {
+		this.listener = listener;	
+	}
+
+	@Override
+	public void setFetcher(IFetcher fetcher) {
+		this.fetcher = fetcher;		
 	}
 
 }

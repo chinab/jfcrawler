@@ -1,6 +1,7 @@
 package org.thuir.jfcrawler.framework.crawler;
 
 import org.thuir.jfcrawler.data.Page;
+import org.thuir.jfcrawler.framework.fetcher.IFetcher;
 import org.thuir.jfcrawler.io.IHttpFetcher;
 
 /**
@@ -10,6 +11,10 @@ import org.thuir.jfcrawler.io.IHttpFetcher;
 public interface ICrawler {
 	
 	public void init();
+	
+	public void setFetcher(IFetcher fetcher);
+	
+	public void addCrawlerEventListener(CrawlerEventListener listener);
 
 	//fetch process
 	public void preFetch();
@@ -22,5 +27,7 @@ public interface ICrawler {
 	public boolean isCrawling();
 	
 	public void setIsCrawling(boolean b);
+	
+	
 
 }

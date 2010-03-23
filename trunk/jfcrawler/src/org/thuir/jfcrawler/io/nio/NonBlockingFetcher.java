@@ -73,4 +73,13 @@ public class NonBlockingFetcher implements IHttpFetcher {
 
 	}
 
+	@Override
+	public void stopFetcher() {
+		try {
+			client.stop();
+		} catch (Exception e) {
+			logger.fatal("error when closing http client");
+		}		
+	}
+
 }
