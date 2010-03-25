@@ -2,7 +2,7 @@ package org.thuir.jfcrawler.io;
 
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.framework.crawler.ICrawler;
-import org.thuir.jfcrawler.framework.fetcher.FetchingException;
+import org.thuir.jfcrawler.io.nio.FetchingException;
 
 /**
  * @author ruKyzhc

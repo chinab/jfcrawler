@@ -6,9 +6,9 @@ import org.thuir.jfcrawler.data.Page;
  * @author ruKyzhc
  *
  */
-public interface IExtractor {
+public abstract class AbstractExtractor implements IExtractor {
 
-	public Object[] extractUrls(Page page);
-	
+	@Override
+	public abstract Object[] extractUrls(Page page);
+
 }
-
