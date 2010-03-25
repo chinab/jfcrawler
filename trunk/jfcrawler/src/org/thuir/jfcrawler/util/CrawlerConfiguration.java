@@ -28,16 +28,16 @@ public class CrawlerConfiguration {
 	//fetcher
 	private static int maxConnectionsPerAddress =
 		config.getInt("maxConnectionsPerAddress", 10);
-	private static int maxThreadPoolSize = 
-		config.getInt("maxThreadPoolSize", 10);
+	private static int maxHttpFetcherThreadPoolSize = 
+		config.getInt("maxHttpFetcherThreadPoolSize", 10);
 	private static int maxTimeout =
 		config.getInt("maxTimeout", 30000);
 
 	public static int getMaxConnectionsPerAddress() {
 		return maxConnectionsPerAddress;
 	}
-	public static int getMaxThreadPoolSize() {
-		return maxThreadPoolSize;
+	public static int getMaxHttpFetcherThreadPoolSize() {
+		return maxHttpFetcherThreadPoolSize;
 	}
 	public static int getMaxTimeout() {
 		return maxTimeout;
@@ -53,8 +53,16 @@ public class CrawlerConfiguration {
 	//fetching thread
 	private static int defaultInterval =
 		config.getInt("defaultInterval", 10000);
+	private static int maxFetcherThreadPoolSize = 
+		config.getInt("maxFetcherThreadPoolSize", 10);
+	
 	public static int getDefaultInterval() {
 		return defaultInterval;
 	}
+	public static int getMaxFetcherThreadPoolSize() {
+		return maxFetcherThreadPoolSize;
+	}
+	
+	
 
 }

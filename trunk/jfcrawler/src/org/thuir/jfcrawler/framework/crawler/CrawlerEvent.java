@@ -1,20 +1,18 @@
 package org.thuir.jfcrawler.framework.crawler;
 
-import org.thuir.jfcrawler.framework.fetcher.IFetcher;
-
 /**
  * @author ruKyzhc
  *
  */
 public class CrawlerEvent {
-	private IFetcher fetcher;
+	private AbstractCrawler crawler;
 	
-	public CrawlerEvent(IFetcher fetcher) {
-		this.fetcher = fetcher;
+	public CrawlerEvent(AbstractCrawler crawler) {
+		this.crawler = crawler;
 	}
 	
-	public IFetcher getFetcher() {
-		return fetcher;		
+	public ICrawler getCrawler() {
+		return crawler;		
 	}
 	
 }

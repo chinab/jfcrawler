@@ -7,7 +7,6 @@ import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.framework.crawler.ICrawler;
-import org.thuir.jfcrawler.framework.fetcher.FetchingException;
 import org.thuir.jfcrawler.io.IHttpFetcher;
 import org.thuir.jfcrawler.util.CrawlerConfiguration;
 
@@ -28,7 +27,7 @@ public class NonBlockingFetcher implements IHttpFetcher {
 		client.setMaxConnectionsPerAddress(
 				CrawlerConfiguration.getMaxConnectionsPerAddress());
 		client.setThreadPool(new QueuedThreadPool(
-				CrawlerConfiguration.getMaxThreadPoolSize()));
+				CrawlerConfiguration.getMaxHttpFetcherThreadPoolSize()));
 		client.setTimeout(
 				CrawlerConfiguration.getMaxTimeout());
 
