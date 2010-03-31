@@ -40,6 +40,11 @@ public class PageUrl implements Serializable {
 		this();
 		this.generateNormalizedUrl(url);
 	}
+	
+	public static PageUrl parse(String url) throws BadUrlFormatException {
+		PageUrl pageUrl = new PageUrl(url);
+		return pageUrl;
+	}
 
 	/**
 	 * @return the url

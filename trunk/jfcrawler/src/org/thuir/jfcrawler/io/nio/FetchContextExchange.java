@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.eclipse.jetty.client.ContentExchange;
 import org.thuir.jfcrawler.data.Page;
-import org.thuir.jfcrawler.framework.crawler.ICrawler;
 
 /**
  * @author ruKyzhc
@@ -12,7 +11,7 @@ import org.thuir.jfcrawler.framework.crawler.ICrawler;
  */
 public class FetchContextExchange extends ContentExchange {
 	private Page page = null;
-	private ICrawler crawler = null;
+	private FetchingListener listener = null;
 	
 	public FetchContextExchange(Page page) {
 		super();
@@ -22,16 +21,16 @@ public class FetchContextExchange extends ContentExchange {
 	public void setPage(Page page) {
 		this.page = page;
 	}
-	
-	public void setCrawler(ICrawler crawler) {
-		this.crawler = crawler;
+
+	public void setFetchingListener(FetchingListener listener) {
+		this.listener = listener;
 	}
 	
 	@Override
 	protected void onResponseComplete() throws IOException {
 		super.onResponseComplete();
 		page.load(this.getResponseContent());
-		crawler.postFetch(page);
+		listener.onFetchingFinish(page);
 	}
 	
 }
