@@ -18,8 +18,10 @@ public class DefaultHTMLExtractor extends AbstractExtractor {
 	}
 
 	@Override
-	public Object[] extractUrls(Page page) {
-		return urls.toArray();
+	public PageUrl[] extractUrls(Page page) {
+		PageUrl[] pageUrls = new PageUrl[urls.size()];
+		urls.toArray(pageUrls);
+		return pageUrls;
 	}
 
 }

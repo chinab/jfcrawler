@@ -5,5 +5,4 @@ package org.thuir.jfcrawler.framework.frontier;
  *
  */
 public abstract class AbstractFrontier implements IFrontier {
-
 }

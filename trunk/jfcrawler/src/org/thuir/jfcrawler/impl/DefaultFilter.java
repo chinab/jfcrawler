@@ -12,7 +12,7 @@ public class DefaultFilter extends AbstractFilter {
 	@Override
 	public boolean shouldVisit(PageUrl url) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 }

@@ -1,5 +1,7 @@
 package org.thuir.jfcrawler.util;
 
+import java.util.Date;
+
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -61,6 +63,14 @@ public class CrawlerConfiguration {
 	}
 	public static int getMaxFetcherThreadPoolSize() {
 		return maxFetcherThreadPoolSize;
+	}
+
+	//writer
+	private static String writerRoot =
+		config.getString("writerRoot", "./job-" +
+				new Date(System.currentTimeMillis()).toString());
+	public static String getWriterRoot() {
+		return writerRoot;
 	}
 	
 	

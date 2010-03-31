@@ -1,15 +1,13 @@
 package org.thuir.jfcrawler.framework.crawler;
 
 import org.thuir.jfcrawler.data.Page;
-import org.thuir.jfcrawler.io.IHttpFetcher;
+import org.thuir.jfcrawler.data.PageUrl;
 
 /**
  * @author ruKyzhc
  *
  */
 public interface ICrawler {
-	
-	public void init();
 	
 //	public void setFetcher(IFetcher fetcher);
 //	
@@ -18,9 +16,11 @@ public interface ICrawler {
 //	public void addCrawlerEventListener(CrawlerEventListener listener);
 
 	//fetch process
+	public void addSeed(PageUrl url);
+	
 	public void preFetch();
 	
-	public void doFetch(IHttpFetcher fetcher);
+	public void doFetch();
 
 	public void postFetch(Page page);
 //	
