@@ -15,6 +15,7 @@ public class FetchContextExchange extends ContentExchange {
 	private ICrawler crawler = null;
 	
 	public FetchContextExchange(Page page) {
+		super();
 		this.page = page;
 	}
 

@@ -17,11 +17,39 @@ import org.thuir.jfcrawler.util.CrawlerConfiguration;
 public class NonBlockingFetcher implements IHttpFetcher {
 	private static final Logger logger =
 		Logger.getLogger(NonBlockingFetcher.class);
-	
-	private static HttpClient client = null;
+
+	//	private static HttpClient client = null;
+	//
+	//	//initialize the fetcher
+	//	static {
+	//		client = new HttpClient();
+	//		client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
+	//		client.setMaxConnectionsPerAddress(
+	//				CrawlerConfiguration.getMaxConnectionsPerAddress());
+	//		client.setThreadPool(new QueuedThreadPool(
+	//				CrawlerConfiguration.getMaxHttpFetcherThreadPoolSize()));
+	//		client.setTimeout(
+	//				CrawlerConfiguration.getMaxTimeout());
+	//
+	//		try {
+	//			client.start();
+	//		} catch (Exception e) {
+	//			logger.fatal("HttpClient initialization fails!");
+	//		}
+	//	}
+
+	//	public static void closeFetcher() {			
+	//		try {
+	//			client.stop();
+	//		} catch (Exception e) {
+	//			logger.fatal("Error occurs when closing HttpClient");
+	//		}
+	//	}
+
+	private HttpClient client = null;
 
 	//initialize the fetcher
-	static {
+	public NonBlockingFetcher() {
 		client = new HttpClient();
 		client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
 		client.setMaxConnectionsPerAddress(
@@ -30,6 +58,11 @@ public class NonBlockingFetcher implements IHttpFetcher {
 				CrawlerConfiguration.getMaxHttpFetcherThreadPoolSize()));
 		client.setTimeout(
 				CrawlerConfiguration.getMaxTimeout());
+		
+//		client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
+//		client.setMaxConnectionsPerAddress(2); // max 200 concurrent connections to every address
+//		client.setThreadPool(new QueuedThreadPool(2)); // max 250 threads
+//		client.setTimeout(30000); // 30 seconds timeout; if no server reply, the request expires
 
 		try {
 			client.start();
@@ -37,14 +70,15 @@ public class NonBlockingFetcher implements IHttpFetcher {
 			logger.fatal("HttpClient initialization fails!");
 		}
 	}
-	
-	public static void closeFetcher() {			
+
+	public void close() {			
 		try {
 			client.stop();
 		} catch (Exception e) {
 			logger.fatal("Error occurs when closing HttpClient");
 		}
 	}
+
 
 	private NonBlockingFetcherStatus status = NonBlockingFetcherStatus.UNKNOWN;
 
@@ -55,9 +89,10 @@ public class NonBlockingFetcher implements IHttpFetcher {
 			logger.fatal("HttpClient has not been deployed.");
 			throw new FetchingException(status);
 		}
-		
+
 		FetchContextExchange exchange = new FetchContextExchange(page);
 		exchange.setURL(page.getPageUrl().getUrl());
+		exchange.setCrawler(crawler);
 
 		try {
 			status = NonBlockingFetcherStatus.SENDING_EXCHANGE;
@@ -66,7 +101,7 @@ public class NonBlockingFetcher implements IHttpFetcher {
 			logger.error("Error [" + 
 					e.getMessage() + "] occurs while fetching " +
 					page.getPageUrl().getUrl());
-			
+
 			throw new FetchingException(status);
 		}
 

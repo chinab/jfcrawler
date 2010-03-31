@@ -1,6 +1,7 @@
 package org.thuir.jfcrawler.framework.extractor;
 
 import org.thuir.jfcrawler.data.Page;
+import org.thuir.jfcrawler.data.PageUrl;
 
 /**
  * @author ruKyzhc
@@ -9,6 +10,6 @@ import org.thuir.jfcrawler.data.Page;
 public abstract class AbstractExtractor implements IExtractor {
 
 	@Override
-	public abstract Object[] extractUrls(Page page);
+	public abstract PageUrl[] extractUrls(Page page);
 
 }

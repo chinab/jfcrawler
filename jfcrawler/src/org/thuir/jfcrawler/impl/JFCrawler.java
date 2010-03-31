@@ -14,10 +14,18 @@ public class JFCrawler extends AbstractJFCrawler {
 	public static void main(String[] args) {
 		JFCrawler crawler = new JFCrawler();
 		
+		crawler.init();
+		
 		crawler.initializeFrontier(DefaultFrontier.class);
 		crawler.initializeExtractor(DefaultExtractor.class);
+		crawler.initializeFilter(DefaultFilter.class);
+		crawler.initializeScheduler(DefaultScheduler.class);
 		
-		crawler.initializeCrawlerPool(DefaultCrawler.class, 5);
+		crawler.initializeCrawlerPool(DefaultCrawler.class, 2);
+		
+		crawler.addSeed("www.sina.com.cn");
+		crawler.addSeed("www.baidu.com");
+		
 		crawler.start();
 	}
 
