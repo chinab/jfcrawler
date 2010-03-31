@@ -1,21 +1,20 @@
 package org.thuir.jfcrawler.framework;
 
-import java.util.ArrayList;
-
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.PageUrl;
-import org.thuir.jfcrawler.framework.crawler.AbstractCrawler;
-import org.thuir.jfcrawler.framework.extractor.AbstractExtractor;
-import org.thuir.jfcrawler.framework.filter.AbstractFilter;
-import org.thuir.jfcrawler.framework.frontier.AbstractFrontier;
-import org.thuir.jfcrawler.framework.scheduler.AbstractScheduler;
-import org.thuir.jfcrawler.framework.writer.AbstractWriter;
-import org.thuir.jfcrawler.impl.DefaultExtractor;
-import org.thuir.jfcrawler.impl.DefaultFileWriter;
-import org.thuir.jfcrawler.impl.DefaultFilter;
-import org.thuir.jfcrawler.impl.DefaultFrontier;
-import org.thuir.jfcrawler.impl.DefaultScheduler;
-import org.thuir.jfcrawler.io.IHttpFetcher;
+import org.thuir.jfcrawler.framework.cache.BlockingQueueCache;
+import org.thuir.jfcrawler.framework.cache.Cache;
+import org.thuir.jfcrawler.framework.frontier.BlockingQueueFrontier;
+import org.thuir.jfcrawler.framework.frontier.Frontier;
+import org.thuir.jfcrawler.framework.handler.DefaultUrlHandler;
+import org.thuir.jfcrawler.framework.handler.HTMLPageHandler;
+import org.thuir.jfcrawler.framework.handler.UrlHandler;
+import org.thuir.jfcrawler.framework.handler.PageHandler;
+import org.thuir.jfcrawler.framework.processor.DefaultFetcher;
+import org.thuir.jfcrawler.framework.processor.Fetcher;
+import org.thuir.jfcrawler.framework.processor.Preprocessor;
+import org.thuir.jfcrawler.framework.writer.DefaultFileWriter;
+import org.thuir.jfcrawler.framework.writer.Writer;
 import org.thuir.jfcrawler.io.nio.NonBlockingFetcher;
 
 /**
@@ -23,76 +22,86 @@ import org.thuir.jfcrawler.io.nio.NonBlockingFetcher;
  *
  */
 public abstract class AbstractJFCrawler extends Thread {
+	protected Preprocessor[] preprocessorPool = null;
+	protected int preprocessorPoolSize = 0;
 
-	protected AbstractCrawler[] crawlerPool = null;
-	protected int crawlerPoolSize = 0;
-	
-	protected IHttpFetcher fetcher = null;
-	
-	private ArrayList<PageUrl> seeds = new ArrayList<PageUrl>();
+	//processor
+	protected Fetcher fetcher = null;
 
-	protected Class<? extends AbstractFrontier>  frontierClass = 
-		DefaultFrontier.class;
-	
-	protected Class<? extends AbstractFilter>    filterClass   = 
-		DefaultFilter.class;
-	
-	protected Class<? extends AbstractExtractor> extractorClass = 
-		DefaultExtractor.class;
-	
-	protected Class<? extends AbstractScheduler> schedulerClass = 
-		DefaultScheduler.class;
-	
-	protected Class<? extends AbstractWriter> writerClass =
+	protected NonBlockingFetcher httpFetcher = null;
+
+	//cache
+	protected Cache cache = null;
+
+	protected Frontier frontier = null;
+
+	protected Class<? extends UrlHandler> urlHandlerClass   = 
+		DefaultUrlHandler.class;
+
+	protected Class<? extends PageHandler> pageHandlerClass = 
+		HTMLPageHandler.class;
+
+	protected Class<? extends Writer> writerClass =
 		DefaultFileWriter.class;
 
-	public void init() {
-		fetcher = new NonBlockingFetcher();
-	}
-	
-	public void initializeFilter(
-			Class<? extends AbstractFilter> T) {
-		this.filterClass = T;
+	protected Class<? extends Cache> cacheClass = 
+		BlockingQueueCache.class;
+
+	protected Class<? extends Frontier> frontierClass = 
+		BlockingQueueFrontier.class;
+
+	protected Class<? extends Fetcher> fetcherClass = 
+		DefaultFetcher.class;
+
+	public void initalizeFetcher(
+			Class<? extends Fetcher> T) {
+		this.fetcherClass = T;
 	}
 
-	public void initializeExtractor(
-			Class<? extends AbstractExtractor> T) {
-		this.extractorClass = T;
+	public void initializeUrlHandlerClass(
+			Class<? extends UrlHandler> T) {
+		this.urlHandlerClass = T;
+	}
+
+	public void initializePageHandlerClass(
+			Class<? extends PageHandler> T) {
+		this.pageHandlerClass = T;
 	}
 	public void initializeFrontier(
-			Class<? extends AbstractFrontier> T) {
+			Class<? extends Frontier> T) {
 		this.frontierClass = T;
 	}
-	public void initializeScheduler(
-			Class<? extends AbstractScheduler> T) {
-		this.schedulerClass = T;
+	public void initializeCache(
+			Class<? extends Cache> T) {
+		this.cacheClass = T;
 	}
 	public void initializeWriter(
-			Class<? extends AbstractWriter> T) {
+			Class<? extends Writer> T) {
 		this.writerClass = T;
 	}
 
-	public void initializeCrawlerPool(
-			Class<? extends AbstractCrawler> T, int nThread) {
-		crawlerPoolSize = nThread;
-		try {
-			crawlerPool = new AbstractCrawler[nThread];
+	public void initializeProcessor(
+			Class<? extends Preprocessor> T, int nThread) {
+		preprocessorPoolSize = nThread;
+		
+		assert cache != null;
+		assert frontier != null;
+		
+		try {			
+			preprocessorPool = new Preprocessor[nThread];
 			for(int i = 0; i < nThread; i++) {
-				crawlerPool[i] = T.newInstance();
-				
-				crawlerPool[i].setHttpFetcher(fetcher);
-				
-				crawlerPool[i].setExtractor(
-						extractorClass.newInstance());
-				crawlerPool[i].setFilter(
-						filterClass.newInstance());
-				crawlerPool[i].setScheduler(
-						schedulerClass.newInstance());
-				crawlerPool[i].setFrontierToScheduler(
-						frontierClass.newInstance());
-				crawlerPool[i].setWriter(
+				preprocessorPool[i] = T.newInstance();
+
+				preprocessorPool[i].setCache(cache);
+				preprocessorPool[i].setFrontier(frontier);
+
+				preprocessorPool[i].setPageHandler(
+						pageHandlerClass.newInstance());
+				preprocessorPool[i].setUrlHandler(
+						urlHandlerClass.newInstance());
+				preprocessorPool[i].setWriter(
 						writerClass.newInstance());
-				
+
 			}
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
@@ -100,22 +109,42 @@ public abstract class AbstractJFCrawler extends Thread {
 			// TODO Auto-generated catch block
 		}
 	}
-	
-	public void addSeed(String url) {
+
+	public void initializeModules() {		
 		try {
-			seeds.add(new PageUrl(url));
-		} catch (BadUrlFormatException e) {
+			httpFetcher = new NonBlockingFetcher();
+
+			frontier = frontierClass.newInstance();
+			cache = cacheClass.newInstance();
+			
+			fetcher = fetcherClass.newInstance();
+			fetcher.setNonBlockingFetcher(httpFetcher);
+			fetcher.setCache(cache);
+			fetcher.setFrontier(frontier);
+			
+			httpFetcher.addFetchingListener(fetcher);
+			
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
 		}
+	}
+	
+	public void setJobName(String name) {
+		this.setName(name);
+	}
+
+	public void addSeed(String url) throws BadUrlFormatException {
+		frontier.schedule(PageUrl.parse(url));
 	}
 
 	@Override
-	public void start() {
-		for(int j = 0; j < seeds.size(); j++) {
-			crawlerPool[j%crawlerPoolSize].addSeed(seeds.get(j));
+	public void run() {
+		for(Preprocessor p : preprocessorPool) {
+			p.start();
 		}
-		for(int i = 0; i < crawlerPoolSize; i++) {
-			crawlerPool[i].start();
-		}
+		fetcher.start();
 	}
 
 }

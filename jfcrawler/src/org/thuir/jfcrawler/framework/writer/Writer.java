@@ -8,8 +8,8 @@ import org.thuir.jfcrawler.data.Page;
  * @author ruKyzhc
  *
  */
-public interface IWriter {
+public abstract class Writer {
 	
-	public void write(Page page) throws IOException;
-
+	public abstract void write(Page page) throws IOException ;
+	
 }
