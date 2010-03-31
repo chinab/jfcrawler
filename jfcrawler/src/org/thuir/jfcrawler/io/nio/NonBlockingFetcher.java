@@ -6,17 +6,21 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.thuir.jfcrawler.data.Page;
-import org.thuir.jfcrawler.framework.crawler.ICrawler;
-import org.thuir.jfcrawler.io.IHttpFetcher;
 import org.thuir.jfcrawler.util.CrawlerConfiguration;
 
 /**
  * @author ruKyzhc
  *
  */
-public class NonBlockingFetcher implements IHttpFetcher {
+public class NonBlockingFetcher {
 	private static final Logger logger =
 		Logger.getLogger(NonBlockingFetcher.class);
+	
+	protected FetchingListener listener = null;
+	
+	public void addFetchingListener(FetchingListener listener) {
+		this.listener = listener;
+	}
 
 	//	private static HttpClient client = null;
 	//
@@ -82,9 +86,7 @@ public class NonBlockingFetcher implements IHttpFetcher {
 
 	private NonBlockingFetcherStatus status = NonBlockingFetcherStatus.UNKNOWN;
 
-	@Override
-	public void fetchPage(ICrawler crawler, Page page) 
-	throws FetchingException {
+	public void fetch(Page page) throws FetchingException {
 		if(client == null) {
 			logger.fatal("HttpClient has not been deployed.");
 			throw new FetchingException(status);
@@ -92,7 +94,7 @@ public class NonBlockingFetcher implements IHttpFetcher {
 
 		FetchContextExchange exchange = new FetchContextExchange(page);
 		exchange.setURL(page.getPageUrl().getUrl());
-		exchange.setCrawler(crawler);
+		exchange.setFetchingListener(listener);
 
 		try {
 			status = NonBlockingFetcherStatus.SENDING_EXCHANGE;
@@ -107,8 +109,7 @@ public class NonBlockingFetcher implements IHttpFetcher {
 
 	}
 
-	@Override
-	public void stopFetcher() {
+	public void stop() {
 		try {
 			client.stop();
 		} catch (Exception e) {
