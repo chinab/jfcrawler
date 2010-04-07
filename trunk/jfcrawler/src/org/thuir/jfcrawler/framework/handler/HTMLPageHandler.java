@@ -29,7 +29,7 @@ public class HTMLPageHandler extends PageHandler {
 				String link = e.getAttributeValue("href");
 				if(link == null)
 					continue;
-				PageUrl url = new PageUrl(link);
+				PageUrl url = new PageUrl(page.getPageUrl(), link);
 				urls.add(url);
 			} catch (BadUrlFormatException e1) {
 				continue;

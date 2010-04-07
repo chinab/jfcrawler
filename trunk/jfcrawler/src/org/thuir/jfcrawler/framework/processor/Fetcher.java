@@ -43,7 +43,6 @@ public abstract class Fetcher extends Thread implements FetchingListener{
 					Thread.sleep(INTERVAL);
 					continue;
 				}
-				System.out.println("url : [" + url +"]");
 				fetcher.fetch(new Page(url));
 			} catch (FetchingException e) {
 				// TODO Auto-generated catch block
@@ -56,6 +55,7 @@ public abstract class Fetcher extends Thread implements FetchingListener{
 	@Override
 	public void onFetchingFinish(Page page) {
 		try {
+			System.out.println("url : [" + page.getPageUrl() +"]");
 			while(!cache.offer(page)) {
 				Thread.sleep(INTERVAL);
 			}

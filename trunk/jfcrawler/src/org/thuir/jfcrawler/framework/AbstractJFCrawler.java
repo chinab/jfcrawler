@@ -136,7 +136,7 @@ public abstract class AbstractJFCrawler extends Thread {
 	}
 
 	public void addSeed(String url) throws BadUrlFormatException {
-		frontier.schedule(PageUrl.parse(url));
+		frontier.schedule(PageUrl.parse(null, url));
 	}
 
 	@Override
