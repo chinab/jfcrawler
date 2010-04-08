@@ -10,7 +10,10 @@ public class DefaultUrlHandler extends UrlHandler {
 
 	@Override
 	public boolean shouldVisit(PageUrl url) {
-		return true;
+		if(url.getHost().equals("www.discuz.net")) 
+			return true;
+		else
+			return false;
 	}
 
 	@Override

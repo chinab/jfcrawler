@@ -29,7 +29,7 @@ public class FetchContextExchange extends ContentExchange {
 	@Override
 	protected void onResponseComplete() throws IOException {
 		super.onResponseComplete();
-		page.load(this.getResponseContent());
+		page.load(this.getResponseContentBytes());
 		listener.onFetchingFinish(page);
 	}
 	

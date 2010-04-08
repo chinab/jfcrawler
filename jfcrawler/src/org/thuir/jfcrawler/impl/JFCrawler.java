@@ -15,11 +15,12 @@ import org.thuir.jfcrawler.framework.processor.DefaultPreprocessor;
  */
 public class JFCrawler extends AbstractJFCrawler {
 	
-	public JFCrawler() {
+	public JFCrawler(String jobName) {
+		super(jobName);
 	}
 	
 	public static void main(String[] args) throws BadUrlFormatException {
-		JFCrawler crawler = new JFCrawler();
+		JFCrawler crawler = new JFCrawler("job");
 		
 		crawler.initializeFrontier(BlockingQueueFrontier.class);
 		crawler.initializeCache(BlockingQueueCache.class);
@@ -29,7 +30,7 @@ public class JFCrawler extends AbstractJFCrawler {
 		crawler.initializePageHandlerClass(HTMLPageHandler.class);
 
 		crawler.initializeModules();
-		crawler.initializeProcessor(DefaultPreprocessor.class, 2);
+		crawler.initializeProcessor(DefaultPreprocessor.class, 10);
 		
 		crawler.addSeed("http://www.discuz.net/");
 		

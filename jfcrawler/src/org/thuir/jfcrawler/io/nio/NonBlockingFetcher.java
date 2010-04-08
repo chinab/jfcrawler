@@ -22,34 +22,6 @@ public class NonBlockingFetcher {
 		this.listener = listener;
 	}
 
-	//	private static HttpClient client = null;
-	//
-	//	//initialize the fetcher
-	//	static {
-	//		client = new HttpClient();
-	//		client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
-	//		client.setMaxConnectionsPerAddress(
-	//				CrawlerConfiguration.getMaxConnectionsPerAddress());
-	//		client.setThreadPool(new QueuedThreadPool(
-	//				CrawlerConfiguration.getMaxHttpFetcherThreadPoolSize()));
-	//		client.setTimeout(
-	//				CrawlerConfiguration.getMaxTimeout());
-	//
-	//		try {
-	//			client.start();
-	//		} catch (Exception e) {
-	//			logger.fatal("HttpClient initialization fails!");
-	//		}
-	//	}
-
-	//	public static void closeFetcher() {			
-	//		try {
-	//			client.stop();
-	//		} catch (Exception e) {
-	//			logger.fatal("Error occurs when closing HttpClient");
-	//		}
-	//	}
-
 	private HttpClient client = null;
 
 	//initialize the fetcher
@@ -58,15 +30,12 @@ public class NonBlockingFetcher {
 		client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
 		client.setMaxConnectionsPerAddress(
 				CrawlerConfiguration.getMaxConnectionsPerAddress());
-		client.setThreadPool(new QueuedThreadPool(
-				CrawlerConfiguration.getMaxHttpFetcherThreadPoolSize()));
+		
+		QueuedThreadPool pool = new QueuedThreadPool(
+				CrawlerConfiguration.getMaxHttpFetcherThreadPoolSize());
+		client.setThreadPool(pool);
 		client.setTimeout(
 				CrawlerConfiguration.getMaxTimeout());
-		
-//		client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
-//		client.setMaxConnectionsPerAddress(2); // max 200 concurrent connections to every address
-//		client.setThreadPool(new QueuedThreadPool(2)); // max 250 threads
-//		client.setTimeout(30000); // 30 seconds timeout; if no server reply, the request expires
 
 		try {
 			client.start();

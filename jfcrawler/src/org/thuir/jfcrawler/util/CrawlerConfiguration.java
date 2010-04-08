@@ -1,7 +1,5 @@
 package org.thuir.jfcrawler.util;
 
-import java.util.Date;
-
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -53,22 +51,26 @@ public class CrawlerConfiguration {
 	}
 
 	//fetching thread
-	private static int defaultInterval =
-		config.getInt("defaultInterval", 10000);
+	private static int threadInterval =
+		config.getInt("threadInterval", 1000);
 	private static int maxFetcherThreadPoolSize = 
 		config.getInt("maxFetcherThreadPoolSize", 10);
-	
-	public static int getDefaultInterval() {
-		return defaultInterval;
+	private static int accessInterval =
+		config.getInt("accessInterval", 10000);
+		
+	public static int getThreadInterval() {
+		return threadInterval;
 	}
 	public static int getMaxFetcherThreadPoolSize() {
 		return maxFetcherThreadPoolSize;
 	}
+	public static int getAccessInterval() {
+		return accessInterval;
+	}
 
 	//writer
 	private static String writerRoot =
-		config.getString("writerRoot", "./job-" +
-				new Date(System.currentTimeMillis()).toString());
+		config.getString("writerRoot", "jobs/");
 	public static String getWriterRoot() {
 		return writerRoot;
 	}

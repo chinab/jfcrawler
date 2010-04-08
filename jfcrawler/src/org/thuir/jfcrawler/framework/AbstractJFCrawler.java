@@ -16,6 +16,7 @@ import org.thuir.jfcrawler.framework.processor.Preprocessor;
 import org.thuir.jfcrawler.framework.writer.DefaultFileWriter;
 import org.thuir.jfcrawler.framework.writer.Writer;
 import org.thuir.jfcrawler.io.nio.NonBlockingFetcher;
+import org.thuir.jfcrawler.util.AccessController;
 
 /**
  * @author ruKyzhc
@@ -24,6 +25,8 @@ import org.thuir.jfcrawler.io.nio.NonBlockingFetcher;
 public abstract class AbstractJFCrawler extends Thread {
 	protected Preprocessor[] preprocessorPool = null;
 	protected int preprocessorPoolSize = 0;
+	
+	protected String jobName = null;
 
 	//processor
 	protected Fetcher fetcher = null;
@@ -52,6 +55,10 @@ public abstract class AbstractJFCrawler extends Thread {
 
 	protected Class<? extends Fetcher> fetcherClass = 
 		DefaultFetcher.class;
+	
+	public AbstractJFCrawler(String jobName) {
+		this.jobName = jobName;
+	}
 
 	public void initalizeFetcher(
 			Class<? extends Fetcher> T) {
@@ -99,8 +106,9 @@ public abstract class AbstractJFCrawler extends Thread {
 						pageHandlerClass.newInstance());
 				preprocessorPool[i].setUrlHandler(
 						urlHandlerClass.newInstance());
-				preprocessorPool[i].setWriter(
-						writerClass.newInstance());
+				Writer w = writerClass.newInstance();
+				w.setRoot(jobName);
+				preprocessorPool[i].setWriter(w);
 
 			}
 		} catch (InstantiationException e) {
@@ -121,6 +129,7 @@ public abstract class AbstractJFCrawler extends Thread {
 			fetcher.setNonBlockingFetcher(httpFetcher);
 			fetcher.setCache(cache);
 			fetcher.setFrontier(frontier);
+			fetcher.setAccessController(new AccessController());
 			
 			httpFetcher.addFetchingListener(fetcher);
 			
