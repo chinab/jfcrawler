@@ -10,6 +10,8 @@ import org.thuir.jfcrawler.data.Page;
  */
 public abstract class Writer {
 	
+	public abstract void setRoot(String job);
+	
 	public abstract void write(Page page) throws IOException ;
 	
 }

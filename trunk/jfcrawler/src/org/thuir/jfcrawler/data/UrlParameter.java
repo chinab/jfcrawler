@@ -55,4 +55,19 @@ public final class UrlParameter implements Serializable {
 		this.value = value;
 	}
 	
+	@Override
+	public String toString() {
+		return key + '=' + value;
+	}
+	
+	public static UrlParameter parse(String str) {
+		int pointer = str.indexOf('=');
+		if(pointer < 0)
+			return null;
+		UrlParameter p = new UrlParameter();
+		p.setKey(str.substring(0, pointer));
+		p.setValue(str.substring(pointer + 1));
+		return p;
+	}
+	
 }

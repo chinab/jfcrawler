@@ -1,5 +1,7 @@
 package org.thuir.jfcrawler.framework.handler;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +23,16 @@ public class HTMLPageHandler extends PageHandler {
 	public PageUrl[] extractUrls(Page page) {
 		ArrayList<PageUrl> urls = new ArrayList<PageUrl>();
 		
-		Source source = new Source(page.getHtmlContent());
+		Source source = null;
+		try {
+			source = new Source(
+					new ByteArrayInputStream(
+							page.getHtmlContent()));
+		} catch (IOException e) {
+			//TODO
+			return null;
+		}
+		
 		List<Element> list = source.getAllElements(HTMLElementName.A);
 		
 		for(Element e : list) {

@@ -8,7 +8,7 @@ public class Page {
 
 	private PageUrl url = null;
 	
-	private String html = null;
+	private byte[] html = null;
 	
 	public Page() {
 		
@@ -27,11 +27,13 @@ public class Page {
 		return this.url;
 	}
 	
-	public String getHtmlContent() {
+	public byte[] getHtmlContent() {
 		return html;
 	}
 	
-	public void load(String html) {
-		this.html = html;
+	public void load(byte[] response) {
+		int len = response.length;
+		this.html = new byte[len];
+		System.arraycopy(response, 0, html, 0, len);
 	}
 }

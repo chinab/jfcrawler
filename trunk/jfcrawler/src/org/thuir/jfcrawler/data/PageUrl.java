@@ -183,21 +183,6 @@ public class PageUrl implements Serializable {
 		return path;
 	}
 
-	//	/**
-	//	 * 
-	//	 * @param url
-	//	 * @throws BadUrlFormatException
-	//	 */
-	//	public void generateNormalizedUrl(String url) throws BadUrlFormatException {
-	//		this.url = null;
-	//		this.protocol = null;
-	//		this.host = null;
-	//		this.port = null;
-	//		this.page = null;
-	//		this.params.clear();
-	//		normalizeUrl(this, url);
-	//	}
-
 	@Override
 	public String toString() {
 		return url;
@@ -397,7 +382,7 @@ public class PageUrl implements Serializable {
 		buf.append(path);
 
 		if(page == null) {
-			pageUrl.setPage("");
+			pageUrl.setPage("#");
 			pageUrl.setUrl(buf.toString());
 			return;
 		}

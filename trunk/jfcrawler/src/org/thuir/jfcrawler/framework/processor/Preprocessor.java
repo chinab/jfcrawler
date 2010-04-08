@@ -1,5 +1,7 @@
 package org.thuir.jfcrawler.framework.processor;
 
+import java.io.IOException;
+
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.PageUrl;
 import org.thuir.jfcrawler.framework.cache.Cache;
@@ -57,7 +59,12 @@ public abstract class Preprocessor extends Thread {
 					continue;
 				}
 				
+				writer.write(page);
+				
 				PageUrl[] urls = pageHandler.extractUrls(page);
+				if(urls == null)
+					continue;
+				
 				for(PageUrl url : urls) {
 					if(!urlHandler.shouldVisit(url))
 						continue;
@@ -65,6 +72,8 @@ public abstract class Preprocessor extends Thread {
 					frontier.schedule(url);
 				}
 			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 			}
 		}
