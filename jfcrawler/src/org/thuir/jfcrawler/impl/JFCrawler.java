@@ -26,11 +26,12 @@ public class JFCrawler extends AbstractJFCrawler {
 		crawler.initializeCache(BlockingQueueCache.class);
 		
 		crawler.initalizeFetcher(DefaultFetcher.class);
-		crawler.initializeUrlHandlerClass(HostFilter.class);
-		crawler.initializePageHandlerClass(HTMLExtractor.class);
 
 		crawler.initializeModules();
 		crawler.initializeCrawler(DefaultCrawler.class, 10);
+		
+		crawler.addFilter(new HostFilter());
+		crawler.addExtractor(new HTMLExtractor());
 		
 		crawler.addSeed("http://www.discuz.net/");
 		
