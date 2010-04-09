@@ -1,5 +1,7 @@
 package org.thuir.jfcrawler.framework.extractor;
 
+import java.util.ArrayList;
+
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.PageUrl;
 
@@ -9,6 +11,6 @@ import org.thuir.jfcrawler.data.PageUrl;
  */
 public abstract class Extractor {
 
-	public abstract PageUrl[] extractUrls(Page page);
+	public abstract ArrayList<PageUrl> extractUrls(Page page);
 
 }

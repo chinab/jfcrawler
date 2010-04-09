@@ -4,9 +4,8 @@ import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.PageUrl;
 import org.thuir.jfcrawler.framework.cache.BlockingQueueCache;
 import org.thuir.jfcrawler.framework.cache.Cache;
-import org.thuir.jfcrawler.framework.extractor.HTMLExtractor;
+import org.thuir.jfcrawler.framework.classifier.Classifier;
 import org.thuir.jfcrawler.framework.extractor.Extractor;
-import org.thuir.jfcrawler.framework.filter.HostFilter;
 import org.thuir.jfcrawler.framework.filter.Filter;
 import org.thuir.jfcrawler.framework.frontier.BlockingQueueFrontier;
 import org.thuir.jfcrawler.framework.frontier.Frontier;
@@ -38,12 +37,6 @@ public abstract class AbstractJFCrawler extends Thread {
 
 	protected Frontier frontier = null;
 
-	protected Class<? extends Filter> urlHandlerClass   = 
-		HostFilter.class;
-
-	protected Class<? extends Extractor> pageHandlerClass = 
-		HTMLExtractor.class;
-
 	protected Class<? extends Writer> writerClass =
 		DefaultFileWriter.class;
 
@@ -65,15 +58,6 @@ public abstract class AbstractJFCrawler extends Thread {
 		this.fetcherClass = T;
 	}
 
-	public void initializeUrlHandlerClass(
-			Class<? extends Filter> T) {
-		this.urlHandlerClass = T;
-	}
-
-	public void initializePageHandlerClass(
-			Class<? extends Extractor> T) {
-		this.pageHandlerClass = T;
-	}
 	public void initializeFrontier(
 			Class<? extends Frontier> T) {
 		this.frontierClass = T;
@@ -102,10 +86,6 @@ public abstract class AbstractJFCrawler extends Thread {
 				crawlerPool[i].setCache(cache);
 				crawlerPool[i].setFrontier(frontier);
 
-				crawlerPool[i].setPageHandler(
-						pageHandlerClass.newInstance());
-				crawlerPool[i].setUrlHandler(
-						urlHandlerClass.newInstance());
 				Writer w = writerClass.newInstance();
 				w.setRoot(jobName);
 				crawlerPool[i].setWriter(w);
@@ -154,6 +134,24 @@ public abstract class AbstractJFCrawler extends Thread {
 			p.start();
 		}
 		fetcher.start();
+	}
+	
+	public void addExtractor(Extractor e) {
+		for(Crawler c : crawlerPool) {
+			c.addExtractor(e);
+		}
+	}
+	
+	public void addFilter(Filter f) {
+		for(Crawler c : crawlerPool) {
+			c.addFilter(f);
+		}
+	}
+	
+	public void addClassifier(Classifier l) {
+		for(Crawler c : crawlerPool) {
+			c.addClassifier(l);
+		}
 	}
 
 }
