@@ -12,7 +12,7 @@ import org.thuir.jfcrawler.framework.handler.UrlHandler;
 import org.thuir.jfcrawler.framework.handler.PageHandler;
 import org.thuir.jfcrawler.framework.processor.DefaultFetcher;
 import org.thuir.jfcrawler.framework.processor.Fetcher;
-import org.thuir.jfcrawler.framework.processor.Preprocessor;
+import org.thuir.jfcrawler.framework.processor.Crawler;
 import org.thuir.jfcrawler.framework.writer.DefaultFileWriter;
 import org.thuir.jfcrawler.framework.writer.Writer;
 import org.thuir.jfcrawler.io.nio.NonBlockingFetcher;
@@ -23,8 +23,8 @@ import org.thuir.jfcrawler.util.AccessController;
  *
  */
 public abstract class AbstractJFCrawler extends Thread {
-	protected Preprocessor[] preprocessorPool = null;
-	protected int preprocessorPoolSize = 0;
+	protected Crawler[] crawlerPool = null;
+	protected int crawlerPoolSize = 0;
 	
 	protected String jobName = null;
 
@@ -87,28 +87,28 @@ public abstract class AbstractJFCrawler extends Thread {
 		this.writerClass = T;
 	}
 
-	public void initializeProcessor(
-			Class<? extends Preprocessor> T, int nThread) {
-		preprocessorPoolSize = nThread;
+	public void initializeCrawler(
+			Class<? extends Crawler> T, int nThread) {
+		crawlerPoolSize = nThread;
 		
 		assert cache != null;
 		assert frontier != null;
 		
 		try {			
-			preprocessorPool = new Preprocessor[nThread];
+			crawlerPool = new Crawler[nThread];
 			for(int i = 0; i < nThread; i++) {
-				preprocessorPool[i] = T.newInstance();
+				crawlerPool[i] = T.newInstance();
 
-				preprocessorPool[i].setCache(cache);
-				preprocessorPool[i].setFrontier(frontier);
+				crawlerPool[i].setCache(cache);
+				crawlerPool[i].setFrontier(frontier);
 
-				preprocessorPool[i].setPageHandler(
+				crawlerPool[i].setPageHandler(
 						pageHandlerClass.newInstance());
-				preprocessorPool[i].setUrlHandler(
+				crawlerPool[i].setUrlHandler(
 						urlHandlerClass.newInstance());
 				Writer w = writerClass.newInstance();
 				w.setRoot(jobName);
-				preprocessorPool[i].setWriter(w);
+				crawlerPool[i].setWriter(w);
 
 			}
 		} catch (InstantiationException e) {
@@ -150,7 +150,7 @@ public abstract class AbstractJFCrawler extends Thread {
 
 	@Override
 	public void run() {
-		for(Preprocessor p : preprocessorPool) {
+		for(Crawler p : crawlerPool) {
 			p.start();
 		}
 		fetcher.start();

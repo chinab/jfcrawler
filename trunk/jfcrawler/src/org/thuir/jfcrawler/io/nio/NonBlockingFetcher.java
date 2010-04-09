@@ -53,12 +53,12 @@ public class NonBlockingFetcher {
 	}
 
 
-	private NonBlockingFetcherStatus status = NonBlockingFetcherStatus.UNKNOWN;
+//	private NonBlockingFetcherStatus status = NonBlockingFetcherStatus.UNKNOWN;
 
-	public void fetch(Page page) throws FetchingException {
+	public void fetch(Page page) {
 		if(client == null) {
 			logger.fatal("HttpClient has not been deployed.");
-			throw new FetchingException(status);
+//			throw new FetchingException(status);
 		}
 
 		FetchContextExchange exchange = new FetchContextExchange(page);
@@ -66,14 +66,14 @@ public class NonBlockingFetcher {
 		exchange.setFetchingListener(listener);
 
 		try {
-			status = NonBlockingFetcherStatus.SENDING_EXCHANGE;
+//			status = NonBlockingFetcherStatus.SENDING_EXCHANGE;
 			client.send(exchange);
 		} catch (IOException e) {
 			logger.error("Error [" + 
 					e.getMessage() + "] occurs while fetching " +
 					page.getPageUrl().getUrl());
 
-			throw new FetchingException(status);
+//			throw new FetchingException(status);
 		}
 
 	}

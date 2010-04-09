@@ -1,7 +1,6 @@
 package org.thuir.jfcrawler.util;
 
 import org.thuir.jfcrawler.data.PageUrl;
-import org.thuir.jfcrawler.data.UrlParameter;
 
 public class DynamicUrlUtil {
 	private static final String defaultPage = "#";
@@ -23,7 +22,7 @@ public class DynamicUrlUtil {
 		
 		StringBuffer buf = new StringBuffer();
 		buf.append(uri);
-		for(UrlParameter p : url.getParams()) {
+		for(PageUrl.UrlParameter p : url.getParams()) {
 			buf.append('_');
 			buf.append(p.toString());
 		}

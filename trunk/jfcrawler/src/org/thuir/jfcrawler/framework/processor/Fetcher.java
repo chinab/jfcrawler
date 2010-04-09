@@ -4,7 +4,6 @@ import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.PageUrl;
 import org.thuir.jfcrawler.framework.cache.Cache;
 import org.thuir.jfcrawler.framework.frontier.Frontier;
-import org.thuir.jfcrawler.io.nio.FetchingException;
 import org.thuir.jfcrawler.io.nio.FetchingListener;
 import org.thuir.jfcrawler.io.nio.NonBlockingFetcher;
 import org.thuir.jfcrawler.util.AccessController;
@@ -65,8 +64,8 @@ public abstract class Fetcher extends Thread implements FetchingListener{
 				}
 				accessCtrl.access(url.getHost(), System.currentTimeMillis());
 				fetcher.fetch(new Page(url));
-			} catch (FetchingException e) {
-				// TODO Auto-generated catch block
+//			} catch (FetchingException e) {
+//				// TODO Auto-generated catch block
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 			}
