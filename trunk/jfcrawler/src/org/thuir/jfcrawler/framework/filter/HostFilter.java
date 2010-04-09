@@ -6,7 +6,7 @@ import org.thuir.jfcrawler.data.PageUrl;
  * @author ruKyzhc
  *
  */
-public class DefaultUrlHandler extends UrlHandler {
+public class HostFilter extends Filter {
 
 	@Override
 	public boolean shouldVisit(PageUrl url) {
@@ -15,9 +15,5 @@ public class DefaultUrlHandler extends UrlHandler {
 		else
 			return false;
 	}
-
-	@Override
-	public void process(PageUrl url) {		
-	}
-
+	
 }

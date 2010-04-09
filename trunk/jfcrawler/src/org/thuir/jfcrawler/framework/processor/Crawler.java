@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.PageUrl;
 import org.thuir.jfcrawler.framework.cache.Cache;
-import org.thuir.jfcrawler.framework.extractor.PageHandler;
-import org.thuir.jfcrawler.framework.filter.UrlHandler;
+import org.thuir.jfcrawler.framework.extractor.Extractor;
+import org.thuir.jfcrawler.framework.filter.Filter;
 import org.thuir.jfcrawler.framework.frontier.Frontier;
 import org.thuir.jfcrawler.framework.writer.Writer;
 
@@ -18,9 +18,9 @@ public abstract class Crawler extends Thread {
 
 	private static final long INTERVAL = 1000l;
 
-	protected PageHandler pageHandler = null;
+	protected Extractor pageHandler = null;
 
-	protected UrlHandler  urlHandler  = null;
+	protected Filter  urlHandler  = null;
 
 	protected Writer      writer      = null;
 
@@ -28,11 +28,11 @@ public abstract class Crawler extends Thread {
 	
 	protected Frontier frontier = null;
 
-	public void setPageHandler(PageHandler pageHandler) {
+	public void setPageHandler(Extractor pageHandler) {
 		this.pageHandler = pageHandler;
 	}
 
-	public void setUrlHandler(UrlHandler urlHandler) {
+	public void setUrlHandler(Filter urlHandler) {
 		this.urlHandler = urlHandler;
 	}
 
@@ -68,7 +68,6 @@ public abstract class Crawler extends Thread {
 				for(PageUrl url : urls) {
 					if(!urlHandler.shouldVisit(url))
 						continue;
-					urlHandler.process(url);
 					frontier.schedule(url);
 				}
 			} catch (InterruptedException e) {

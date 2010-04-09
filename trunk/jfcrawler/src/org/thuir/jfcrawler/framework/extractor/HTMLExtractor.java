@@ -17,7 +17,7 @@ import org.thuir.jfcrawler.data.PageUrl;
  * @author ruKyzhc
  *
  */
-public class HTMLPageHandler extends PageHandler {
+public class HTMLExtractor extends Extractor {
 
 	@Override
 	public PageUrl[] extractUrls(Page page) {

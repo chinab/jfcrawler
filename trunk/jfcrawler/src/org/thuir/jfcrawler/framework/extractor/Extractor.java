@@ -7,7 +7,7 @@ import org.thuir.jfcrawler.data.PageUrl;
  * @author ruKyzhc
  *
  */
-public abstract class PageHandler {
+public abstract class Extractor {
 
 	public abstract PageUrl[] extractUrls(Page page);
 
