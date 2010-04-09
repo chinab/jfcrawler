@@ -5,9 +5,9 @@ import java.io.IOException;
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.PageUrl;
 import org.thuir.jfcrawler.framework.cache.Cache;
+import org.thuir.jfcrawler.framework.extractor.PageHandler;
+import org.thuir.jfcrawler.framework.filter.UrlHandler;
 import org.thuir.jfcrawler.framework.frontier.Frontier;
-import org.thuir.jfcrawler.framework.handler.UrlHandler;
-import org.thuir.jfcrawler.framework.handler.PageHandler;
 import org.thuir.jfcrawler.framework.writer.Writer;
 
 /**

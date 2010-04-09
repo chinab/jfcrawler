@@ -1,4 +1,4 @@
-package org.thuir.jfcrawler.framework.handler;
+package org.thuir.jfcrawler.framework.extractor;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

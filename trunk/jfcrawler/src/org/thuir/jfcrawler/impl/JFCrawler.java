@@ -3,9 +3,9 @@ package org.thuir.jfcrawler.impl;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.framework.AbstractJFCrawler;
 import org.thuir.jfcrawler.framework.cache.BlockingQueueCache;
+import org.thuir.jfcrawler.framework.extractor.HTMLPageHandler;
+import org.thuir.jfcrawler.framework.filter.DefaultUrlHandler;
 import org.thuir.jfcrawler.framework.frontier.BlockingQueueFrontier;
-import org.thuir.jfcrawler.framework.handler.DefaultUrlHandler;
-import org.thuir.jfcrawler.framework.handler.HTMLPageHandler;
 import org.thuir.jfcrawler.framework.processor.DefaultFetcher;
 import org.thuir.jfcrawler.framework.processor.DefaultCrawler;
 
