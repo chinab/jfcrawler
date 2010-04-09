@@ -4,10 +4,10 @@ import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.PageUrl;
 import org.thuir.jfcrawler.framework.cache.BlockingQueueCache;
 import org.thuir.jfcrawler.framework.cache.Cache;
-import org.thuir.jfcrawler.framework.extractor.HTMLPageHandler;
-import org.thuir.jfcrawler.framework.extractor.PageHandler;
-import org.thuir.jfcrawler.framework.filter.DefaultUrlHandler;
-import org.thuir.jfcrawler.framework.filter.UrlHandler;
+import org.thuir.jfcrawler.framework.extractor.HTMLExtractor;
+import org.thuir.jfcrawler.framework.extractor.Extractor;
+import org.thuir.jfcrawler.framework.filter.HostFilter;
+import org.thuir.jfcrawler.framework.filter.Filter;
 import org.thuir.jfcrawler.framework.frontier.BlockingQueueFrontier;
 import org.thuir.jfcrawler.framework.frontier.Frontier;
 import org.thuir.jfcrawler.framework.processor.DefaultFetcher;
@@ -38,11 +38,11 @@ public abstract class AbstractJFCrawler extends Thread {
 
 	protected Frontier frontier = null;
 
-	protected Class<? extends UrlHandler> urlHandlerClass   = 
-		DefaultUrlHandler.class;
+	protected Class<? extends Filter> urlHandlerClass   = 
+		HostFilter.class;
 
-	protected Class<? extends PageHandler> pageHandlerClass = 
-		HTMLPageHandler.class;
+	protected Class<? extends Extractor> pageHandlerClass = 
+		HTMLExtractor.class;
 
 	protected Class<? extends Writer> writerClass =
 		DefaultFileWriter.class;
@@ -66,12 +66,12 @@ public abstract class AbstractJFCrawler extends Thread {
 	}
 
 	public void initializeUrlHandlerClass(
-			Class<? extends UrlHandler> T) {
+			Class<? extends Filter> T) {
 		this.urlHandlerClass = T;
 	}
 
 	public void initializePageHandlerClass(
-			Class<? extends PageHandler> T) {
+			Class<? extends Extractor> T) {
 		this.pageHandlerClass = T;
 	}
 	public void initializeFrontier(
