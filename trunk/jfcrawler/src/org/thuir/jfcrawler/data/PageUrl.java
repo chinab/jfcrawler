@@ -241,6 +241,7 @@ public class PageUrl implements Serializable {
 	private static final String PARAMETERS = "&";
 	private static final String EMAIL      = "@";
 	private static final String EQUAL      = "=";
+	private static final String BOOKMARK   = "#";
 
 	public static void normalizeUrl(PageUrl pageUrl, PageUrl parent, String url) 
 	throws BadUrlFormatException{	
@@ -258,17 +259,24 @@ public class PageUrl implements Serializable {
 		String value = null;
 
 		int pointer = 0;
-		StringBuffer urlbuf = 
-			new StringBuffer(url.trim().replaceAll("\\\\", "/"));
-
+		
 		//Email
-		pointer = urlbuf.indexOf(EMAIL);
+		pointer = url.indexOf(EMAIL);
 		if(pointer >= 0) {
 			logger.error("bad url:" + url);
 			throw new BadUrlFormatException(
 					PageUrl.class.getName(), "url : " + url);
 		}
 
+		//bookmark
+		pointer = url.indexOf(BOOKMARK);
+		if(pointer >= 0)  {
+			url = url.substring(0, pointer);
+		}
+		
+		StringBuffer urlbuf = 
+			new StringBuffer(url.trim().replaceAll("\\\\", "/"));
+		
 		//protocol
 		pointer = urlbuf.indexOf(PREFIX);
 		if(pointer >= 0) {
@@ -446,16 +454,23 @@ public class PageUrl implements Serializable {
 		String value = null;
 
 		int pointer = 0;
-		StringBuffer urlbuf = 
-			new StringBuffer(url.trim().replaceAll("\\\\", "/"));
-
+		
 		//Email
-		pointer = urlbuf.indexOf(EMAIL);
+		pointer = url.indexOf(EMAIL);
 		if(pointer >= 0) {
 			logger.error("bad url:" + url);
 			throw new BadUrlFormatException(
 					PageUrl.class.getName(), "url : " + url);
 		}
+
+		//bookmark
+		pointer = url.indexOf(BOOKMARK);
+		if(pointer >= 0)  {
+			url = url.substring(0, pointer);
+		}
+		
+		StringBuffer urlbuf = 
+			new StringBuffer(url.trim().replaceAll("\\\\", "/"));
 
 		//protocol
 		pointer = urlbuf.indexOf(PREFIX);
