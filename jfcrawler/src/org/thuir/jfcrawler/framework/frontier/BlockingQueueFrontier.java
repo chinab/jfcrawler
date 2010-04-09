@@ -11,7 +11,7 @@ import org.thuir.jfcrawler.data.PageUrl;
 public class BlockingQueueFrontier extends Frontier {
 	private ArrayBlockingQueue<PageUrl> queue = null;
 	
-	private final static int size = 1024;
+	private final static int size = 65536;
 	
 	public BlockingQueueFrontier() {
 		queue = new ArrayBlockingQueue<PageUrl>(size);
