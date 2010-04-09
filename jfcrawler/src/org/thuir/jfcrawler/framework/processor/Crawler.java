@@ -22,7 +22,7 @@ public abstract class Crawler extends Thread {
 
 	protected Filter  urlHandler  = null;
 
-	protected Writer      writer      = null;
+	protected Writer  writer      = null;
 
 	protected Cache   cache   = null;
 	
