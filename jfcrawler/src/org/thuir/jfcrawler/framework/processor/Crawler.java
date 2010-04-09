@@ -14,7 +14,7 @@ import org.thuir.jfcrawler.framework.writer.Writer;
  * @author ruKyzhc
  *
  */
-public abstract class Preprocessor extends Thread {
+public abstract class Crawler extends Thread {
 
 	private static final long INTERVAL = 1000l;
 

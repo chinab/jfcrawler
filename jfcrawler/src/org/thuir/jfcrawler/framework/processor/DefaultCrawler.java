@@ -5,7 +5,7 @@ package org.thuir.jfcrawler.framework.processor;
  * @author ruKyzhc
  *
  */
-public class DefaultPreprocessor extends Preprocessor {
+public class DefaultCrawler extends Crawler {
 //	private static final Logger logger =
 //		Logger.getLogger(DefaultPreprocessor.class);
 	
@@ -13,8 +13,8 @@ public class DefaultPreprocessor extends Preprocessor {
 	
 	private int id = 0;
 	
-	public DefaultPreprocessor() {
+	public DefaultCrawler() {
 		this.id = count++;
-		this.setName("preprocessor " + id);
+		this.setName("crawler " + id);
 	}
 }

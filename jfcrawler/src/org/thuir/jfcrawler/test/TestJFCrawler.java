@@ -6,19 +6,13 @@ import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.PageUrl;
 import org.thuir.jfcrawler.framework.writer.DefaultFileWriter;
+import org.thuir.jfcrawler.io.database.UrlDB;
 
 import junit.framework.TestCase;
 
 public class TestJFCrawler extends TestCase {
 
 	public void testWriter() throws BadUrlFormatException, IOException {
-		DefaultFileWriter writer = new DefaultFileWriter();
-		writer.setRoot("test");
-		
-		PageUrl url = 
-			PageUrl.parse(null, "http://127.0.0.1/test/test.php?action=save");
-		Page page = new Page(url);
-		page.load(new byte[10]);
-		writer.write(page);
+		UrlDB db = new UrlDB();
 	}
 }

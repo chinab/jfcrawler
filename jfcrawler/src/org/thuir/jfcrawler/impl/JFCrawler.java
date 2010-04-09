@@ -7,7 +7,7 @@ import org.thuir.jfcrawler.framework.frontier.BlockingQueueFrontier;
 import org.thuir.jfcrawler.framework.handler.DefaultUrlHandler;
 import org.thuir.jfcrawler.framework.handler.HTMLPageHandler;
 import org.thuir.jfcrawler.framework.processor.DefaultFetcher;
-import org.thuir.jfcrawler.framework.processor.DefaultPreprocessor;
+import org.thuir.jfcrawler.framework.processor.DefaultCrawler;
 
 /**
  * @author ruKyzhc
@@ -30,7 +30,7 @@ public class JFCrawler extends AbstractJFCrawler {
 		crawler.initializePageHandlerClass(HTMLPageHandler.class);
 
 		crawler.initializeModules();
-		crawler.initializeProcessor(DefaultPreprocessor.class, 10);
+		crawler.initializeCrawler(DefaultCrawler.class, 10);
 		
 		crawler.addSeed("http://www.discuz.net/");
 		
