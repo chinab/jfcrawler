@@ -56,9 +56,29 @@ public class PageUrl implements Serializable {
 		normalizeUrl(this, parent, url);
 	}
 
+	public PageUrl(String url) throws BadUrlFormatException {
+		this();
+
+		this.url = null;
+		this.protocol = null;
+		this.host = null;
+		this.port = null;
+		this.page = null;
+		this.path = null;
+		this.params.clear();
+
+		normalizeUrl(this, url);
+	}
+
 	public static PageUrl parse(PageUrl parent, String url) 
 	throws BadUrlFormatException {
 		PageUrl pageUrl = new PageUrl(parent, url);
+		return pageUrl;
+	}
+	
+	public static PageUrl parse(String url) 
+	throws BadUrlFormatException {
+		PageUrl pageUrl = new PageUrl(url);
 		return pageUrl;
 	}
 
@@ -321,6 +341,171 @@ public class PageUrl implements Serializable {
 					urlbuf.insert(0, parent.getPath());
 				}
 			}			
+		}
+
+		//path
+		pointer = urlbuf.lastIndexOf(SEPERATOR);
+		if(pointer >= 0) {
+			path = urlbuf.substring(0, pointer + 1);
+			urlbuf.delete(0, pointer + 1);
+		} else {
+			path = "";
+		}
+
+		//page
+		pointer = urlbuf.indexOf(QUERY);
+		if(pointer >= 0) {
+			page = urlbuf.substring(0, pointer);
+			urlbuf.delete(0, pointer + 1);
+		} else if(urlbuf.length() > 0){
+			if(urlbuf.indexOf(".") > 0) {
+				page = urlbuf.toString();
+			} else if (urlbuf.indexOf("#") >= 0){
+				page = urlbuf.toString();
+			} else {
+				path = path + urlbuf.toString() + "/";
+			}
+		}
+
+		//query
+		TreeMap<String, String> temp_map = new TreeMap<String, String>();
+		String[] params = urlbuf.toString().split(PARAMETERS);
+		for(String param : params) {
+			temp_array = param.split(EQUAL);
+			if(temp_array.length >= 2) {
+				key = temp_array[0].trim();
+				value = temp_array[1].trim();
+				temp_map.put(key, value);
+			} else {
+				continue;
+			}
+		}
+
+		StringBuffer buf = new StringBuffer();
+
+		pageUrl.setProtocol(protocol);
+		buf.append(protocol);
+		buf.append(PREFIX);
+
+		pageUrl.setHost(host);
+		buf.append(host);
+
+		pageUrl.setPort(port);
+		if(pro != INDEX_HTTP || !(port.equals(PORT_HTTP))) {
+			buf.append(PORT_SEP);
+			buf.append(port);
+		}
+
+		buf.append(SEPERATOR);
+
+		pageUrl.setPath(path);
+		buf.append(path);
+
+		if(page == null) {
+			pageUrl.setPage("#");
+			pageUrl.setUrl(buf.toString());
+			return;
+		}
+
+		pageUrl.setPage(page);
+		buf.append(page);
+
+		Entry<String, String> iter = null;
+		int count = 0;
+		while((iter = temp_map.pollFirstEntry()) != null) {
+			if(count == 0)
+				buf.append(QUERY);
+			else
+				buf.append(PARAMETERS);
+
+			key = iter.getKey();
+			value = iter.getValue();
+			pageUrl.addParameter(key, value);
+			buf.append(key);
+			buf.append(EQUAL);
+			buf.append(value);
+
+			count++;
+		}
+
+		pageUrl.setUrl(buf.toString());
+	}
+	
+	public static void normalizeUrl(PageUrl pageUrl, String url) 
+	throws BadUrlFormatException{
+
+		String protocol = null;
+		String host = null;
+		String port = null;
+		String page = null;
+		String path = null;
+
+		String[] temp_array = new String[2];
+		String temp_host = null;
+		String key = null;
+		String value = null;
+
+		int pointer = 0;
+		StringBuffer urlbuf = 
+			new StringBuffer(url.trim().replaceAll("\\\\", "/"));
+
+		//Email
+		pointer = urlbuf.indexOf(EMAIL);
+		if(pointer >= 0) {
+			logger.error("bad url:" + url);
+			throw new BadUrlFormatException(
+					PageUrl.class.getName(), "url : " + url);
+		}
+
+		//protocol
+		pointer = urlbuf.indexOf(PREFIX);
+		if(pointer >= 0) {
+			protocol = urlbuf.substring(0, pointer);
+			urlbuf.delete(0, pointer + 3);
+		}
+
+		int pro = 0;
+		if(protocol == null) {
+			protocol = PROTOCOL_HTTP;
+		} else if(protocol.equalsIgnoreCase(PROTOCOL_HTTP)) {
+			pro = INDEX_HTTP;
+		} else if(protocol.equalsIgnoreCase(PROTOCOL_HTTPS)) {
+			pro = INDEX_HTTPS;
+		} else if(protocol.equalsIgnoreCase(PROTOCOL_FTP)) {
+			pro = INDEX_FTP;
+		} else {
+			logger.error("bad url:" + url);
+			throw new BadUrlFormatException(
+					PageUrl.class.getName(), "url : " + url);
+		}
+
+		//host&port
+		pointer = urlbuf.indexOf(SEPERATOR);
+		if(pointer == 0) {
+			logger.error("bad url:" + url);
+			throw new BadUrlFormatException(
+					PageUrl.class.getName(), "url : " + url);
+		} else if(pointer > 0) {
+			temp_host = urlbuf.substring(0, pointer);
+
+			temp_array = temp_host.split(PORT_SEP);
+			host = temp_array[0];
+			if(temp_array.length > 1)
+				port = temp_array[1];
+			else
+				port = PORT[pro];
+
+			urlbuf.delete(0, pointer + 1);
+
+		} else {
+			temp_array = urlbuf.toString().split(PORT_SEP);
+			host = temp_array[0];
+			if(temp_array.length > 1)
+				port = temp_array[1];
+			else
+				port = PORT[pro];
+
+			urlbuf.delete(0, urlbuf.length());			
 		}
 
 		//path
