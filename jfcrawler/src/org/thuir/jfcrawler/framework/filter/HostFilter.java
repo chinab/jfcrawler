@@ -11,7 +11,7 @@ public class HostFilter extends Filter {
 	private String host = null;
 	
 	public void setHost(String host) throws BadUrlFormatException {
-		this.host = PageUrl.parse(null, host).getHost();;
+		this.host = PageUrl.parse(host).getHost();;
 	}
 
 	@Override
