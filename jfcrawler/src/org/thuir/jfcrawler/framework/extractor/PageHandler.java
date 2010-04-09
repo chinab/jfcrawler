@@ -1,4 +1,4 @@
-package org.thuir.jfcrawler.framework.handler;
+package org.thuir.jfcrawler.framework.extractor;
 
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.PageUrl;
