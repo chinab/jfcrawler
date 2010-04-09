@@ -32,4 +32,8 @@ public class UrlDB {
 	public void save(PageUrl url) {
 		
 	}
+	
+	public long lastVisit(PageUrl url) {
+		return 0l;
+	}
 }
