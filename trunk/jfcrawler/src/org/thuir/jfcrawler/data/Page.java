@@ -6,7 +6,7 @@ package org.thuir.jfcrawler.data;
  */
 public class Page {
 
-	private PageUrl url = null;
+	private Url url = null;
 	
 	private byte[] html = null;
 	
@@ -14,16 +14,16 @@ public class Page {
 		
 	}
 	
-	public Page(PageUrl url) {
+	public Page(Url url) {
 		this();
 		this.url = url;
 	}
 	
-	public void setPageUrl(PageUrl url) {
+	public void setUrl(Url url) {
 		this.url = url;
 	}
 	
-	public PageUrl getPageUrl() {
+	public Url getUrl() {
 		return this.url;
 	}
 	

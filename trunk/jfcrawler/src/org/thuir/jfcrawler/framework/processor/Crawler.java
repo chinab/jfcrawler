@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.thuir.jfcrawler.data.Page;
-import org.thuir.jfcrawler.data.PageUrl;
+import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.cache.Cache;
 import org.thuir.jfcrawler.framework.classifier.Classifier;
 import org.thuir.jfcrawler.framework.extractor.Extractor;
@@ -65,7 +65,7 @@ public abstract class Crawler extends Thread {
 
 	@Override
 	public void run() {
-		ArrayList<PageUrl> urls = new ArrayList<PageUrl>();
+		ArrayList<Url> urls = new ArrayList<Url>();
 		while(true) {
 			try {
 				Page page = cache.poll();
@@ -77,7 +77,7 @@ public abstract class Crawler extends Thread {
 				writer.write(page);
 
 				for(Extractor e : extractors) {
-					ArrayList<PageUrl> ret = e.extractUrls(page);
+					ArrayList<Url> ret = e.extractUrls(page);
 					if(ret == null)
 						continue;
 					urls.addAll(ret);
@@ -86,7 +86,7 @@ public abstract class Crawler extends Thread {
 
 
 				boolean forbidden = false;
-				for(PageUrl url : urls) {
+				for(Url url : urls) {
 					forbidden = false;
 					for(Classifier c : classifiers) {
 						c.process(url);

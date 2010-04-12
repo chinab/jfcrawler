@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.thuir.jfcrawler.data.PageUrl;
+import org.thuir.jfcrawler.data.Url;
 
 public class UrlDB {
 	private Connection conn = null;
@@ -24,7 +24,7 @@ public class UrlDB {
 		String username = "root";
 		String password = "root";
 
-		try { 
+		try {
 			Class.forName( "org.gjt.mm.mysql.Driver" ); 
 			conn = DriverManager.getConnection( 
 					url, username, password );
@@ -38,15 +38,15 @@ public class UrlDB {
 		} 
 	}
 
-	public void load(PageUrl url) throws SQLException {
+	public void load(Url url) throws SQLException {
 		ResultSet res = stmt_load.executeQuery();
 	}
 
-	public void save(PageUrl url) throws SQLException {
+	public void save(Url url) throws SQLException {
 		stmt_save.executeUpdate();
 	}
 
-	public long check(PageUrl url) throws SQLException {
+	public long check(Url url) throws SQLException {
 		ResultSet res = stmt_check.executeQuery();
 		if(res.next())
 			return res.getLong("last-visit");

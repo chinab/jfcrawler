@@ -11,7 +11,7 @@ import net.htmlparser.jericho.Source;
 
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Page;
-import org.thuir.jfcrawler.data.PageUrl;
+import org.thuir.jfcrawler.data.Url;
 
 /**
  * @author ruKyzhc
@@ -20,8 +20,8 @@ import org.thuir.jfcrawler.data.PageUrl;
 public class HTMLExtractor extends Extractor {
 
 	@Override
-	public ArrayList<PageUrl> extractUrls(Page page) {
-		ArrayList<PageUrl> urls = new ArrayList<PageUrl>();
+	public ArrayList<Url> extractUrls(Page page) {
+		ArrayList<Url> urls = new ArrayList<Url>();
 		
 		Source source = null;
 		try {
@@ -40,7 +40,7 @@ public class HTMLExtractor extends Extractor {
 				String link = e.getAttributeValue("href");
 				if(link == null)
 					continue;
-				PageUrl url = new PageUrl(page.getPageUrl(), link);
+				Url url = new Url(page.getUrl(), link);
 				urls.add(url);
 			} catch (BadUrlFormatException e1) {
 				continue;

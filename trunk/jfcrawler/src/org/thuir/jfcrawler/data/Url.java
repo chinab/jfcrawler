@@ -13,9 +13,9 @@ import org.apache.log4j.Logger;
  * @author ruKyzhc
  *
  */
-public class PageUrl implements Serializable {
+public class Url implements Serializable {
 	private static final Logger logger = 
-		Logger.getLogger(PageUrl.class);
+		Logger.getLogger(Url.class);
 
 	/**
 	 * generated serialVersionUID
@@ -36,15 +36,17 @@ public class PageUrl implements Serializable {
 
 	protected ArrayList<UrlParameter> params;
 	
-	//statistics
+	protected long lastVisit = 0l;
 	
-	protected long lastVisit = 0;
+	protected long lastModify = 0l;
+	
+	protected int status = 0;
 
-	public PageUrl() {
+	public Url() {
 		params = new ArrayList<UrlParameter>();
 	}
 
-	public PageUrl(PageUrl parent, String url) throws BadUrlFormatException {
+	public Url(Url parent, String url) throws BadUrlFormatException {
 		this();
 
 		this.url = null;
@@ -58,7 +60,7 @@ public class PageUrl implements Serializable {
 		normalizeUrl(this, parent, url);
 	}
 
-	public PageUrl(String url) throws BadUrlFormatException {
+	public Url(String url) throws BadUrlFormatException {
 		this();
 
 		this.url = null;
@@ -72,115 +74,98 @@ public class PageUrl implements Serializable {
 		normalizeUrl(this, url);
 	}
 
-	public static PageUrl parse(PageUrl parent, String url) 
+	public static Url parse(Url parent, String url) 
 	throws BadUrlFormatException {
-		PageUrl pageUrl = new PageUrl(parent, url);
-		return pageUrl;
+		return new Url(parent, url);
 	}
 	
-	public static PageUrl parse(String url) 
+	public static Url parse(String url) 
 	throws BadUrlFormatException {
-		PageUrl pageUrl = new PageUrl(url);
-		return pageUrl;
+		return new Url(url);
 	}
 
-	/**
-	 * @return the url
-	 */
 	public String getUrl() {
 		return url;
 	}
-
-	/**
-	 * @param url the url to set
-	 */
 	protected void setUrl(String url) {
 		this.url = url;
 	}
-
-	/**
-	 * @return the host
-	 */
 	public String getHost() {
 		return host;
 	}
-
-	/**
-	 * @param host the host to set
-	 */
 	protected void setHost(String host) {
 		this.host = host;
 	}
-
-	/**
-	 * @return the protocol
-	 */
 	public String getProtocol() {
 		return protocol;
 	}
-
-	/**
-	 * @param protocol the protocol to set
-	 */
 	protected void setProtocol(String protocol) {
 		this.protocol = protocol;
 	}
-
-	/**
-	 * @return the page
-	 */
 	public String getPage() {
 		return page;
 	}
-
-	/**
-	 * @param page the page to set
-	 */
 	protected void setPage(String page) {
 		this.page = page;
 	}
-
-
-	/**
-	 * @return the port
-	 */
 	public String getPort() {
 		return port;
 	}
-
-	/**
-	 * @param port the port to set
-	 */
 	protected void setPort(String port) {
 		this.port = port;
 	}
-
-	/**
-	 * @return the params
-	 */
 	public ArrayList<UrlParameter> getParameters() {
 		return params;
 	}
-
-	/**
-	 * @param add <key, value> to parameters list.
-	 */
 	protected void addParameter(String key, String value) {
 		this.params.add(new UrlParameter(key, value));
 	}
-
-	/**
-	 * @param path the path to set
-	 */
 	protected void setPath(String path) {
 		this.path = path;
 	}
-
-	/**
-	 * @return the path
-	 */
 	public String getPath() {
 		return path;
+	}
+	
+	public void setLastVisit(long lastVisit) {
+		this.lastVisit = lastVisit;
+	}
+	public long getLastVisit() {
+		return lastVisit;
+	}
+	public void setLastModify(long lastModify) {
+		this.lastModify = lastModify;
+	}
+	public long getLastModify() {
+		return lastModify;
+	}
+	
+	public void setFetched() {
+		status = UrlStatus.setFetchingStatus(status, UrlStatus.FETCHED);
+	}
+	public boolean isFetched() {
+		return UrlStatus.fetchingStatus(status) == UrlStatus.FETCHED;
+	}
+	
+	public void setDiscarded() {
+		status = UrlStatus.setFetchingStatus(status, UrlStatus.DISCARD);
+	}
+	public boolean isDiscarded() {
+		return UrlStatus.fetchingStatus(status) == UrlStatus.DISCARD;
+	}
+	
+	public void setMissing() {
+		status = UrlStatus.setFetchingStatus(status, UrlStatus.MISSING);
+	}
+	public boolean isMissing() {
+		return UrlStatus.fetchingStatus(status) == UrlStatus.MISSING;
+	}
+	
+	public void setHttpCode(int code) {
+		status = UrlStatus.setHttpCode(status, code);
+	}
+	public int getHttpCode() {
+		return UrlStatus.httpCode(status);
 	}
 
 	@Override
@@ -190,8 +175,8 @@ public class PageUrl implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof PageUrl) {
-			return this.url.equals(((PageUrl)obj).url);
+		if(obj instanceof Url) {
+			return this.url.equals(((Url)obj).url);
 		} else {
 			return false;
 		}
@@ -223,7 +208,7 @@ public class PageUrl implements Serializable {
 	private static final String EQUAL      = "=";
 	private static final String BOOKMARK   = "#";
 
-	public static void normalizeUrl(PageUrl pageUrl, PageUrl parent, String url) 
+	public static void normalizeUrl(Url target, Url parent, String url) 
 	throws BadUrlFormatException{	
 		boolean isPrefix = true;
 
@@ -245,7 +230,7 @@ public class PageUrl implements Serializable {
 		if(pointer >= 0) {
 			logger.error("bad url:" + url);
 			throw new BadUrlFormatException(
-					PageUrl.class.getName(), "url : " + url);
+					Url.class.getName(), "url : " + url);
 		}
 
 		//bookmark
@@ -277,7 +262,7 @@ public class PageUrl implements Serializable {
 		} else {
 			logger.error("bad url:" + url);
 			throw new BadUrlFormatException(
-					PageUrl.class.getName(), "url : " + url);
+					Url.class.getName(), "url : " + url);
 		}
 
 		//host&port
@@ -286,7 +271,7 @@ public class PageUrl implements Serializable {
 			if(parent == null) {
 				logger.error("bad url:" + url);
 				throw new BadUrlFormatException(
-						PageUrl.class.getName(), "url : " + url);
+						Url.class.getName(), "url : " + url);
 			} else {
 				host = parent.getHost();
 				port = parent.getPort();
@@ -322,7 +307,7 @@ public class PageUrl implements Serializable {
 				if(parent == null) {
 					logger.error("bad url:" + url);
 					throw new BadUrlFormatException(
-							PageUrl.class.getName(), "url : " + url);
+							Url.class.getName(), "url : " + url);
 				} else {
 					host = parent.getHost();
 					port = parent.getPort();
@@ -371,14 +356,14 @@ public class PageUrl implements Serializable {
 
 		StringBuffer buf = new StringBuffer();
 
-		pageUrl.setProtocol(protocol);
+		target.setProtocol(protocol);
 		buf.append(protocol);
 		buf.append(PREFIX);
 
-		pageUrl.setHost(host);
+		target.setHost(host);
 		buf.append(host);
 
-		pageUrl.setPort(port);
+		target.setPort(port);
 		if(pro != INDEX_HTTP || !(port.equals(PORT_HTTP))) {
 			buf.append(PORT_SEP);
 			buf.append(port);
@@ -386,16 +371,16 @@ public class PageUrl implements Serializable {
 
 		buf.append(SEPERATOR);
 
-		pageUrl.setPath(path);
+		target.setPath(path);
 		buf.append(path);
 
 		if(page == null) {
-			pageUrl.setPage("#");
-			pageUrl.setUrl(buf.toString());
+			target.setPage("#");
+			target.setUrl(buf.toString());
 			return;
 		}
 
-		pageUrl.setPage(page);
+		target.setPage(page);
 		buf.append(page);
 
 		Entry<String, String> iter = null;
@@ -408,7 +393,7 @@ public class PageUrl implements Serializable {
 
 			key = iter.getKey();
 			value = iter.getValue();
-			pageUrl.addParameter(key, value);
+			target.addParameter(key, value);
 			buf.append(key);
 			buf.append(EQUAL);
 			buf.append(value);
@@ -416,179 +401,15 @@ public class PageUrl implements Serializable {
 			count++;
 		}
 
-		pageUrl.setUrl(buf.toString());
+		target.setUrl(buf.toString());
 	}
 	
-	public static void normalizeUrl(PageUrl pageUrl, String url) 
+	public static void normalizeUrl(Url target, String url) 
 	throws BadUrlFormatException{
-
-		String protocol = null;
-		String host = null;
-		String port = null;
-		String page = null;
-		String path = null;
-
-		String[] temp_array = new String[2];
-		String temp_host = null;
-		String key = null;
-		String value = null;
-
-		int pointer = 0;
-		
-		//Email
-		pointer = url.indexOf(EMAIL);
-		if(pointer >= 0) {
-			logger.error("bad url:" + url);
-			throw new BadUrlFormatException(
-					PageUrl.class.getName(), "url : " + url);
-		}
-
-		//bookmark
-		pointer = url.indexOf(BOOKMARK);
-		if(pointer >= 0)  {
-			url = url.substring(0, pointer);
-		}
-		
-		StringBuffer urlbuf = 
-			new StringBuffer(url.trim().replaceAll("\\\\", "/"));
-
-		//protocol
-		pointer = urlbuf.indexOf(PREFIX);
-		if(pointer >= 0) {
-			protocol = urlbuf.substring(0, pointer);
-			urlbuf.delete(0, pointer + 3);
-		}
-
-		int pro = 0;
-		if(protocol == null) {
-			protocol = PROTOCOL_HTTP;
-		} else if(protocol.equalsIgnoreCase(PROTOCOL_HTTP)) {
-			pro = INDEX_HTTP;
-		} else if(protocol.equalsIgnoreCase(PROTOCOL_HTTPS)) {
-			pro = INDEX_HTTPS;
-		} else if(protocol.equalsIgnoreCase(PROTOCOL_FTP)) {
-			pro = INDEX_FTP;
-		} else {
-			logger.error("bad url:" + url);
-			throw new BadUrlFormatException(
-					PageUrl.class.getName(), "url : " + url);
-		}
-
-		//host&port
-		pointer = urlbuf.indexOf(SEPERATOR);
-		if(pointer == 0) {
-			logger.error("bad url:" + url);
-			throw new BadUrlFormatException(
-					PageUrl.class.getName(), "url : " + url);
-		} else if(pointer > 0) {
-			temp_host = urlbuf.substring(0, pointer);
-
-			temp_array = temp_host.split(PORT_SEP);
-			host = temp_array[0];
-			if(temp_array.length > 1)
-				port = temp_array[1];
-			else
-				port = PORT[pro];
-
-			urlbuf.delete(0, pointer + 1);
-
-		} else {
-			temp_array = urlbuf.toString().split(PORT_SEP);
-			host = temp_array[0];
-			if(temp_array.length > 1)
-				port = temp_array[1];
-			else
-				port = PORT[pro];
-
-			urlbuf.delete(0, urlbuf.length());			
-		}
-
-		//path
-		pointer = urlbuf.lastIndexOf(SEPERATOR);
-		if(pointer >= 0) {
-			path = urlbuf.substring(0, pointer + 1);
-			urlbuf.delete(0, pointer + 1);
-		} else {
-			path = "";
-		}
-
-		//page
-		pointer = urlbuf.indexOf(QUERY);
-		if(pointer >= 0) {
-			page = urlbuf.substring(0, pointer);
-			urlbuf.delete(0, pointer + 1);
-		} else if(urlbuf.length() > 0){
-			if(urlbuf.indexOf(".") > 0) {
-				page = urlbuf.toString();
-			} else if (urlbuf.indexOf("#") >= 0){
-				page = urlbuf.toString();
-			} else {
-				path = path + urlbuf.toString() + "/";
-			}
-		}
-
-		//query
-		TreeMap<String, String> temp_map = new TreeMap<String, String>();
-		String[] params = urlbuf.toString().split(PARAMETERS);
-		for(String param : params) {
-			temp_array = param.split(EQUAL);
-			if(temp_array.length >= 2) {
-				key = temp_array[0].trim();
-				value = temp_array[1].trim();
-				temp_map.put(key, value);
-			} else {
-				continue;
-			}
-		}
-
-		StringBuffer buf = new StringBuffer();
-
-		pageUrl.setProtocol(protocol);
-		buf.append(protocol);
-		buf.append(PREFIX);
-
-		pageUrl.setHost(host);
-		buf.append(host);
-
-		pageUrl.setPort(port);
-		if(pro != INDEX_HTTP || !(port.equals(PORT_HTTP))) {
-			buf.append(PORT_SEP);
-			buf.append(port);
-		}
-
-		buf.append(SEPERATOR);
-
-		pageUrl.setPath(path);
-		buf.append(path);
-
-		if(page == null) {
-			pageUrl.setPage("#");
-			pageUrl.setUrl(buf.toString());
-			return;
-		}
-
-		pageUrl.setPage(page);
-		buf.append(page);
-
-		Entry<String, String> iter = null;
-		int count = 0;
-		while((iter = temp_map.pollFirstEntry()) != null) {
-			if(count == 0)
-				buf.append(QUERY);
-			else
-				buf.append(PARAMETERS);
-
-			key = iter.getKey();
-			value = iter.getValue();
-			pageUrl.addParameter(key, value);
-			buf.append(key);
-			buf.append(EQUAL);
-			buf.append(value);
-
-			count++;
-		}
-
-		pageUrl.setUrl(buf.toString());
+		if(url.startsWith("http://"))
+			normalizeUrl(target, null, url);
+		else
+			normalizeUrl(target, null, "http://" + url);
 	}
 	
 	/**

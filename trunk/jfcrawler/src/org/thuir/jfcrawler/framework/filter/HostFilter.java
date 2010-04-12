@@ -1,7 +1,7 @@
 package org.thuir.jfcrawler.framework.filter;
 
 import org.thuir.jfcrawler.data.BadUrlFormatException;
-import org.thuir.jfcrawler.data.PageUrl;
+import org.thuir.jfcrawler.data.Url;
 
 /**
  * @author ruKyzhc
@@ -11,11 +11,11 @@ public class HostFilter extends Filter {
 	private String host = null;
 	
 	public void setHost(String host) throws BadUrlFormatException {
-		this.host = PageUrl.parse(host).getHost();;
+		this.host = Url.parse(host).getHost();;
 	}
 
 	@Override
-	public boolean shouldVisit(PageUrl url) {
+	public boolean shouldVisit(Url url) {
 		if(host == null)
 			return false;
 		else if(url.getHost().equals(host)) 

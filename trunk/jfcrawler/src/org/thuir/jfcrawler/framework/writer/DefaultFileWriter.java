@@ -24,7 +24,7 @@ public class DefaultFileWriter extends Writer {
 	@Override
 	public void write(Page page) throws IOException {
 		File file = new File(root + "\\" +
-				DynamicUrlUtil.generatePath(page.getPageUrl()));
+				DynamicUrlUtil.generatePath(page.getUrl()));
 		File path = new File(file.getParent());
 		
 		if(!path.exists()) {
@@ -33,6 +33,6 @@ public class DefaultFileWriter extends Writer {
 		FileOutputStream writer = new FileOutputStream(file);
 		writer.write(page.getHtmlContent());
 		writer.close();
-		System.out.println("[url]" + page.getPageUrl());
+		System.out.println("[url]" + page.getUrl());
 	}
 }
