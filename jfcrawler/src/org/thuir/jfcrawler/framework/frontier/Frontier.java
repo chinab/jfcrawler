@@ -1,6 +1,6 @@
 package org.thuir.jfcrawler.framework.frontier;
 
-import org.thuir.jfcrawler.data.PageUrl;
+import org.thuir.jfcrawler.data.Url;
 
 /**
  * @author ruKyzhc
@@ -8,7 +8,7 @@ import org.thuir.jfcrawler.data.PageUrl;
  */
 public abstract class Frontier {
 	
-	public abstract void schedule(PageUrl url);
+	public abstract void schedule(Url url);
 	
-	public abstract PageUrl next();
+	public abstract Url next();
 }

@@ -1,7 +1,7 @@
 package org.thuir.jfcrawler.framework.processor;
 
 import org.thuir.jfcrawler.data.Page;
-import org.thuir.jfcrawler.data.PageUrl;
+import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.cache.Cache;
 import org.thuir.jfcrawler.framework.frontier.Frontier;
 import org.thuir.jfcrawler.io.nio.FetchingListener;
@@ -48,7 +48,7 @@ public abstract class Fetcher extends Thread implements FetchingListener{
 	public void run() {
 		while(true) {
 			try {
-				PageUrl url = frontier.next();
+				Url url = frontier.next();
 				if(url == null) {
 					Thread.sleep(INTERVAL);
 					continue;

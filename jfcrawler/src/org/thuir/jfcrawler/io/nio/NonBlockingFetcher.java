@@ -62,7 +62,7 @@ public class NonBlockingFetcher {
 		}
 
 		FetchContextExchange exchange = new FetchContextExchange(page);
-		exchange.setURL(page.getPageUrl().getUrl());
+		exchange.setURL(page.getUrl().getUrl());
 		exchange.setFetchingListener(listener);
 
 		try {
@@ -71,7 +71,7 @@ public class NonBlockingFetcher {
 		} catch (IOException e) {
 			logger.error("Error [" + 
 					e.getMessage() + "] occurs while fetching " +
-					page.getPageUrl().getUrl());
+					page.getUrl().getUrl());
 
 //			throw new FetchingException(status);
 		}

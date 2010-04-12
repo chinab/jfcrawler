@@ -1,11 +1,11 @@
 package org.thuir.jfcrawler.util;
 
-import org.thuir.jfcrawler.data.PageUrl;
+import org.thuir.jfcrawler.data.Url;
 
 public class DynamicUrlUtil {
 	private static final String defaultPage = "#";
 	
-	public static String danymicUrlToString(PageUrl url) {
+	public static String danymicUrlToString(Url url) {
 		if(url.getPage().equals(""))
 			return defaultPage;
 		String temp = url.getPage();
@@ -22,7 +22,7 @@ public class DynamicUrlUtil {
 		
 		StringBuffer buf = new StringBuffer();
 		buf.append(uri);
-		for(PageUrl.UrlParameter p : url.getParameters()) {
+		for(Url.UrlParameter p : url.getParameters()) {
 			buf.append('_');
 			buf.append(p.toString());
 		}
@@ -32,11 +32,11 @@ public class DynamicUrlUtil {
 		return buf.toString();
 	}
 	
-	public static PageUrl parseStringToDanymicUri(String str) {
+	public static Url parseStringToDanymicUri(String str) {
 		return null;
 	}
 	
-	public static String generatePath(PageUrl url) {
+	public static String generatePath(Url url) {
 		return
 			url.getHost() + "\\" 
 			+ url.getPath().replaceAll("/", "\\\\") + "\\" 

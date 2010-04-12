@@ -1,6 +1,6 @@
 package org.thuir.jfcrawler.framework.filter;
 
-import org.thuir.jfcrawler.data.PageUrl;
+import org.thuir.jfcrawler.data.Url;
 
 /**
  * @author ruKyzhc
@@ -8,6 +8,6 @@ import org.thuir.jfcrawler.data.PageUrl;
  */
 public abstract class Filter {
 
-	public abstract boolean shouldVisit(PageUrl url);
+	public abstract boolean shouldVisit(Url url);
 
 }

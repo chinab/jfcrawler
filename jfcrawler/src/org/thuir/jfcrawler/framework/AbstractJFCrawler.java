@@ -1,7 +1,7 @@
 package org.thuir.jfcrawler.framework;
 
 import org.thuir.jfcrawler.data.BadUrlFormatException;
-import org.thuir.jfcrawler.data.PageUrl;
+import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.cache.BlockingQueueCache;
 import org.thuir.jfcrawler.framework.cache.Cache;
 import org.thuir.jfcrawler.framework.classifier.Classifier;
@@ -125,7 +125,7 @@ public abstract class AbstractJFCrawler extends Thread {
 	}
 
 	public void addSeed(String url) throws BadUrlFormatException {
-		frontier.schedule(PageUrl.parse(null, url));
+		frontier.schedule(Url.parse(null, url));
 	}
 
 	@Override
