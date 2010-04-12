@@ -1,3 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project>
+<project name="jfcrawler" default="jar" xmlns:ivy="antlib:org.apache.ivy.ant">
+	<!-- some variables used -->
+	<property name="lib.dir" value="lib" />
+	<property name="build.dir" value="build"/>
+	<property name="dist.dir" value="dist" />
+	<property name="src.dir" value="src" />
+
+	<!-- paths used for compilation and run  -->
+	<path id="lib.path.id">
+		<fileset dir="${lib.dir}" />
+	</path>
+
+	<!--
+		================================= 
+		target: resolve
+		=================================
+	-->
+	<target name="resolve" description="--> retreive dependencies with ivy">
+		<ivy:retrieve />
+	</target>
+
+	<!--
+		================================= 
+		target: report
+		=================================
+	-->
+	<target name="report" depends="resolve"
+		description="--> generates a report of dependencies">
+		<ivy:report todir="${dist.dir}" />
+	</target>
+
+	<!--
+		================================= 
+		target: compile
+		=================================
+	-->
+	<target name="compile" depends="resolve" description="--> compile the project">
+		<mkdir dir="${build.dir}" />
+		<javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="lib.path.id" />
+	</target>
+
+	<!--
+		================================= 
+		target: jar
+		=================================
+	-->
+	<target name="jar" depends="compile" description="--> create jar file">
+	</target>
+
+	<!--
+		================================= 
+		target: run-demo
+		=================================
+	-->
+	<target name="demo" depends="compile" description="--> run the demo">
+	</target>
+
+	<!--
+		================================= 
+		target: clean
+		=================================
+	-->
+	<target name="clean" description="--> clean the project">
+		<delete includeemptydirs="true">
+			<fileset dir="${dist.dir}" />
+		</delete>
+	</target>
+
+	<!--
+		================================= 
+		target: clean-cache
+		=================================
+	-->
+	<target name="clean-cache" description="--> clean the ivy cache">
+		<ivy:cleancache />
+	</target>
 </project>
