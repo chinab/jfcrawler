@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="jfcrawler" default="jar" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="jfcrawler" basedir="." default="jar" xmlns:ivy="antlib:org.apache.ivy.ant">
 	<!-- some variables used -->
-	<property name="lib.dir" value="lib" />
-	<property name="build.dir" value="build"/>
-	<property name="dist.dir" value="dist" />
-	<property name="src.dir" value="src" />
+	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="build.dir" value="${basedir}/build"/>
+	<property name="dist.dir" value="${basedir}/dist" />
+	<property name="src.dir" value="${basedir}/src" />
 
 	<!-- paths used for compilation and run  -->
 	<path id="lib.path.id">
-		<fileset dir="${lib.dir}" />
+		<fileset dir="${lib.dir}" >
+			<include name="**/*.jar"/>
+		</fileset>
 	</path>
 
 	<!--
@@ -35,9 +37,30 @@
 		target: compile
 		=================================
 	-->
-	<target name="compile" depends="resolve" description="--> compile the project">
+	<target name="compile" depends="resolve" 
+			description="--> compile the project">
 		<mkdir dir="${build.dir}" />
-		<javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="lib.path.id" />
+		<javac 
+			srcdir="${src.dir}"
+			destdir="${build.dir}" 
+			classpathref="lib.path.id" >
+			<include name="**/*.java"/>
+			<exclude name="**/.svn/**"/>
+			<exclude name="org/thuir/jfcrawler/test/**"/>
+		</javac>
+	</target>
+	
+	<target name="compile-without-resolve" 
+			description="--> compile the project without resolving">
+		<mkdir dir="${build.dir}" />
+		<javac 
+			srcdir="${src.dir}"
+			destdir="${build.dir}" 
+			classpathref="lib.path.id" >
+			<include name="**/*.java"/>
+			<exclude name="**/.svn/**"/>
+			<exclude name="org/thuir/jfcrawler/test/**"/>
+		</javac>
 	</target>
 
 	<!--
@@ -46,6 +69,11 @@
 		=================================
 	-->
 	<target name="jar" depends="compile" description="--> create jar file">
+		<jar destfile="${dist.dir}/${ant.project.name}.jar">   
+			<fileset dir="${build.dir}">   
+				<include name="**/*.class"/>   
+			</fileset> 
+		</jar>   
 	</target>
 
 	<!--
@@ -62,8 +90,9 @@
 		=================================
 	-->
 	<target name="clean" description="--> clean the project">
-		<delete includeemptydirs="true">
+		<delete includeemptydirs="true" quiet="true" >
 			<fileset dir="${dist.dir}" />
+			<fileset dir="${build.dir}" />
 		</delete>
 	</target>
 
