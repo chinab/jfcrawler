@@ -35,8 +35,10 @@ public class PageUrl implements Serializable {
 	protected String path;
 
 	protected ArrayList<UrlParameter> params;
-
-	protected int    docId;
+	
+	//statistics
+	
+	protected long lastVisit = 0;
 
 	public PageUrl() {
 		params = new ArrayList<UrlParameter>();
@@ -95,21 +97,6 @@ public class PageUrl implements Serializable {
 	protected void setUrl(String url) {
 		this.url = url;
 	}
-
-	/**
-	 * @return the docId
-	 */
-	public int getDocId() {
-		return docId;
-	}
-
-	/**
-	 * @param docId the docId to set
-	 */
-	protected void setDocId(int docId) {
-		this.docId = docId;
-	}
-
 
 	/**
 	 * @return the host
@@ -171,15 +158,8 @@ public class PageUrl implements Serializable {
 	/**
 	 * @return the params
 	 */
-	public ArrayList<UrlParameter> getParams() {
+	public ArrayList<UrlParameter> getParameters() {
 		return params;
-	}
-
-	/**
-	 * @return get all paremeters
-	 */
-	public Object[] getParameters() {
-		return params.toArray();
 	}
 
 	/**

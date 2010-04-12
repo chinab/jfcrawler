@@ -2,38 +2,63 @@ package org.thuir.jfcrawler.io.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import org.thuir.jfcrawler.data.PageUrl;
 
 public class UrlDB {
-	private Connection connection = null; 
-	private Statement statement = null; 
+	private Connection conn = null;
+
+	private static final String SQL_LOAD = "";
+	private static final String SQL_SAVE = "";
+	private static final String SQL_CHECK = "";
+
+	private PreparedStatement stmt_load = null;
+	private PreparedStatement stmt_save = null;
+	private PreparedStatement stmt_check = null;
 
 	public UrlDB() {
 		String url = "jdbc:mysql://localhost:3306/urldb";
-		String username = "root"; 
-		String password = "root"; 
+		String username = "root";
+		String password = "root";
 
 		try { 
 			Class.forName( "org.gjt.mm.mysql.Driver" ); 
-			connection = DriverManager.getConnection( 
+			conn = DriverManager.getConnection( 
 					url, username, password );
+
+			stmt_load = conn.prepareStatement(SQL_LOAD);
+			stmt_save = conn.prepareStatement(SQL_SAVE);
+			stmt_check = conn.prepareStatement(SQL_CHECK);
+
 		} catch ( ClassNotFoundException cnfex ) {
 		} catch ( SQLException sqlex ) {
 		} 
 	}
-	
-	public void load(PageUrl url) {
 
+	public void load(PageUrl url) throws SQLException {
+		ResultSet res = stmt_load.executeQuery();
 	}
-	
-	public void save(PageUrl url) {
-		
+
+	public void save(PageUrl url) throws SQLException {
+		stmt_save.executeUpdate();
 	}
-	
-	public long lastVisit(PageUrl url) {
-		return 0l;
+
+	public long check(PageUrl url) throws SQLException {
+		ResultSet res = stmt_check.executeQuery();
+		if(res.next())
+			return res.getLong("last-visit");
+		else
+			return 0l;
 	}
+
+	public void close() throws SQLException {
+		stmt_load.close();
+		stmt_save.close();
+		stmt_check.close();
+		conn.close();
+	}
+
 }

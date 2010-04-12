@@ -22,7 +22,7 @@ public class DynamicUrlUtil {
 		
 		StringBuffer buf = new StringBuffer();
 		buf.append(uri);
-		for(PageUrl.UrlParameter p : url.getParams()) {
+		for(PageUrl.UrlParameter p : url.getParameters()) {
 			buf.append('_');
 			buf.append(p.toString());
 		}
