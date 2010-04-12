@@ -73,9 +73,17 @@
 			<fileset dir="${build.dir}">   
 				<include name="**/*.class"/>   
 			</fileset> 
-		</jar>   
+		</jar>
 	</target>
 
+	<!--
+			================================= 
+			target: test
+			=================================
+	-->
+	<target name="test" depends="compile" description="--> test unit">
+	</target>
+	
 	<!--
 		================================= 
 		target: run-demo
