@@ -1,6 +1,7 @@
 package org.thuir.jfcrawler.framework.processor;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.thuir.jfcrawler.data.Page;
@@ -11,6 +12,7 @@ import org.thuir.jfcrawler.framework.extractor.Extractor;
 import org.thuir.jfcrawler.framework.filter.Filter;
 import org.thuir.jfcrawler.framework.frontier.Frontier;
 import org.thuir.jfcrawler.framework.writer.Writer;
+import org.thuir.jfcrawler.io.database.UrlDB;
 
 /**
  * @author ruKyzhc
@@ -31,6 +33,8 @@ public abstract class Crawler extends Thread {
 	protected Cache cache = null;
 
 	protected Frontier frontier = null;
+	
+	protected UrlDB urldb = null;
 
 	public Crawler() {
 		extractors = new ArrayList<Extractor>();
@@ -63,6 +67,10 @@ public abstract class Crawler extends Thread {
 		this.frontier = frontier;
 	}
 
+	public void setUrlDB(UrlDB urldb) {
+		this.urldb = urldb;
+	}
+	
 	@Override
 	public void run() {
 		ArrayList<Url> urls = new ArrayList<Url>();
@@ -75,7 +83,8 @@ public abstract class Crawler extends Thread {
 				}
 
 				writer.write(page);
-
+				urldb.save(page.getUrl());
+				
 				for(Extractor e : extractors) {
 					ArrayList<Url> ret = e.extractUrls(page);
 					if(ret == null)
@@ -97,12 +106,15 @@ public abstract class Crawler extends Thread {
 							break;
 						}
 					}
-					if(!forbidden)
+					if(!forbidden) {
 						frontier.schedule(url);
+					}
 				}
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
+			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 			}
 		}

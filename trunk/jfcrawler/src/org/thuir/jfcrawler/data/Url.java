@@ -167,6 +167,13 @@ public class Url implements Serializable {
 	public int getHttpCode() {
 		return UrlStatus.httpCode(status);
 	}
+	
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	public int getStatus() {
+		return this.status;
+	}
 
 	@Override
 	public String toString() {

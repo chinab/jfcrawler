@@ -1,5 +1,7 @@
 package org.thuir.jfcrawler.framework;
 
+import java.sql.SQLException;
+
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.cache.BlockingQueueCache;
@@ -14,6 +16,7 @@ import org.thuir.jfcrawler.framework.processor.Fetcher;
 import org.thuir.jfcrawler.framework.processor.Crawler;
 import org.thuir.jfcrawler.framework.writer.DefaultFileWriter;
 import org.thuir.jfcrawler.framework.writer.Writer;
+import org.thuir.jfcrawler.io.database.UrlDB;
 import org.thuir.jfcrawler.io.nio.NonBlockingFetcher;
 import org.thuir.jfcrawler.util.AccessController;
 
@@ -36,6 +39,8 @@ public abstract class AbstractJFCrawler extends Thread {
 	protected Cache cache = null;
 
 	protected Frontier frontier = null;
+	
+	protected UrlDB urldb = null;
 
 	protected Class<? extends Writer> writerClass =
 		DefaultFileWriter.class;
@@ -71,12 +76,23 @@ public abstract class AbstractJFCrawler extends Thread {
 		this.writerClass = T;
 	}
 
+	public boolean initalizeUrlDB() {
+		urldb = new UrlDB();
+		try {
+			urldb.clear();
+		} catch (SQLException e) {
+			return false;
+		}
+		return true;
+	}
+	
 	public void initializeCrawler(
 			Class<? extends Crawler> T, int nThread) {
 		crawlerPoolSize = nThread;
 		
 		assert cache != null;
 		assert frontier != null;
+		assert urldb != null;
 		
 		try {			
 			crawlerPool = new Crawler[nThread];
@@ -85,6 +101,7 @@ public abstract class AbstractJFCrawler extends Thread {
 
 				crawlerPool[i].setCache(cache);
 				crawlerPool[i].setFrontier(frontier);
+				crawlerPool[i].setUrlDB(urldb);
 
 				Writer w = writerClass.newInstance();
 				w.setRoot(jobName);
