@@ -10,13 +10,18 @@ import org.thuir.jfcrawler.data.Url;
 
 public class UrlDB {
 	private Connection conn = null;
+	
+	private static final String table = "urlstatus";
 
-	private static final String SQL_LOAD = "";
+	private static final String SQL_LOAD = 
+		"SELECT * FROM " + table + " WHERE url = ?";
 	private static final String SQL_SAVE = "";
+	private static final String SQL_CREATE = "";
 	private static final String SQL_CHECK = "";
 
 	private PreparedStatement stmt_load = null;
 	private PreparedStatement stmt_save = null;
+	private PreparedStatement stmt_create = null;
 	private PreparedStatement stmt_check = null;
 
 	public UrlDB() {
@@ -32,18 +37,32 @@ public class UrlDB {
 			stmt_load = conn.prepareStatement(SQL_LOAD);
 			stmt_save = conn.prepareStatement(SQL_SAVE);
 			stmt_check = conn.prepareStatement(SQL_CHECK);
+			stmt_create = conn.prepareStatement(SQL_CREATE);
 
 		} catch ( ClassNotFoundException cnfex ) {
 		} catch ( SQLException sqlex ) {
 		} 
 	}
 
-	public void load(Url url) throws SQLException {
+
+	public boolean load(Url url) throws SQLException {
 		ResultSet res = stmt_load.executeQuery();
+		if(res.next()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
-	public void save(Url url) throws SQLException {
-		stmt_save.executeUpdate();
+	public boolean save(Url url) throws SQLException {
+		ResultSet res = stmt_check.executeQuery();
+		if(res.next()) {
+			stmt_save.executeUpdate();
+			return true;
+		} else {
+			stmt_create.executeUpdate();
+			return false;
+		}
 	}
 
 	public long check(Url url) throws SQLException {
@@ -51,7 +70,7 @@ public class UrlDB {
 		if(res.next())
 			return res.getLong("last-visit");
 		else
-			return 0l;
+			return -1l;
 	}
 
 	public void close() throws SQLException {
