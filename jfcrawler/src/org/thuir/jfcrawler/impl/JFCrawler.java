@@ -24,6 +24,7 @@ public class JFCrawler extends AbstractJFCrawler {
 		
 		crawler.initializeFrontier(BlockingQueueFrontier.class);
 		crawler.initializeCache(BlockingQueueCache.class);
+		crawler.initalizeUrlDB();
 		
 		crawler.initalizeFetcher(DefaultFetcher.class);
 
