@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.thuir.jfcrawler.data.Url;
+import org.thuir.jfcrawler.util.ConfigUtil;
 
 public class UrlDB {
 	private Connection conn = null;
@@ -33,9 +34,12 @@ public class UrlDB {
 	private PreparedStatement stmt_check = null;
 
 	public UrlDB() throws Exception {
-		String url = "jdbc:mysql://localhost:3306/urldb";
-		String username = "root";
-		String password = "root";
+		String url = 
+			ConfigUtil.getConfig().getString("url-database.host");
+		String username = 
+			ConfigUtil.getConfig().getString("url-database.user");
+		String password = 
+			ConfigUtil.getConfig().getString("url-database.pass");
 
 		Class.forName( "org.gjt.mm.mysql.Driver" ); 
 		conn = DriverManager.getConnection( 
