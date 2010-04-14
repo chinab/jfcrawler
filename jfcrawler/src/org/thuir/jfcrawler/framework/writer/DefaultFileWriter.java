@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.thuir.jfcrawler.data.Page;
-import org.thuir.jfcrawler.util.CrawlerConfiguration;
+import org.thuir.jfcrawler.util.ConfigUtil;
 import org.thuir.jfcrawler.util.DynamicUrlUtil;
 
 /**
@@ -18,7 +18,9 @@ public class DefaultFileWriter extends Writer {
 	
 	@Override
 	public void setRoot(String job) {
-		this.root = CrawlerConfiguration.getWriterRoot() + "\\" + job;		
+		this.root = 
+			ConfigUtil.getConfig().getString("writer.root") 
+			+ "\\" + job;		
 	}
 	
 	@Override

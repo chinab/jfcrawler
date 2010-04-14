@@ -13,6 +13,7 @@ import org.thuir.jfcrawler.framework.filter.Filter;
 import org.thuir.jfcrawler.framework.frontier.Frontier;
 import org.thuir.jfcrawler.framework.writer.Writer;
 import org.thuir.jfcrawler.io.database.UrlDB;
+import org.thuir.jfcrawler.util.ConfigUtil;
 
 /**
  * @author ruKyzhc
@@ -20,7 +21,8 @@ import org.thuir.jfcrawler.io.database.UrlDB;
  */
 public abstract class Crawler extends Thread {
 
-	private static final long INTERVAL = 1000l;
+	private static final long INTERVAL = 
+		ConfigUtil.getConfig().getLong("basic.thread-interval");;
 
 	protected ArrayList<Extractor> extractors = null;
 

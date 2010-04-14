@@ -7,7 +7,7 @@ import org.thuir.jfcrawler.framework.frontier.Frontier;
 import org.thuir.jfcrawler.io.nio.FetchingListener;
 import org.thuir.jfcrawler.io.nio.NonBlockingFetcher;
 import org.thuir.jfcrawler.util.AccessController;
-import org.thuir.jfcrawler.util.CrawlerConfiguration;
+import org.thuir.jfcrawler.util.ConfigUtil;
 
 /**
  * @author ruKyzhc
@@ -15,10 +15,11 @@ import org.thuir.jfcrawler.util.CrawlerConfiguration;
  */
 public abstract class Fetcher extends Thread implements FetchingListener{
 
-	private static final long INTERVAL = 1000l;
+	private static final long INTERVAL = 
+		ConfigUtil.getConfig().getLong("basic.thread-interval");
 	
 	private static final long ACCESS_INTERVAL = 
-		CrawlerConfiguration.getAccessInterval();
+		ConfigUtil.getConfig().getLong("basic.accessing-interval");
 
 	protected NonBlockingFetcher fetcher = null;
 

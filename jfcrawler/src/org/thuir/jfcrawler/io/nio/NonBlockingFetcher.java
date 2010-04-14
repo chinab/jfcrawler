@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.thuir.jfcrawler.data.Page;
-import org.thuir.jfcrawler.util.CrawlerConfiguration;
+import org.thuir.jfcrawler.util.ConfigUtil;
 
 /**
  * @author ruKyzhc
@@ -29,13 +29,16 @@ public class NonBlockingFetcher {
 		client = new HttpClient();
 		client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
 		client.setMaxConnectionsPerAddress(
-				CrawlerConfiguration.getMaxConnectionsPerAddress());
+				ConfigUtil.
+				getConfig().getInt("fetcher.max-connections"));
 		
 		QueuedThreadPool pool = new QueuedThreadPool(
-				CrawlerConfiguration.getMaxHttpFetcherThreadPoolSize());
+				ConfigUtil.
+				getConfig().getInt("fetcher.max-pool-size"));
 		client.setThreadPool(pool);
 		client.setTimeout(
-				CrawlerConfiguration.getMaxTimeout());
+				ConfigUtil.
+				getConfig().getInt("fetcher.max-timeout"));
 
 		try {
 			client.start();
