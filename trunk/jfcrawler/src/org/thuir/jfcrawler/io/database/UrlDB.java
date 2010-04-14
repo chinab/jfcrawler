@@ -32,24 +32,19 @@ public class UrlDB {
 	private PreparedStatement stmt_create = null;
 	private PreparedStatement stmt_check = null;
 
-	public UrlDB() {
+	public UrlDB() throws Exception {
 		String url = "jdbc:mysql://localhost:3306/urldb";
 		String username = "root";
 		String password = "root";
 
-		try {
-			Class.forName( "org.gjt.mm.mysql.Driver" ); 
-			conn = DriverManager.getConnection( 
-					url, username, password );
+		Class.forName( "org.gjt.mm.mysql.Driver" ); 
+		conn = DriverManager.getConnection( 
+				url, username, password );
 
-			stmt_load = conn.prepareStatement(SQL_LOAD);
-			stmt_save = conn.prepareStatement(SQL_SAVE);
-			stmt_check = conn.prepareStatement(SQL_CHECK);
-			stmt_create = conn.prepareStatement(SQL_CREATE);
-
-		} catch ( ClassNotFoundException cnfex ) {
-		} catch ( SQLException sqlex ) {
-		} 
+		stmt_load = conn.prepareStatement(SQL_LOAD);
+		stmt_save = conn.prepareStatement(SQL_SAVE);
+		stmt_check = conn.prepareStatement(SQL_CHECK);
+		stmt_create = conn.prepareStatement(SQL_CREATE);
 	}
 
 	public void clear() throws SQLException {

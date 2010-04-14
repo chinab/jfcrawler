@@ -1,7 +1,5 @@
 package org.thuir.jfcrawler.framework;
 
-import java.sql.SQLException;
-
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.cache.BlockingQueueCache;
@@ -76,14 +74,13 @@ public abstract class AbstractJFCrawler extends Thread {
 		this.writerClass = T;
 	}
 
-	public boolean initalizeUrlDB() {
-		urldb = new UrlDB();
+	public void initalizeUrlDB() {
 		try {
+			urldb = new UrlDB();
 			urldb.clear();
-		} catch (SQLException e) {
-			return false;
+		} catch (Exception e) {
+			this.urldb = null;
 		}
-		return true;
 	}
 	
 	public void initializeCrawler(

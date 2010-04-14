@@ -83,7 +83,9 @@ public abstract class Crawler extends Thread {
 				}
 
 				writer.write(page);
-				urldb.save(page.getUrl());
+				
+				if(urldb != null)
+					urldb.save(page.getUrl());
 				
 				for(Extractor e : extractors) {
 					ArrayList<Url> ret = e.extractUrls(page);
