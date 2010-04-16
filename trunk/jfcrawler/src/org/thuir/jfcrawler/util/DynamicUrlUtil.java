@@ -1,5 +1,7 @@
 package org.thuir.jfcrawler.util;
 
+import java.util.Map.Entry;
+
 import org.thuir.jfcrawler.data.Url;
 
 public class DynamicUrlUtil {
@@ -22,9 +24,11 @@ public class DynamicUrlUtil {
 		
 		StringBuffer buf = new StringBuffer();
 		buf.append(uri);
-		for(Url.UrlParameter p : url.getParameters()) {
+		for(Entry<String, String> p : url.getParameters().entrySet()) {
 			buf.append('_');
-			buf.append(p.toString());
+			buf.append(p.getKey());
+			buf.append('=');
+			buf.append(p.getValue());
 		}
 		if(suffix != null) {
 			buf.append(suffix);
