@@ -74,6 +74,11 @@
 				<include name="**/*.class"/>   
 			</fileset> 
 		</jar>
+		<jar jarfile="${dist.dir}/${ant.project.name}-src.jar">
+			<fileset dir="${src.dir}">
+				<include name="**/*.java"/> 
+			</fileset> 
+		</jar>
 	</target>
 
 	<!--
