@@ -117,6 +117,9 @@ public class Url implements Serializable {
 	public HashMap<String, String> getParameters() {
 		return params;
 	}
+	public String getParameter(String key) {
+		return params.get(key);
+	}
 	protected void addParameter(String key, String value) {
 		this.params.put(key, value);
 	}
