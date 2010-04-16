@@ -1,7 +1,7 @@
 package org.thuir.jfcrawler.data;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
@@ -34,7 +34,7 @@ public class Url implements Serializable {
 
 	protected String path;
 
-	protected ArrayList<UrlParameter> params;
+	protected HashMap<String, String> params;
 	
 	protected long lastVisit = 0l;
 	
@@ -43,7 +43,7 @@ public class Url implements Serializable {
 	protected int status = 0;
 
 	public Url() {
-		params = new ArrayList<UrlParameter>();
+		params = new HashMap<String, String>();
 	}
 
 	public Url(Url parent, String url) throws BadUrlFormatException {
@@ -114,11 +114,11 @@ public class Url implements Serializable {
 	protected void setPort(String port) {
 		this.port = port;
 	}
-	public ArrayList<UrlParameter> getParameters() {
+	public HashMap<String, String> getParameters() {
 		return params;
 	}
 	protected void addParameter(String key, String value) {
-		this.params.add(new UrlParameter(key, value));
+		this.params.put(key, value);
 	}
 	protected void setPath(String path) {
 		this.path = path;
@@ -419,73 +419,71 @@ public class Url implements Serializable {
 			normalizeUrl(target, null, "http://" + url);
 	}
 	
-	/**
-	 * @author ruKyzhc
-	 *
-	 */
-	public static class UrlParameter implements Serializable {
-		
-		/**
-		 * generated serialVersionUID
-		 */
-		private static final long serialVersionUID = -664061118486665562L;
-
-		private String key;
-		
-		private String value;
-		
-		public UrlParameter() {
-			this.key = "";
-			this.value = "";
-		}
-		
-		public UrlParameter(String key, String value) {
-			this.key = key;
-			this.value = value;
-		}
-
-		/**
-		 * @return the key
-		 */
-		public String getKey() {
-			return key;
-		}
-
-		/**
-		 * @param key the key to set
-		 */
-		public void setKey(String key) {
-			this.key = key;
-		}
-
-		/**
-		 * @return the value
-		 */
-		public String getValue() {
-			return value;
-		}
-
-		/**
-		 * @param value the value to set
-		 */
-		public void setValue(String value) {
-			this.value = value;
-		}
-		
-		@Override
-		public String toString() {
-			return key + '=' + value;
-		}
-		
-		public static UrlParameter parse(String str) {
-			int pointer = str.indexOf('=');
-			if(pointer < 0)
-				return null;
-			UrlParameter p = new UrlParameter();
-			p.setKey(str.substring(0, pointer));
-			p.setValue(str.substring(pointer + 1));
-			return p;
-		}
-		
-	}
+	
+//	/**
+//	 * @author ruKyzhc
+//	 *
+//	 */
+//	
+//	public static class UrlParameter implements Serializable {
+//		private static final long serialVersionUID = -664061118486665562L;
+//
+//		private String key;
+//		
+//		private String value;
+//		
+//		public UrlParameter() {
+//			this.key = "";
+//			this.value = "";
+//		}
+//		
+//		public UrlParameter(String key, String value) {
+//			this.key = key;
+//			this.value = value;
+//		}
+//
+//		/**
+//		 * @return the key
+//		 */
+//		public String getKey() {
+//			return key;
+//		}
+//
+//		/**
+//		 * @param key the key to set
+//		 */
+//		public void setKey(String key) {
+//			this.key = key;
+//		}
+//
+//		/**
+//		 * @return the value
+//		 */
+//		public String getValue() {
+//			return value;
+//		}
+//
+//		/**
+//		 * @param value the value to set
+//		 */
+//		public void setValue(String value) {
+//			this.value = value;
+//		}
+//		
+//		@Override
+//		public String toString() {
+//			return key + '=' + value;
+//		}
+//		
+//		public static UrlParameter parse(String str) {
+//			int pointer = str.indexOf('=');
+//			if(pointer < 0)
+//				return null;
+//			UrlParameter p = new UrlParameter();
+//			p.setKey(str.substring(0, pointer));
+//			p.setValue(str.substring(pointer + 1));
+//			return p;
+//		}
+//		
+//	}
 }
