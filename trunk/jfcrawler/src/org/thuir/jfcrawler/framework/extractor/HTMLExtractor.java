@@ -40,7 +40,7 @@ public class HTMLExtractor extends Extractor {
 				String link = e.getAttributeValue("href");
 				if(link == null)
 					continue;
-				Url url = new Url(page.getUrl(), link);
+				Url url = Url.parseWithParent(page.getUrl(), link);
 				urls.add(url);
 			} catch (BadUrlFormatException e1) {
 				continue;

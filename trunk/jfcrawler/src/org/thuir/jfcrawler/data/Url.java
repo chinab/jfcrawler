@@ -41,47 +41,49 @@ public class Url implements Serializable {
 	protected long lastModify = 0l;
 	
 	protected int status = 0;
+	
+	private static Class<? extends Url> urlClass = Url.class;
 
-	public Url() {
+	protected Url() {
 		params = new HashMap<String, String>();
 	}
 
-	public Url(Url parent, String url) throws BadUrlFormatException {
-		this();
-
-		this.url = null;
-		this.protocol = null;
-		this.host = null;
-		this.port = null;
-		this.page = null;
-		this.path = null;
-		this.params.clear();
-
-		normalizeUrl(this, parent, url);
+	public static void setUrlClass(Class<? extends Url> c) {
+		urlClass= c;
 	}
-
-	public Url(String url) throws BadUrlFormatException {
-		this();
-
-		this.url = null;
-		this.protocol = null;
-		this.host = null;
-		this.port = null;
-		this.page = null;
-		this.path = null;
-		this.params.clear();
-
-		normalizeUrl(this, url);
-	}
-
-	public static Url parse(Url parent, String url) 
+	
+	public static Url parseWithParent(Url parent, String url) 
 	throws BadUrlFormatException {
-		return new Url(parent, url);
+		if(urlClass == null) 
+			return null;
+		
+		Url inst = null;
+		try {
+			inst = urlClass.newInstance();
+		} catch (InstantiationException e) {
+			return null;
+		} catch (IllegalAccessException e) {
+			return null;
+		}
+		normalizeUrl(inst, parent, url);
+		return inst;
 	}
 	
 	public static Url parse(String url) 
 	throws BadUrlFormatException {
-		return new Url(url);
+		if(urlClass == null) 
+			return null;
+		
+		Url inst = null;
+		try {
+			inst = urlClass.newInstance();
+		} catch (InstantiationException e) {
+			return null;
+		} catch (IllegalAccessException e) {
+			return null;
+		}
+		normalizeUrl(inst, url);
+		return inst;
 	}
 
 	public String getUrl() {
@@ -421,72 +423,5 @@ public class Url implements Serializable {
 		else
 			normalizeUrl(target, null, "http://" + url);
 	}
-	
-	
-//	/**
-//	 * @author ruKyzhc
-//	 *
-//	 */
-//	
-//	public static class UrlParameter implements Serializable {
-//		private static final long serialVersionUID = -664061118486665562L;
-//
-//		private String key;
-//		
-//		private String value;
-//		
-//		public UrlParameter() {
-//			this.key = "";
-//			this.value = "";
-//		}
-//		
-//		public UrlParameter(String key, String value) {
-//			this.key = key;
-//			this.value = value;
-//		}
-//
-//		/**
-//		 * @return the key
-//		 */
-//		public String getKey() {
-//			return key;
-//		}
-//
-//		/**
-//		 * @param key the key to set
-//		 */
-//		public void setKey(String key) {
-//			this.key = key;
-//		}
-//
-//		/**
-//		 * @return the value
-//		 */
-//		public String getValue() {
-//			return value;
-//		}
-//
-//		/**
-//		 * @param value the value to set
-//		 */
-//		public void setValue(String value) {
-//			this.value = value;
-//		}
-//		
-//		@Override
-//		public String toString() {
-//			return key + '=' + value;
-//		}
-//		
-//		public static UrlParameter parse(String str) {
-//			int pointer = str.indexOf('=');
-//			if(pointer < 0)
-//				return null;
-//			UrlParameter p = new UrlParameter();
-//			p.setKey(str.substring(0, pointer));
-//			p.setValue(str.substring(pointer + 1));
-//			return p;
-//		}
-//		
-//	}
+
 }
