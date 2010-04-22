@@ -17,6 +17,7 @@ import org.thuir.jfcrawler.framework.writer.Writer;
 import org.thuir.jfcrawler.io.database.UrlDB;
 import org.thuir.jfcrawler.io.nio.NonBlockingFetcher;
 import org.thuir.jfcrawler.util.AccessController;
+import org.thuir.jfcrawler.util.ConfigUtil;
 
 /**
  * @author ruKyzhc
@@ -132,6 +133,10 @@ public abstract class AbstractJFCrawler extends Thread {
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 		}
+	}
+	
+	public void setUserAgent(String agent) {
+		ConfigUtil.setProperty("User-Agent", agent);
 	}
 	
 	public void setJobName(String name) {
