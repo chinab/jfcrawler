@@ -18,6 +18,8 @@ public class NonBlockingFetcher {
 	
 	protected FetchingListener listener = null;
 	
+	protected String userAgent = (String)ConfigUtil.getProperty("User-Agent");
+	
 	public void addFetchingListener(FetchingListener listener) {
 		this.listener = listener;
 	}
@@ -67,6 +69,7 @@ public class NonBlockingFetcher {
 		FetchContextExchange exchange = new FetchContextExchange(page);
 		exchange.setURL(page.getUrl().getUrl());
 		exchange.setFetchingListener(listener);
+		exchange.addRequestHeader("User-Agent", userAgent);
 
 		try {
 //			status = NonBlockingFetcherStatus.SENDING_EXCHANGE;

@@ -1,5 +1,7 @@
 package org.thuir.jfcrawler.util;
 
+import java.util.HashMap;
+
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
@@ -16,6 +18,9 @@ public class ConfigUtil {
 		"./conf/crawlerConfiguration.properties";
 
 	private static Configuration config;
+	
+	private static HashMap<String, Object> properties = 
+		new HashMap<String, Object>();
 
 	static {
 		try {
@@ -27,5 +32,13 @@ public class ConfigUtil {
 
 	public static Configuration getConfig() {
 		return config;
+	}
+	
+	public static void setProperty(String key, Object value) {
+		properties.put(key, value);
+	}
+	
+	public static Object getProperty(String key) {
+		return properties.get(key);
 	}
 }
