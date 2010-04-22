@@ -135,8 +135,8 @@ public abstract class AbstractJFCrawler extends Thread {
 		}
 	}
 	
-	public void setUserAgent(String agent) {
-		ConfigUtil.setProperty("User-Agent", agent);
+	public void setUserAgent(String userAgent) {
+		httpFetcher.setUserAgent(userAgent);
 	}
 	
 	public void setJobName(String name) {

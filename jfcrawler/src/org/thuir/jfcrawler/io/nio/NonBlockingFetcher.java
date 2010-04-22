@@ -18,7 +18,7 @@ public class NonBlockingFetcher {
 	
 	protected FetchingListener listener = null;
 	
-	protected String userAgent = (String)ConfigUtil.getProperty("User-Agent");
+	protected String userAgent = "";
 	
 	public void addFetchingListener(FetchingListener listener) {
 		this.listener = listener;
@@ -57,9 +57,10 @@ public class NonBlockingFetcher {
 		}
 	}
 
-
-//	private NonBlockingFetcherStatus status = NonBlockingFetcherStatus.UNKNOWN;
-
+	public void setUserAgent(String userAgent) {
+		this.userAgent = userAgent;
+	}
+	
 	public void fetch(Page page) {
 		if(client == null) {
 			logger.fatal("HttpClient has not been deployed.");
