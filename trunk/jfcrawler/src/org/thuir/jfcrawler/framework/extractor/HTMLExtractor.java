@@ -20,8 +20,8 @@ import org.thuir.jfcrawler.data.Url;
 public class HTMLExtractor extends Extractor {
 
 	@Override
-	public ArrayList<Url> extractUrls(Page page) {
-		ArrayList<Url> urls = new ArrayList<Url>();
+	public List<Url> extractUrls(Page page) {
+		List<Url> urls = new ArrayList<Url>();
 		
 		Source source = null;
 		try {

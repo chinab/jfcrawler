@@ -3,6 +3,7 @@ package org.thuir.jfcrawler.framework.processor;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.Url;
@@ -24,11 +25,11 @@ public abstract class Crawler extends Thread {
 	private static final long INTERVAL = 
 		ConfigUtil.getConfig().getLong("basic.thread-interval");;
 
-	protected ArrayList<Extractor> extractors = null;
+	protected List<Extractor> extractors = null;
 
-	protected ArrayList<Filter>  filters  = null;
+	protected List<Filter>  filters  = null;
 
-	protected ArrayList<Classifier> classifiers = null;
+	protected List<Classifier> classifiers = null;
 
 	protected Writer writer = null;
 
@@ -75,7 +76,7 @@ public abstract class Crawler extends Thread {
 	
 	@Override
 	public void run() {
-		ArrayList<Url> urls = new ArrayList<Url>();
+		List<Url> urls = new ArrayList<Url>();
 		while(true) {
 			try {
 				Page page = cache.poll();
@@ -90,7 +91,7 @@ public abstract class Crawler extends Thread {
 					urldb.save(page.getUrl());
 				
 				for(Extractor e : extractors) {
-					ArrayList<Url> ret = e.extractUrls(page);
+					List<Url> ret = e.extractUrls(page);
 					if(ret == null)
 						continue;
 					urls.addAll(ret);

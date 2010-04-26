@@ -71,6 +71,7 @@ public class NonBlockingFetcher {
 		exchange.setURL(page.getUrl().getUrl());
 		exchange.setFetchingListener(listener);
 		exchange.addRequestHeader("User-Agent", userAgent);
+		exchange.addRequestHeader("Content-Type", "text/html; charset=utf-8");
 
 		try {
 //			status = NonBlockingFetcherStatus.SENDING_EXCHANGE;
