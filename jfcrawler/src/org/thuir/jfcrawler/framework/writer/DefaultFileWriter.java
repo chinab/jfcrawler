@@ -35,6 +35,5 @@ public class DefaultFileWriter extends Writer {
 		FileOutputStream writer = new FileOutputStream(file);
 		writer.write(page.getHtmlContent());
 		writer.close();
-		System.out.println("[url]" + page.getUrl());
 	}
 }
