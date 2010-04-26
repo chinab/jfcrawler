@@ -17,6 +17,7 @@ import org.thuir.jfcrawler.framework.writer.Writer;
 import org.thuir.jfcrawler.io.database.UrlDB;
 import org.thuir.jfcrawler.io.nio.NonBlockingFetcher;
 import org.thuir.jfcrawler.util.AccessController;
+import org.thuir.jfcrawler.util.stat.Statistic;
 
 /**
  * @author ruKyzhc
@@ -148,6 +149,9 @@ public abstract class AbstractJFCrawler extends Thread {
 
 	@Override
 	public void run() {
+		Statistic.create("url-counter");
+		Statistic.create("download-size-counter");
+		
 		for(Crawler p : crawlerPool) {
 			p.start();
 		}
