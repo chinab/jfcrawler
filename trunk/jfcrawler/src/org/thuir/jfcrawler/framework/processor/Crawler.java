@@ -88,10 +88,14 @@ public abstract class Crawler extends Thread {
 
 					writer.write(page);
 
-					System.out.println("[url]" + page.getUrl());
 					Statistic.get("download-size-counter")
 						.inc(page.getHtmlContent().length);
 					Statistic.get("url-counter").inc();
+					System.out.println("[url]" + page.getUrl());
+					System.out.println("[url-counter]" + 
+							Statistic.get("url-counter").count());
+					System.out.println("[download-size]" + 
+							Statistic.get("download-size-counter").count());
 
 					if(urldb != null)
 						urldb.save(page.getUrl());
