@@ -17,7 +17,6 @@ import org.thuir.jfcrawler.framework.writer.Writer;
 import org.thuir.jfcrawler.io.database.UrlDB;
 import org.thuir.jfcrawler.io.nio.NonBlockingFetcher;
 import org.thuir.jfcrawler.util.AccessController;
-import org.thuir.jfcrawler.util.ConfigUtil;
 
 /**
  * @author ruKyzhc

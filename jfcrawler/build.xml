@@ -40,7 +40,8 @@
 	<target name="compile" depends="resolve" 
 			description="--> compile the project">
 		<mkdir dir="${build.dir}" />
-		<javac 
+		<javac
+			debug="true" debuglevel="lines, vars, and source"
 			srcdir="${src.dir}"
 			destdir="${build.dir}" 
 			classpathref="lib.path.id" >
@@ -54,6 +55,7 @@
 			description="--> compile the project without resolving">
 		<mkdir dir="${build.dir}" />
 		<javac 
+			debug="true" debuglevel="lines, vars, and source"
 			srcdir="${src.dir}"
 			destdir="${build.dir}" 
 			classpathref="lib.path.id" >
