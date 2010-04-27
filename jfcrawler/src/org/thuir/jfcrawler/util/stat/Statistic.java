@@ -24,6 +24,15 @@ public class Statistic {
 	public static Statistic get(String key) {
 		return statRepository.get(key); 
 	}
+	
+	public static void inc(String key) {
+		Statistic stat = get(key);
+		if(stat == null)
+			return;
+		synchronized(stat) {
+			stat.inc();
+		}
+	}
 
 	protected long counter = 0l;
 	protected String key = null;
