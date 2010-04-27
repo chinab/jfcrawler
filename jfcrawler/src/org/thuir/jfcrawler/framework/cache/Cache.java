@@ -12,4 +12,6 @@ public abstract class Cache {
 	
 	public abstract Page poll();
 
+	public abstract void dump();
+	
 }

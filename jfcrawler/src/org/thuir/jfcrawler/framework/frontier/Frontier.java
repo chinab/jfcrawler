@@ -11,4 +11,7 @@ public abstract class Frontier {
 	public abstract void schedule(Url url);
 	
 	public abstract Url next();
+	
+	public abstract void dump();
+	
 }

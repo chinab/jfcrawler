@@ -37,5 +37,10 @@ public class BlockingQueueFrontier extends Frontier {
 		queue.offer(url);
 		set.add(url.getUrl());
 	}
+	
+	@Override
+	public void dump() {
+		System.out.println("frontier:" + queue.size());		
+	}
 
 }
