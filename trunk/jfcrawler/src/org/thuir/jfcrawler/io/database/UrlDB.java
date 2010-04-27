@@ -107,16 +107,12 @@ public class UrlDB {
 	}
 
 	public synchronized long check(Url url) throws SQLException {
-		try {
 			stmt_check.setString(1, url.getUrl());
 			ResultSet res = stmt_check.executeQuery();
 			if(res.next())
 				return res.getLong("last_visit");
 			else
 				return -1l;
-		} catch(NullPointerException e) {
-			return -1l;
-		}
 	}
 
 	public void close() throws SQLException {
