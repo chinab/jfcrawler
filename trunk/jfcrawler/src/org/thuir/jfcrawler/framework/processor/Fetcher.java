@@ -82,6 +82,7 @@ public abstract class Fetcher extends Thread implements FetchingListener{
 //		} catch (InterruptedException e) {
 //			// TODO Auto-generated catch block
 //		}
+		System.err.println("finish:" + page.getUrl());
 		cache.offer(page);
 	}
 

@@ -27,4 +27,9 @@ public class BlockingQueueCache extends Cache {
 		return queue.poll();
 	}
 
+	@Override
+	public void dump() {
+		System.out.println("cache:" + queue.size());		
+	}
+
 }
