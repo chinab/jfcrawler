@@ -30,6 +30,8 @@ public class FetchContextExchange extends ContentExchange {
 	protected void onResponseComplete() throws IOException {
 		super.onResponseComplete();
 		page.load(this.getResponseContentBytes());
+		page.getUrl().setFetched();
+		page.getUrl().setHttpCode(this.getResponseStatus());
 		listener.onFetchingFinish(page);
 	}
 	
