@@ -2,6 +2,7 @@ package org.thuir.jfcrawler.framework.processor;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,8 +133,11 @@ public abstract class Crawler extends BasicThread {
 
 					if(!forbidden) {
 						if((lastvisit < 0) ||
-								(lastvisit - cur_time > revisit))
+								(cur_time - lastvisit > revisit)) {
+							if(lastvisit >= 0)
+								System.err.println(new Time(lastvisit));
 							frontier.schedule(url);
+						}
 					}
 				}
 			} catch (InterruptedException e) {
@@ -147,5 +151,5 @@ public abstract class Crawler extends BasicThread {
 			}
 		}
 	}
-	
+
 }

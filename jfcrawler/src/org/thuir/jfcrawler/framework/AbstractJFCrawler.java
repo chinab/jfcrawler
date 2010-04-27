@@ -168,6 +168,7 @@ public abstract class AbstractJFCrawler extends Thread {
 			if(!fetcher.idle())
 				allIdle = false;
 			if(cache.size() == 0 && frontier.size() == 0 && allIdle) {
+				System.err.println("finish");
 				for(Crawler p : crawlerPool) {
 					p.close();
 				}
