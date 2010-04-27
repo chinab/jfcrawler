@@ -47,7 +47,7 @@ public class TestJFCrawler extends TestCase implements FetchingListener{
 		System.out.println("start");
 
 		for(int i = 0; i < pages.length; i++)
-			System.err.println(fetcher.fetch(new FetchExchange(pages[i], this)));
+			fetcher.fetch(new FetchExchange(pages[i], this));
 		
 		while(true) {
 			boolean flag = true;

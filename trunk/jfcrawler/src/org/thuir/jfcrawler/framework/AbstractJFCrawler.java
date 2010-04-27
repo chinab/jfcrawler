@@ -15,7 +15,7 @@ import org.thuir.jfcrawler.framework.processor.Crawler;
 import org.thuir.jfcrawler.framework.writer.DefaultFileWriter;
 import org.thuir.jfcrawler.framework.writer.Writer;
 import org.thuir.jfcrawler.io.database.UrlDB;
-import org.thuir.jfcrawler.io.nio.NonBlockingFetcher;
+import org.thuir.jfcrawler.io.httpclient.MultiThreadHttpFetcher;
 import org.thuir.jfcrawler.util.AccessController;
 import org.thuir.jfcrawler.util.stat.Statistic;
 
@@ -32,7 +32,7 @@ public abstract class AbstractJFCrawler extends Thread {
 	//processor
 	protected Fetcher fetcher = null;
 
-	protected NonBlockingFetcher httpFetcher = null;
+	protected MultiThreadHttpFetcher httpFetcher = null;
 
 	//cache
 	protected Cache cache = null;
@@ -115,28 +115,22 @@ public abstract class AbstractJFCrawler extends Thread {
 
 	public void initializeModules() {		
 		try {
-			httpFetcher = new NonBlockingFetcher();
+			httpFetcher = new MultiThreadHttpFetcher();
 
 			frontier = frontierClass.newInstance();
 			cache = cacheClass.newInstance();
 			
 			fetcher = fetcherClass.newInstance();
-			fetcher.setNonBlockingFetcher(httpFetcher);
+			fetcher.setHttpFetcher(httpFetcher);
 			fetcher.setCache(cache);
 			fetcher.setFrontier(frontier);
 			fetcher.setAccessController(new AccessController());
-			
-			httpFetcher.addFetchingListener(fetcher);
 			
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 		}
-	}
-	
-	public void setUserAgent(String userAgent) {
-		httpFetcher.setUserAgent(userAgent);
 	}
 	
 	public void setJobName(String name) {

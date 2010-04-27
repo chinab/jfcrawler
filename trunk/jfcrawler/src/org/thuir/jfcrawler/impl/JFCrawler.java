@@ -38,7 +38,6 @@ public class JFCrawler extends AbstractJFCrawler {
 		crawler.addExtractor(new HTMLExtractor());
 		
 		crawler.addSeed("http://www.discuz.net/");
-		crawler.setUserAgent("JFCRAWLER(THUIR-bot)");
 		
 		crawler.start();
 	}
