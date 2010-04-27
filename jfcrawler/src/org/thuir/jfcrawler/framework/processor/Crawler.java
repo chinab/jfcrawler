@@ -78,6 +78,8 @@ public abstract class Crawler extends Thread {
 		@Override
 		public void run() {
 			List<Url> urls = new ArrayList<Url>();
+			long revisit = 
+				ConfigUtil.getConfig().getLong("crawler.revisit-interval");
 			while(true) {
 				try {
 					Page page = cache.poll();
@@ -86,7 +88,10 @@ public abstract class Crawler extends Thread {
 						continue;
 					}
 
+					long cur_time = System.currentTimeMillis();
+					
 					writer.write(page);
+					page.getUrl().setLastVisit(cur_time);
 
 					Statistic.get("download-size-counter")
 						.inc(page.getHtmlContent().length);
@@ -95,7 +100,8 @@ public abstract class Crawler extends Thread {
 					System.out.println("[url-counter]" + 
 							Statistic.get("url-counter").count());
 					System.out.println("[download-size]" + 
-							Statistic.get("download-size-counter").count());
+							(Statistic.get("download-size-counter").count()
+							/ 1048576.0));
 
 					if(urldb != null)
 						urldb.save(page.getUrl());
@@ -106,9 +112,7 @@ public abstract class Crawler extends Thread {
 							continue;
 						urls.addAll(ret);
 					}
-
-
-
+					long lastvisit = 0l;
 					boolean forbidden = false;
 					for(Url url : urls) {
 						forbidden = false;
@@ -121,8 +125,16 @@ public abstract class Crawler extends Thread {
 								break;
 							}
 						}
+						
+						if(urldb != null)
+							lastvisit = urldb.check(url);
+						else
+							lastvisit = -1l;
+						
 						if(!forbidden) {
-							frontier.schedule(url);
+							if((lastvisit < 0) ||
+									(lastvisit - cur_time > revisit))
+								frontier.schedule(url);
 						}
 					}
 				} catch (InterruptedException e) {

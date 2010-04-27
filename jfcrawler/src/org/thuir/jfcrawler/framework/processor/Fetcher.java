@@ -75,14 +75,14 @@ public abstract class Fetcher extends Thread implements FetchingListener{
 
 	@Override
 	public void onFetchingFinish(Page page) {
-		try {
-			while(!cache.offer(page)) {
-				Thread.sleep(INTERVAL);
-			}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-		}
-
+//		try {
+//			while(!cache.offer(page)) {
+//				Thread.sleep(INTERVAL);
+//			}
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//		}
+		cache.offer(page);
 	}
 
 }

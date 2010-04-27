@@ -54,7 +54,7 @@ public class UrlDB {
 	public void clear() throws SQLException {
 		Statement stmt = conn.createStatement();
 		stmt.executeUpdate(
-				"DROP TABLE IF EXISTS urldb.urlstatus;" );
+		"DROP TABLE IF EXISTS urldb.urlstatus;" );
 		stmt.executeUpdate(
 				"CREATE TABLE  urldb.urlstatus (" +
 				"id int(10) unsigned NOT NULL AUTO_INCREMENT," +
@@ -69,7 +69,7 @@ public class UrlDB {
 		stmt.close();
 	}
 
-	public boolean load(Url url) throws SQLException {
+	public synchronized boolean load(Url url) throws SQLException {
 		stmt_load.setString(1, url.getUrl());
 		ResultSet res = stmt_load.executeQuery();
 		if(res.next()) {
@@ -82,37 +82,41 @@ public class UrlDB {
 		}
 	}
 
-	public boolean save(Url url) throws SQLException {
+	public synchronized boolean save(Url url) throws SQLException {
 		stmt_check.setString(1, url.getUrl());
 		ResultSet res = stmt_check.executeQuery();
 		if(res.next()) {
 			stmt_save.setInt(1, url.getStatus());
 			stmt_save.setLong(2, url.getLastVisit());
 			stmt_save.setLong(3, url.getLastModify());
-			
+
 			stmt_save.setString(4, url.getUrl());
-			
+
 			stmt_save.executeUpdate();
 			return true;
 		} else {			
 			stmt_create.setString(1, url.getUrl());
-			
+
 			stmt_create.setInt(2, url.getStatus());
 			stmt_create.setLong(3, url.getLastVisit());
 			stmt_create.setLong(4, url.getLastModify());
-			
+
 			stmt_create.executeUpdate();
 			return false;
 		}
 	}
 
-	public long check(Url url) throws SQLException {
-		stmt_check.setString(1, url.getUrl());
-		ResultSet res = stmt_check.executeQuery();
-		if(res.next())
-			return res.getLong("last_visit");
-		else
+	public synchronized long check(Url url) throws SQLException {
+		try {
+			stmt_check.setString(1, url.getUrl());
+			ResultSet res = stmt_check.executeQuery();
+			if(res.next())
+				return res.getLong("last_visit");
+			else
+				return -1l;
+		} catch(NullPointerException e) {
 			return -1l;
+		}
 	}
 
 	public void close() throws SQLException {
