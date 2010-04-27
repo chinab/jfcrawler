@@ -17,7 +17,7 @@ import org.thuir.jfcrawler.framework.writer.Writer;
 import org.thuir.jfcrawler.io.database.UrlDB;
 import org.thuir.jfcrawler.io.httpclient.MultiThreadHttpFetcher;
 import org.thuir.jfcrawler.util.AccessController;
-import org.thuir.jfcrawler.util.ConfigUtil;
+import org.thuir.jfcrawler.util.BasicThread;
 import org.thuir.jfcrawler.util.stat.Statistic;
 
 /**
@@ -151,15 +151,23 @@ public abstract class AbstractJFCrawler extends Thread {
 			p.start();
 		}
 		fetcher.start();
-
-		try {
-			Thread.sleep(
-					ConfigUtil.getConfig()
-					.getLong("basic.thread-interval") * 2);
-		} catch (InterruptedException e) {
-		}
+		
 		while(true) {
-			if(cache.size() == 0 && frontier.size() == 0) {
+			try {
+				Thread.sleep(
+						BasicThread.INTERVAL * 10);
+			} catch (InterruptedException e) {
+			}
+			boolean allIdle = true;
+			for(Crawler p : crawlerPool) {
+				if(!p.idle()) {
+					allIdle = false;
+					break;
+				}
+			}
+			if(!fetcher.idle())
+				allIdle = false;
+			if(cache.size() == 0 && frontier.size() == 0 && allIdle) {
 				for(Crawler p : crawlerPool) {
 					p.close();
 				}

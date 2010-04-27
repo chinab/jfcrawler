@@ -57,7 +57,7 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 					Thread.sleep(INTERVAL);
 					continue;
 				}
-				
+				setIdle(false);
 				long temp = 
 					System.currentTimeMillis() -
 					accessCtrl.lastAccess(url.getHost());
@@ -73,6 +73,8 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 //				// TODO Auto-generated catch block
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
+			} finally {
+				setIdle(true);
 			}
 		}
 	}

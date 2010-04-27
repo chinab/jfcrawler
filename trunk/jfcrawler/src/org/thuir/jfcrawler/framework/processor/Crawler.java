@@ -24,9 +24,6 @@ import org.thuir.jfcrawler.util.stat.Statistic;
  */
 public abstract class Crawler extends BasicThread {
 
-	private static final long INTERVAL = 
-		ConfigUtil.getConfig().getLong("basic.thread-interval");
-
 	protected List<Extractor> extractors = null;
 
 	protected List<Filter>  filters  = null;
@@ -89,7 +86,7 @@ public abstract class Crawler extends BasicThread {
 					Thread.sleep(INTERVAL);
 					continue;
 				}
-
+				setIdle(false);
 				long cur_time = System.currentTimeMillis();
 
 				writer.write(page);
@@ -145,6 +142,8 @@ public abstract class Crawler extends BasicThread {
 				// TODO Auto-generated catch block
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
+			} finally {
+				setIdle(true);
 			}
 		}
 	}

@@ -37,7 +37,7 @@ public class JFCrawler extends AbstractJFCrawler {
 		
 		crawler.addExtractor(new HTMLExtractor());
 		
-//		crawler.addSeed("http://www.discuz.net/");
+		crawler.addSeed("http://www.discuz.net/");
 		
 		crawler.start();
 	}
