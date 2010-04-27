@@ -9,13 +9,14 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.thuir.jfcrawler.util.BasicThread;
 import org.thuir.jfcrawler.util.ConfigUtil;
 
 /**
  * @author ruKyzhc
  *
  */
-public class FetchUnit extends Thread {
+public class FetchUnit extends BasicThread {
 	private final long INTERVAL =
 		ConfigUtil.getConfig().getInt("basic.thread-interval");		
 
@@ -33,8 +34,8 @@ public class FetchUnit extends Thread {
 	private FetchExchange exchange = null;
 
 	//flag
-	private boolean idle = true;
-	private boolean alive = true;
+//	private boolean idle = true;
+//	private boolean alive = true;
 
 	public FetchUnit(String threadName, HttpClient client) {
 		this.setName(threadName);
@@ -45,7 +46,7 @@ public class FetchUnit extends Thread {
 
 	@Override
 	public void run() {
-		setAlive(true);
+		super.run();
 		while(true) {
 			try{
 				while(alive() && idle())
@@ -97,21 +98,21 @@ public class FetchUnit extends Thread {
 		setIdle(false);
 	}
 	
-	protected synchronized void setAlive(boolean alive) {
-		this.alive = alive;
-	}
-	
-	protected synchronized boolean alive() {
-		return alive;
-	}
-
-	protected synchronized void setIdle(boolean idle) {
-		this.idle = idle;
-	}
-
-	public synchronized boolean idle() {
-		return idle;
-	}
+//	protected synchronized void setAlive(boolean alive) {
+//		this.alive = alive;
+//	}
+//	
+//	protected synchronized boolean alive() {
+//		return alive;
+//	}
+//
+//	protected synchronized void setIdle(boolean idle) {
+//		this.idle = idle;
+//	}
+//
+//	public synchronized boolean idle() {
+//		return idle;
+//	}
 
 	public synchronized void timer() {
 		expired = System.currentTimeMillis() + TIMEOUT;
