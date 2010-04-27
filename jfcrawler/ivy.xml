@@ -12,5 +12,7 @@
 		<dependency org="org.eclipse.jetty" name="jetty-client"
 			rev="7.0.2.v20100331" />
 		<dependency org="mysql" name="mysql-connector-java" rev="5.1.9" />
+		<dependency org="org.apache.httpcomponents" name="httpclient"
+			rev="4.0.1" />
 	</dependencies>
 </ivy-module>
