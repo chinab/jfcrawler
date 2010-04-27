@@ -146,6 +146,7 @@ public abstract class AbstractJFCrawler extends Thread {
 	public void run() {
 		Statistic.create("url-counter");
 		Statistic.create("download-size-counter");
+		long time = System.currentTimeMillis();
 
 		for(Crawler p : crawlerPool) {
 			p.start();
@@ -158,6 +159,12 @@ public abstract class AbstractJFCrawler extends Thread {
 						BasicThread.INTERVAL * 10);
 			} catch (InterruptedException e) {
 			}
+			System.err.println(
+					"[cache:" + 
+					cache.size() +
+					"][frontier:" + 
+					frontier.size() + 
+					"]");
 			boolean allIdle = true;
 			for(Crawler p : crawlerPool) {
 				if(!p.idle()) {
@@ -177,6 +184,21 @@ public abstract class AbstractJFCrawler extends Thread {
 				break;
 			}				
 		}
+		double duration = (System.currentTimeMillis() - time) / 1000.0;
+		System.err.println(
+				"[catalog:" + Statistic.get("catalog-counter").count() + "]");
+		System.err.println(
+				"[board:" + Statistic.get("board-counter").count() + "]");
+		System.err.println(
+				"[thread:" + Statistic.get("thread-counter").count() + "]");
+		
+		System.err.println(
+				"[time:" + duration+ "]");
+		System.err.println(
+				"[speed:" + 
+				(Statistic.get("download-size-counter").count() / 
+						(double)duration) + 
+				"]");
 	}
 
 	public void addExtractor(Extractor e) {
