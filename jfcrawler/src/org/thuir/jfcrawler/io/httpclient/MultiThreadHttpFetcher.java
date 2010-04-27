@@ -28,7 +28,8 @@ public class MultiThreadHttpFetcher extends Thread{
 
 	private boolean working = false;
 
-	public MultiThreadHttpFetcher(int nThread) {
+	public MultiThreadHttpFetcher() {
+		nThread = ConfigUtil.getConfig().getInt("fetcher.max-pool-size");
 		this.setName("MultiThreadHttpFetcher");
 
 		// initialize httpclient
@@ -46,7 +47,6 @@ public class MultiThreadHttpFetcher extends Thread{
 		client = new DefaultHttpClient(cm, params);
 
 		// initialize thread pool
-		this.nThread = nThread;
 		threadPool = new FetchUnit[nThread];
 
 		for(int i = 0; i < nThread; i++) {
@@ -54,9 +54,11 @@ public class MultiThreadHttpFetcher extends Thread{
 		}
 
 		threadCounter = nThread;
+		
+		this.doStart();
 	}
 
-	public void doStart() {
+	protected void doStart() {
 		working = true;
 		for(FetchUnit u : threadPool) {
 			u.start();
