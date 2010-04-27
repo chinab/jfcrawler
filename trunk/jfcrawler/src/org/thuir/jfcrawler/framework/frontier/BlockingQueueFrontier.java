@@ -39,8 +39,8 @@ public class BlockingQueueFrontier extends Frontier {
 	}
 	
 	@Override
-	public void dump() {
-		System.out.println("frontier:" + queue.size());		
+	public synchronized int size() {
+		return queue.size();		
 	}
 
 }
