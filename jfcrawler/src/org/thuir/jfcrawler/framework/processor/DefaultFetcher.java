@@ -10,5 +10,4 @@ public class DefaultFetcher extends Fetcher {
 		this.setName("default-fetcher");
 	}
 
-
 }

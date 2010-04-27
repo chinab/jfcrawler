@@ -4,8 +4,9 @@ import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.cache.Cache;
 import org.thuir.jfcrawler.framework.frontier.Frontier;
-import org.thuir.jfcrawler.io.nio.FetchingListener;
-import org.thuir.jfcrawler.io.nio.NonBlockingFetcher;
+import org.thuir.jfcrawler.io.httpclient.FetchExchange;
+import org.thuir.jfcrawler.io.httpclient.MultiThreadHttpFetcher;
+import org.thuir.jfcrawler.io.httpclient.FetchingListener;
 import org.thuir.jfcrawler.util.AccessController;
 import org.thuir.jfcrawler.util.ConfigUtil;
 
@@ -21,7 +22,7 @@ public abstract class Fetcher extends Thread implements FetchingListener{
 	private static final long ACCESS_INTERVAL = 
 		ConfigUtil.getConfig().getLong("basic.accessing-interval");
 
-	protected NonBlockingFetcher fetcher = null;
+	protected MultiThreadHttpFetcher fetcher = null;
 
 	protected Frontier frontier = null;
 
@@ -33,7 +34,7 @@ public abstract class Fetcher extends Thread implements FetchingListener{
 		this.accessCtrl = accessCtrl;
 	}
 
-	public void setNonBlockingFetcher(NonBlockingFetcher fetcher) {
+	public void setHttpFetcher(MultiThreadHttpFetcher fetcher) {
 		this.fetcher = fetcher;
 	}
 
@@ -64,7 +65,8 @@ public abstract class Fetcher extends Thread implements FetchingListener{
 					continue;
 				}
 				accessCtrl.access(url.getHost(), System.currentTimeMillis());
-				fetcher.fetch(new Page(url));
+				
+				fetcher.fetch(new FetchExchange(new Page(url), this));
 //			} catch (FetchingException e) {
 //				// TODO Auto-generated catch block
 			} catch (InterruptedException e) {
@@ -74,16 +76,24 @@ public abstract class Fetcher extends Thread implements FetchingListener{
 	}
 
 	@Override
-	public void onFetchingFinish(Page page) {
-//		try {
-//			while(!cache.offer(page)) {
-//				Thread.sleep(INTERVAL);
-//			}
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//		}
-		System.err.println("finish:" + page.getUrl());
-		cache.offer(page);
+	public void onComplete(FetchExchange exchange) {
+		System.err.println("finish:" + exchange.getUrl());
+		cache.offer(exchange.getPage());
+	}
+
+	@Override
+	public void onExcepted(FetchExchange exchange) {
+		System.err.println("excepted:" + exchange.getUrl());
+	}
+
+	@Override
+	public void onExpired(FetchExchange exchange) {
+		System.err.println("expired:" + exchange.getUrl());
+	}
+	
+	@Override
+	public void onFailed(FetchExchange exchange) {
+		System.err.println("failed:" + exchange.getUrl());
 	}
 
 }

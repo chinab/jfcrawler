@@ -19,6 +19,8 @@ import org.thuir.jfcrawler.util.ConfigUtil;
  *
  */
 public class MultiThreadHttpFetcher extends Thread{
+	private final static long INTERVAL = 
+		ConfigUtil.getConfig().getLong("basic.thread-interval");
 	private HttpClient client = null;
 
 	private FetchUnit[] threadPool = null;
@@ -27,6 +29,9 @@ public class MultiThreadHttpFetcher extends Thread{
 	private int threadCounter = 0;
 
 	private boolean working = false;
+	
+	protected String userAgent = 
+		ConfigUtil.getConfig().getString("fetcher.user-agent");
 
 	public MultiThreadHttpFetcher() {
 		nThread = ConfigUtil.getConfig().getInt("fetcher.max-pool-size");
@@ -91,8 +96,7 @@ public class MultiThreadHttpFetcher extends Thread{
 		working = false;
 
 		try {
-			Thread.sleep(
-					ConfigUtil.getConfig().getInt("basic.thread-interval") * 2);
+			Thread.sleep(INTERVAL * 2);
 		} catch (InterruptedException e) {
 		}
 		for(FetchUnit u : threadPool) {
@@ -100,7 +104,7 @@ public class MultiThreadHttpFetcher extends Thread{
 		}
 	}
 
-	public boolean fetch(FetchExchange exchange) {
+	public boolean access(FetchExchange exchange) {
 		if(working == false)
 			return false;
 
@@ -108,8 +112,25 @@ public class MultiThreadHttpFetcher extends Thread{
 		if(u == null)
 			return false;
 
+		exchange.setUserAgent(userAgent);
 		u.fetch(exchange);
 		return true;
+	}
+	
+	public void fetch(FetchExchange exchange) {
+		if(working == false)
+			return;
+
+		FetchUnit u = null;
+		while((u = getIdleUnit()) == null) {
+			try {
+				Thread.sleep(INTERVAL);
+			} catch (InterruptedException e) {
+			}
+		}
+
+		exchange.setUserAgent(userAgent);
+		u.fetch(exchange);
 	}
 
 	protected FetchUnit getIdleUnit() {
