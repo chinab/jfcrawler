@@ -23,9 +23,9 @@ public class TestHttpClient implements FetchingListener{
 		System.out.println("start");
 		TestHttpClient test = new TestHttpClient();
 
-		fetcher.fetch(new FetchExchange(new Page(Url.parse("http://www.icefirer.com")), test));
-		fetcher.fetch(new FetchExchange(new Page(Url.parse("http://www.baidu.com")), test));
-		fetcher.fetch(new FetchExchange(new Page(Url.parse("http://www.renren.com")), test));
+		fetcher.fetch(new FetchExchange(new Page(Url.parse("http://www.icefirer.com")), test, "THUIR-bot"));
+		fetcher.fetch(new FetchExchange(new Page(Url.parse("http://www.baidu.com")), test, "THUIR-bot"));
+		fetcher.fetch(new FetchExchange(new Page(Url.parse("http://www.renren.com")), test, "THUIR-bot"));
 		
 		Thread.sleep(3000);
 
