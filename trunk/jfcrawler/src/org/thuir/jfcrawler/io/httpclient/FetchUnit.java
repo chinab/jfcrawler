@@ -91,6 +91,9 @@ public class FetchUnit extends Thread {
 	public synchronized void fetch(FetchExchange exchange) {
 		this.exchange = exchange;
 		httpget = new HttpGet(exchange.getUrl().getUrl());
+		String userAgent = null;
+		if((userAgent = exchange.getUserAgent()) != null)
+			httpget.addHeader("User-Agent", userAgent);
 		setIdle(false);
 	}
 	

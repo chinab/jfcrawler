@@ -13,9 +13,25 @@ public class FetchExchange {
 	
 	private Page page = null;
 	
+	private String userAgent = null;
+	
 	public FetchExchange(Page page, FetchingListener listener) {
 		this.listener = listener;
 		this.page = page;
+	}
+	
+	public FetchExchange(Page page, FetchingListener listener, String userAgent) {
+		this.listener = listener;
+		this.page = page;
+		this.userAgent = userAgent;
+	}
+	
+	public void setUserAgent(String agent) {
+		this.userAgent = agent;
+	}
+	
+	public String getUserAgent() {
+		return this.userAgent;
 	}
 	
 	public void onComplete() {
