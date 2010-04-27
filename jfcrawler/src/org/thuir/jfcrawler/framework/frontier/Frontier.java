@@ -12,6 +12,6 @@ public abstract class Frontier {
 	
 	public abstract Url next();
 	
-	public abstract void dump();
+	public abstract int size();
 	
 }

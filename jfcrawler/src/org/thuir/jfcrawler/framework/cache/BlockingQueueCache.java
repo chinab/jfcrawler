@@ -28,8 +28,8 @@ public class BlockingQueueCache extends Cache {
 	}
 
 	@Override
-	public void dump() {
-		System.out.println("cache:" + queue.size());		
+	public synchronized int size() {
+		return queue.size();		
 	}
 
 }

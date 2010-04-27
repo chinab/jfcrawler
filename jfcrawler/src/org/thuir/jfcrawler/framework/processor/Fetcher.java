@@ -8,13 +8,14 @@ import org.thuir.jfcrawler.io.httpclient.FetchExchange;
 import org.thuir.jfcrawler.io.httpclient.MultiThreadHttpFetcher;
 import org.thuir.jfcrawler.io.httpclient.FetchingListener;
 import org.thuir.jfcrawler.util.AccessController;
+import org.thuir.jfcrawler.util.BasicThread;
 import org.thuir.jfcrawler.util.ConfigUtil;
 
 /**
  * @author ruKyzhc
  *
  */
-public abstract class Fetcher extends Thread implements FetchingListener{
+public abstract class Fetcher extends BasicThread implements FetchingListener{
 
 	private static final long INTERVAL = 
 		ConfigUtil.getConfig().getLong("basic.thread-interval");
@@ -48,7 +49,8 @@ public abstract class Fetcher extends Thread implements FetchingListener{
 
 	@Override
 	public void run() {
-		while(true) {
+		super.run();
+		while(alive()) {
 			try {
 				Url url = frontier.next();
 				if(url == null) {

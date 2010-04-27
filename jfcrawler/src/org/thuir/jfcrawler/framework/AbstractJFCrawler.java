@@ -17,6 +17,7 @@ import org.thuir.jfcrawler.framework.writer.Writer;
 import org.thuir.jfcrawler.io.database.UrlDB;
 import org.thuir.jfcrawler.io.httpclient.MultiThreadHttpFetcher;
 import org.thuir.jfcrawler.util.AccessController;
+import org.thuir.jfcrawler.util.ConfigUtil;
 import org.thuir.jfcrawler.util.stat.Statistic;
 
 /**
@@ -26,7 +27,7 @@ import org.thuir.jfcrawler.util.stat.Statistic;
 public abstract class AbstractJFCrawler extends Thread {
 	protected Crawler[] crawlerPool = null;
 	protected int crawlerPoolSize = 0;
-	
+
 	protected String jobName = null;
 
 	//processor
@@ -38,7 +39,7 @@ public abstract class AbstractJFCrawler extends Thread {
 	protected Cache cache = null;
 
 	protected Frontier frontier = null;
-	
+
 	protected UrlDB urldb = null;
 
 	protected Class<? extends Writer> writerClass =
@@ -52,7 +53,7 @@ public abstract class AbstractJFCrawler extends Thread {
 
 	protected Class<? extends Fetcher> fetcherClass = 
 		DefaultFetcher.class;
-	
+
 	public AbstractJFCrawler(String jobName) {
 		this.jobName = jobName;
 	}
@@ -83,15 +84,15 @@ public abstract class AbstractJFCrawler extends Thread {
 			this.urldb = null;
 		}
 	}
-	
+
 	public void initializeCrawler(
 			Class<? extends Crawler> T, int nThread) {
 		crawlerPoolSize = nThread;
-		
+
 		assert cache != null;
 		assert frontier != null;
 		assert urldb != null;
-		
+
 		try {			
 			crawlerPool = new Crawler[nThread];
 			for(int i = 0; i < nThread; i++) {
@@ -119,20 +120,20 @@ public abstract class AbstractJFCrawler extends Thread {
 
 			frontier = frontierClass.newInstance();
 			cache = cacheClass.newInstance();
-			
+
 			fetcher = fetcherClass.newInstance();
 			fetcher.setHttpFetcher(httpFetcher);
 			fetcher.setCache(cache);
 			fetcher.setFrontier(frontier);
 			fetcher.setAccessController(new AccessController());
-			
+
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 		}
 	}
-	
+
 	public void setJobName(String name) {
 		this.setName(name);
 	}
@@ -145,25 +146,42 @@ public abstract class AbstractJFCrawler extends Thread {
 	public void run() {
 		Statistic.create("url-counter");
 		Statistic.create("download-size-counter");
-		
+
 		for(Crawler p : crawlerPool) {
 			p.start();
 		}
 		fetcher.start();
+
+		try {
+			Thread.sleep(
+					ConfigUtil.getConfig()
+					.getLong("basic.thread-interval") * 2);
+		} catch (InterruptedException e) {
+		}
+		while(true) {
+			if(cache.size() == 0 && frontier.size() == 0) {
+				for(Crawler p : crawlerPool) {
+					p.close();
+				}
+				fetcher.close();
+				httpFetcher.close();
+				break;
+			}				
+		}
 	}
-	
+
 	public void addExtractor(Extractor e) {
 		for(Crawler c : crawlerPool) {
 			c.addExtractor(e);
 		}
 	}
-	
+
 	public void addFilter(Filter f) {
 		for(Crawler c : crawlerPool) {
 			c.addFilter(f);
 		}
 	}
-	
+
 	public void addClassifier(Classifier l) {
 		for(Crawler c : crawlerPool) {
 			c.addClassifier(l);
