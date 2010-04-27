@@ -2,18 +2,18 @@ package org.thuir.jfcrawler.test;
 
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.Url;
-import org.thuir.jfcrawler.io.nio.FetchingListener;
-import org.thuir.jfcrawler.io.nio.NonBlockingFetcher;
+import org.thuir.jfcrawler.io.httpclient.FetchExchange;
+import org.thuir.jfcrawler.io.httpclient.MultiThreadHttpFetcher;
+import org.thuir.jfcrawler.io.httpclient.FetchingListener;
 
 import junit.framework.TestCase;
 
 public class TestJFCrawler extends TestCase implements FetchingListener{
 
 	public void testWriter() throws Exception {
-		NonBlockingFetcher fetcher = new NonBlockingFetcher();
+		MultiThreadHttpFetcher fetcher = new MultiThreadHttpFetcher();
 
-		fetcher.addFetchingListener(this);
-		fetcher.setUserAgent("THUIR-bot");
+//		fetcher.setUserAgent("THUIR-bot");
 		Page[] pages = {
 				new Page(Url.parse("http://www.icefirer.com/index-htm-m-bbs.html")),
 				new Page(Url.parse("http://www.icefirer.com/read-htm-tid-1458-page-3.html")),
@@ -44,9 +44,10 @@ public class TestJFCrawler extends TestCase implements FetchingListener{
 //				new Page(Url.parse("http://www.phpwind.com/")),
 //				new Page(Url.parse("http://www.tianya.cn/")),
 		};
+		System.out.println("start");
 
-		for(int i = 0; i < pages.length * 1; i++)
-			fetcher.fetch(pages[i % pages.length]);
+		for(int i = 0; i < pages.length; i++)
+			System.err.println(fetcher.fetch(new FetchExchange(pages[i], this)));
 		
 		while(true) {
 			boolean flag = true;
@@ -62,8 +63,23 @@ public class TestJFCrawler extends TestCase implements FetchingListener{
 	}
 
 	@Override
-	public void onFetchingFinish(Page page) {
-		page.ready();
-		System.out.println(page.getUrl() + ":" + page.getHtmlContent().length);
+	public void onComplete(FetchExchange exchange) {
+		System.out.println(exchange.getPage().getHtmlContent().length);
+		exchange.getPage().ready();
+	}
+
+	@Override
+	public void onExcepted(FetchExchange exchange) {
+		
+	}
+
+	@Override
+	public void onExpired(FetchExchange exchange) {
+		
+	}
+
+	@Override
+	public void onFailed(FetchExchange exchange) {
+		
 	}
 }
