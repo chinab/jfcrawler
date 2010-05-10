@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forum id="discuz_7_2">
+	<sites>
+		<site root="http://www.discuz.net" 
+			entrance="http://www.discuz.net/index.php"/>
+	</sites>
+	<sitemap>
+		<vertex id="catalog" classification="CATALOG">
+			<pattern type="REGEX">^index\.php(\?gid=[\d]+)?$</pattern>
+			<paging type="NONE"/>
+			<child ref="board" xpath=""/>
+		</vertex>
+		<vertex id="board" classification="BOARD">
+			<pattern type="REGEX">^forum-[\d]+-[\d]+\.html$</pattern>
+			<paging type="FLIP" xpath="" prefix="forum-[\d]+-" suffix="\.html"/>
+			<child ref="thread" xpath=""/>
+		</vertex>
+		<vertex id="thread" classification="THREAD">
+			<pattern type="REGEX">^thread-[\d]+-[\d]+-[\d]+\.html$</pattern>
+			<paging type="FLIP" xpath="" prefix="thread-[\d]+-" suffix="-[\d]+\.html"/>
+		</vertex>
+	</sitemap>
+</forum>
