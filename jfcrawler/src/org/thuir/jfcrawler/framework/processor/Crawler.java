@@ -17,7 +17,7 @@ import org.thuir.jfcrawler.framework.writer.Writer;
 import org.thuir.jfcrawler.io.database.UrlDB;
 import org.thuir.jfcrawler.util.BasicThread;
 import org.thuir.jfcrawler.util.ConfigUtil;
-import org.thuir.jfcrawler.util.stat.Statistic;
+import org.thuir.jfcrawler.util.Statistic;
 
 /**
  * @author ruKyzhc

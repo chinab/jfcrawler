@@ -10,7 +10,7 @@ import org.thuir.forum.template.Vertex;
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.extractor.HTMLExtractor;
-import org.thuir.jfcrawler.util.stat.Statistic;
+import org.thuir.jfcrawler.util.Statistic;
 
 /**
  * @author ruKyzhc

@@ -9,7 +9,7 @@ import org.thuir.jfcrawler.framework.AbstractJFCrawler;
 import org.thuir.jfcrawler.framework.filter.HostFilter;
 import org.thuir.jfcrawler.framework.processor.DefaultCrawler;
 import org.thuir.jfcrawler.framework.processor.DefaultFetcher;
-import org.thuir.jfcrawler.util.stat.Statistic;
+import org.thuir.jfcrawler.util.Statistic;
 
 /**
  * @author ruKyzhc
@@ -32,13 +32,13 @@ public class ForumCrawler extends AbstractJFCrawler {
 		crawler.initializeCrawler(DefaultCrawler.class, 15);
 
 		HostFilter f = new HostFilter();
-		f.setHost("www.icefirer.com");
+		f.setHost("www.phpwind.net");
 		crawler.addFilter(f);
 
 		crawler.addExtractor(new ForumExtractor());
 		crawler.addClassifier(new ForumUrlClassifier());
 
-		crawler.addSeed("http://www.icefirer.com/index-htm-m-bbs.html");
+		crawler.addSeed("http://www.phpwind.net/index-htm-m-bbs.html");
 
 		Statistic.create("catalog-counter");
 		Statistic.create("board-counter");

@@ -11,7 +11,7 @@ import org.thuir.jfcrawler.framework.processor.Fetcher;
 import org.thuir.jfcrawler.framework.processor.Crawler;
 import org.thuir.jfcrawler.io.httpclient.MultiThreadHttpFetcher;
 import org.thuir.jfcrawler.util.BasicThread;
-import org.thuir.jfcrawler.util.stat.Statistic;
+import org.thuir.jfcrawler.util.Statistic;
 
 /**
  * @author ruKyzhc
