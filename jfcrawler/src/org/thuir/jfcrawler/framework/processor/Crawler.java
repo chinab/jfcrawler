@@ -2,7 +2,6 @@ package org.thuir.jfcrawler.framework.processor;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +46,7 @@ public abstract class Crawler extends BasicThread {
 		
 		cache = Factory.getCacheInstance();
 		frontier = Factory.getFrontierInstance();
+		urldb = (UrlDB)Factory.getModule(Factory.MODULE_URLDB);
 	}
 
 	public void addExtractor(Extractor extractor) {
@@ -63,19 +63,6 @@ public abstract class Crawler extends BasicThread {
 
 	public void setWriter(Writer writer) {
 		this.writer = writer;
-	}
-
-
-//	public void setCache(Cache cache) {
-//		this.cache = cache;
-//	}
-//
-//	public void setFrontier(Frontier frontier) {
-//		this.frontier = frontier;
-//	}
-
-	public void setUrlDB(UrlDB urldb) {
-		this.urldb = urldb;
 	}
 
 	@Override
@@ -138,8 +125,6 @@ public abstract class Crawler extends BasicThread {
 					if(!forbidden) {
 						if((lastvisit < 0) ||
 								(cur_time - lastvisit > revisit)) {
-							if(lastvisit >= 0)
-								System.err.println(new Time(lastvisit));
 							frontier.schedule(url);
 						}
 					}
