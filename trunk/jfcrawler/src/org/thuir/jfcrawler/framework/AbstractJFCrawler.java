@@ -42,14 +42,14 @@ public abstract class AbstractJFCrawler extends Thread {
 
 	protected UrlDB urldb = null;
 
-	protected Class<? extends Writer> writerClass =
-		DefaultFileWriter.class;
-
-	protected Class<? extends Cache> cacheClass = 
-		BlockingQueueCache.class;
-
-	protected Class<? extends Frontier> frontierClass = 
-		BlockingQueueFrontier.class;
+//	protected Class<? extends Writer> writerClass =
+//		DefaultFileWriter.class;
+//
+//	protected Class<? extends Cache> cacheClass = 
+//		BlockingQueueCache.class;
+//
+//	protected Class<? extends Frontier> frontierClass = 
+//		BlockingQueueFrontier.class;
 
 	protected Class<? extends Fetcher> fetcherClass = 
 		DefaultFetcher.class;
@@ -63,18 +63,18 @@ public abstract class AbstractJFCrawler extends Thread {
 		this.fetcherClass = T;
 	}
 
-	public void initializeFrontier(
-			Class<? extends Frontier> T) {
-		this.frontierClass = T;
-	}
-	public void initializeCache(
-			Class<? extends Cache> T) {
-		this.cacheClass = T;
-	}
-	public void initializeWriter(
-			Class<? extends Writer> T) {
-		this.writerClass = T;
-	}
+//	public void initializeFrontier(
+//			Class<? extends Frontier> T) {
+//		this.frontierClass = T;
+//	}
+//	public void initializeCache(
+//			Class<? extends Cache> T) {
+//		this.cacheClass = T;
+//	}
+//	public void initializeWriter(
+//			Class<? extends Writer> T) {
+//		this.writerClass = T;
+//	}
 
 	public void initalizeUrlDB() {
 		try {
@@ -89,8 +89,8 @@ public abstract class AbstractJFCrawler extends Thread {
 			Class<? extends Crawler> T, int nThread) {
 		crawlerPoolSize = nThread;
 
-		assert cache != null;
-		assert frontier != null;
+//		assert cache != null;
+//		assert frontier != null;
 		assert urldb != null;
 
 		try {			
@@ -98,13 +98,14 @@ public abstract class AbstractJFCrawler extends Thread {
 			for(int i = 0; i < nThread; i++) {
 				crawlerPool[i] = T.newInstance();
 
-				crawlerPool[i].setCache(cache);
-				crawlerPool[i].setFrontier(frontier);
+//				crawlerPool[i].setCache(cache);
+//				crawlerPool[i].setFrontier(frontier);
 				crawlerPool[i].setUrlDB(urldb);
 
-				Writer w = writerClass.newInstance();
-				w.setRoot(jobName);
-				crawlerPool[i].setWriter(w);
+//				Writer w = writerClass.newInstance();
+//				w.setRoot(jobName);
+				crawlerPool[i].setWriter(
+						Factory.getWriterInstance(jobName));
 
 			}
 		} catch (InstantiationException e) {
@@ -118,13 +119,13 @@ public abstract class AbstractJFCrawler extends Thread {
 		try {
 			httpFetcher = new MultiThreadHttpFetcher();
 
-			frontier = frontierClass.newInstance();
-			cache = cacheClass.newInstance();
+//			frontier = frontierClass.newInstance();
+//			cache = cacheClass.newInstance();
 
 			fetcher = fetcherClass.newInstance();
 			fetcher.setHttpFetcher(httpFetcher);
-			fetcher.setCache(cache);
-			fetcher.setFrontier(frontier);
+//			fetcher.setCache(cache);
+//			fetcher.setFrontier(frontier);
 			fetcher.setAccessController(new AccessController());
 
 		} catch (InstantiationException e) {

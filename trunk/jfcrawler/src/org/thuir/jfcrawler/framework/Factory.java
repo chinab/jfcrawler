@@ -9,6 +9,8 @@ import org.thuir.jfcrawler.framework.cache.BlockingQueueCache;
 import org.thuir.jfcrawler.framework.cache.Cache;
 import org.thuir.jfcrawler.framework.frontier.BlockingQueueFrontier;
 import org.thuir.jfcrawler.framework.frontier.Frontier;
+import org.thuir.jfcrawler.framework.writer.DefaultFileWriter;
+import org.thuir.jfcrawler.framework.writer.Writer;
 import org.thuir.jfcrawler.io.database.UrlDB;
 import org.thuir.jfcrawler.io.httpclient.MultiThreadHttpFetcher;
 import org.thuir.jfcrawler.util.AccessController;
@@ -79,6 +81,22 @@ public class Factory {
 			return null;
 		}
 	}
+	
+	private static Writer writer = null;
+	public static void registerWriterClass(
+			Class<? extends Writer> writerClazz) {
+		try {
+			writer = writerClazz.newInstance();
+		} catch (InstantiationException e) {
+			writer = new DefaultFileWriter();
+		} catch (IllegalAccessException e) {
+			writer = new DefaultFileWriter();
+		}
+	}
+	public static Writer getWriterInstance(String jobName) {
+		writer.setRoot(jobName);
+		return writer;
+	}
 
 	private static Map<String, Object> modules =
 		new HashMap<String, Object>();
@@ -93,6 +111,8 @@ public class Factory {
 	public static void initAllModuleWithDefault() {
 		modules.put(MODULE_HTTPFETCHER,      new MultiThreadHttpFetcher());
 		modules.put(MODULE_ACCESSCONTROLLER, new AccessController());
+		//TODO
+		modules.put(MODULE_STATISTICS, null);
 		try {
 			modules.put(MODULE_URLDB, new UrlDB());
 		} catch (Exception e) {
