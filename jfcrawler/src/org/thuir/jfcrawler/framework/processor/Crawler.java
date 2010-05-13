@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.Url;
+import org.thuir.jfcrawler.framework.Factory;
 import org.thuir.jfcrawler.framework.cache.Cache;
 import org.thuir.jfcrawler.framework.classifier.Classifier;
 import org.thuir.jfcrawler.framework.extractor.Extractor;
@@ -40,9 +41,12 @@ public abstract class Crawler extends BasicThread {
 	protected UrlDB urldb = null;
 
 	public Crawler() {
-		extractors = new ArrayList<Extractor>();
-		filters  = new ArrayList<Filter>();
+		extractors  = new ArrayList<Extractor>();
+		filters     = new ArrayList<Filter>();
 		classifiers = new ArrayList<Classifier>();
+		
+		cache = Factory.getCacheInstance();
+		frontier = Factory.getFrontierInstance();
 	}
 
 	public void addExtractor(Extractor extractor) {
@@ -62,13 +66,13 @@ public abstract class Crawler extends BasicThread {
 	}
 
 
-	public void setCache(Cache cache) {
-		this.cache = cache;
-	}
-
-	public void setFrontier(Frontier frontier) {
-		this.frontier = frontier;
-	}
+//	public void setCache(Cache cache) {
+//		this.cache = cache;
+//	}
+//
+//	public void setFrontier(Frontier frontier) {
+//		this.frontier = frontier;
+//	}
 
 	public void setUrlDB(UrlDB urldb) {
 		this.urldb = urldb;
