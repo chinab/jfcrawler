@@ -2,6 +2,7 @@ package org.thuir.jfcrawler.framework.processor;
 
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.Url;
+import org.thuir.jfcrawler.framework.Factory;
 import org.thuir.jfcrawler.framework.cache.Cache;
 import org.thuir.jfcrawler.framework.frontier.Frontier;
 import org.thuir.jfcrawler.io.httpclient.FetchExchange;
@@ -31,24 +32,19 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 	
 	protected AccessController accessCtrl = null;
 	
-	public void setAccessController(AccessController accessCtrl) {
-		this.accessCtrl = accessCtrl;
-	}
-
-	public void setHttpFetcher(MultiThreadHttpFetcher fetcher) {
-		this.fetcher = fetcher;
-	}
-
-	public void setFrontier(Frontier frontier) {
-		this.frontier = frontier;
-	}
-
-	public void setCache(Cache cache) {
-		this.cache = cache;
+	public Fetcher() {
+		frontier = 
+			Factory.getFrontierInstance();
+		cache =
+			Factory.getCacheInstance();
+		accessCtrl = 
+			(AccessController)Factory.getModule(Factory.MODULE_ACCESSCONTROLLER);
+		fetcher =
+			(MultiThreadHttpFetcher)Factory.getModule(Factory.MODULE_HTTPFETCHER);
 	}
 
 	@Override
-	public void run() {
+	public void run() {		
 		super.run();
 		while(alive()) {
 			try {
@@ -69,8 +65,6 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 				accessCtrl.access(url.getHost(), System.currentTimeMillis());
 				
 				fetcher.fetch(new FetchExchange(new Page(url), this));
-//			} catch (FetchingException e) {
-//				// TODO Auto-generated catch block
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 			} finally {
@@ -98,6 +92,12 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 	@Override
 	public void onFailed(FetchExchange exchange) {
 		System.err.println("failed:" + exchange.getUrl());
+	}
+	
+	@Override
+	public void close() {
+		super.close();
+		fetcher.close();
 	}
 
 }

@@ -50,48 +50,49 @@ public class Factory {
 		}
 	}
 	
-	private static Class<? extends Cache> cacheClass = 
-		BlockingQueueCache.class;
-	public static void registerCacheClass(
+	private static Cache cache = new BlockingQueueCache();
+	public static boolean registerCacheClass(
 			Class<? extends Cache> cacheClazz) {
-		cacheClass = cacheClazz;
+		try {
+			cache = cacheClazz.newInstance();
+		} catch (InstantiationException e) {
+			return false;
+		} catch (IllegalAccessException e) {
+			return false;
+		}
+		return true;
 	}
 	public static Cache getCacheInstance() {
-		try {
-			return cacheClass.newInstance();
-		} catch (InstantiationException e) {
-			return null;
-		} catch (IllegalAccessException e) {
-			return null;
-		}
+		return cache;
 	}
 	
-	private static Class<? extends Frontier> frontierClass = 
-		BlockingQueueFrontier.class;
-	public static void registerFrontierClass(
+	private static Frontier frontier = new BlockingQueueFrontier();
+	public static boolean registerFrontierClass(
 			Class<? extends Frontier> frontierClazz) {
-		frontierClass = frontierClazz;
+		try {
+			frontier = frontierClazz.newInstance();
+		} catch (InstantiationException e) {
+			return false;
+		} catch (IllegalAccessException e) {
+			return false;
+		}
+		return true;
 	}
 	public static Frontier getFrontierInstance() {
-		try {
-			return frontierClass.newInstance();
-		} catch (InstantiationException e) {
-			return null;
-		} catch (IllegalAccessException e) {
-			return null;
-		}
+		return frontier;
 	}
 	
-	private static Writer writer = null;
-	public static void registerWriterClass(
+	private static Writer writer = new DefaultFileWriter();
+	public static boolean registerWriterClass(
 			Class<? extends Writer> writerClazz) {
 		try {
 			writer = writerClazz.newInstance();
 		} catch (InstantiationException e) {
-			writer = new DefaultFileWriter();
+			return false;
 		} catch (IllegalAccessException e) {
-			writer = new DefaultFileWriter();
+			return false;
 		}
+		return true;
 	}
 	public static Writer getWriterInstance(String jobName) {
 		writer.setRoot(jobName);
@@ -108,13 +109,16 @@ public class Factory {
 		"module.httpfetcher";
 	public final static String MODULE_ACCESSCONTROLLER = 
 		"module.accesscontroller";
+	
 	public static void initAllModuleWithDefault() {
 		modules.put(MODULE_HTTPFETCHER,      new MultiThreadHttpFetcher());
 		modules.put(MODULE_ACCESSCONTROLLER, new AccessController());
 		//TODO
 		modules.put(MODULE_STATISTICS, null);
 		try {
-			modules.put(MODULE_URLDB, new UrlDB());
+			UrlDB urldb = new UrlDB();
+			urldb.clear();
+			modules.put(MODULE_URLDB, urldb);
 		} catch (Exception e) {
 			modules.put(MODULE_URLDB, null);
 		}

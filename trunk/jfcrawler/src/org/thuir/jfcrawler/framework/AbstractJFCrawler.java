@@ -2,21 +2,13 @@ package org.thuir.jfcrawler.framework;
 
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Url;
-import org.thuir.jfcrawler.framework.cache.BlockingQueueCache;
 import org.thuir.jfcrawler.framework.cache.Cache;
 import org.thuir.jfcrawler.framework.classifier.Classifier;
 import org.thuir.jfcrawler.framework.extractor.Extractor;
 import org.thuir.jfcrawler.framework.filter.Filter;
-import org.thuir.jfcrawler.framework.frontier.BlockingQueueFrontier;
 import org.thuir.jfcrawler.framework.frontier.Frontier;
-import org.thuir.jfcrawler.framework.processor.DefaultFetcher;
 import org.thuir.jfcrawler.framework.processor.Fetcher;
 import org.thuir.jfcrawler.framework.processor.Crawler;
-import org.thuir.jfcrawler.framework.writer.DefaultFileWriter;
-import org.thuir.jfcrawler.framework.writer.Writer;
-import org.thuir.jfcrawler.io.database.UrlDB;
-import org.thuir.jfcrawler.io.httpclient.MultiThreadHttpFetcher;
-import org.thuir.jfcrawler.util.AccessController;
 import org.thuir.jfcrawler.util.BasicThread;
 import org.thuir.jfcrawler.util.stat.Statistic;
 
@@ -33,81 +25,25 @@ public abstract class AbstractJFCrawler extends Thread {
 	//processor
 	protected Fetcher fetcher = null;
 
-	protected MultiThreadHttpFetcher httpFetcher = null;
-
 	//cache
 	protected Cache cache = null;
 
 	protected Frontier frontier = null;
 
-	protected UrlDB urldb = null;
-
-//	protected Class<? extends Writer> writerClass =
-//		DefaultFileWriter.class;
-//
-//	protected Class<? extends Cache> cacheClass = 
-//		BlockingQueueCache.class;
-//
-//	protected Class<? extends Frontier> frontierClass = 
-//		BlockingQueueFrontier.class;
-
-	protected Class<? extends Fetcher> fetcherClass = 
-		DefaultFetcher.class;
-
 	public AbstractJFCrawler(String jobName) {
 		this.jobName = jobName;
 	}
+	
+	public void initialize() {
+		Factory.initAllModuleWithDefault();
+		cache = Factory.getCacheInstance();
+		frontier = Factory.getFrontierInstance();
+	}
 
-	public void initalizeFetcher(
+	public void initializeFetcher(
 			Class<? extends Fetcher> T) {
-		this.fetcherClass = T;
-	}
-
-//	public void initializeFrontier(
-//			Class<? extends Frontier> T) {
-//		this.frontierClass = T;
-//	}
-//	public void initializeCache(
-//			Class<? extends Cache> T) {
-//		this.cacheClass = T;
-//	}
-//	public void initializeWriter(
-//			Class<? extends Writer> T) {
-//		this.writerClass = T;
-//	}
-
-	public void initalizeUrlDB() {
 		try {
-			urldb = new UrlDB();
-			urldb.clear();
-		} catch (Exception e) {
-			this.urldb = null;
-		}
-	}
-
-	public void initializeCrawler(
-			Class<? extends Crawler> T, int nThread) {
-		crawlerPoolSize = nThread;
-
-//		assert cache != null;
-//		assert frontier != null;
-		assert urldb != null;
-
-		try {			
-			crawlerPool = new Crawler[nThread];
-			for(int i = 0; i < nThread; i++) {
-				crawlerPool[i] = T.newInstance();
-
-//				crawlerPool[i].setCache(cache);
-//				crawlerPool[i].setFrontier(frontier);
-				crawlerPool[i].setUrlDB(urldb);
-
-//				Writer w = writerClass.newInstance();
-//				w.setRoot(jobName);
-				crawlerPool[i].setWriter(
-						Factory.getWriterInstance(jobName));
-
-			}
+			fetcher = T.newInstance();
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 		} catch (IllegalAccessException e) {
@@ -115,19 +51,17 @@ public abstract class AbstractJFCrawler extends Thread {
 		}
 	}
 
-	public void initializeModules() {		
-		try {
-			httpFetcher = new MultiThreadHttpFetcher();
+	public void initializeCrawler(
+			Class<? extends Crawler> T, int nThread) {
+		crawlerPoolSize = nThread;
 
-//			frontier = frontierClass.newInstance();
-//			cache = cacheClass.newInstance();
-
-			fetcher = fetcherClass.newInstance();
-			fetcher.setHttpFetcher(httpFetcher);
-//			fetcher.setCache(cache);
-//			fetcher.setFrontier(frontier);
-			fetcher.setAccessController(new AccessController());
-
+		try {			
+			crawlerPool = new Crawler[nThread];
+			for(int i = 0; i < nThread; i++) {
+				crawlerPool[i] = T.newInstance();				
+				crawlerPool[i].setWriter(
+						Factory.getWriterInstance(jobName));
+			}
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 		} catch (IllegalAccessException e) {
@@ -153,19 +87,14 @@ public abstract class AbstractJFCrawler extends Thread {
 			p.start();
 		}
 		fetcher.start();
-		
+
 		while(true) {
 			try {
 				Thread.sleep(
 						BasicThread.INTERVAL * 10);
 			} catch (InterruptedException e) {
 			}
-			System.err.println(
-					"[cache:" + 
-					cache.size() +
-					"][frontier:" + 
-					frontier.size() + 
-					"]");
+			
 			boolean allIdle = true;
 			for(Crawler p : crawlerPool) {
 				if(!p.idle()) {
@@ -181,25 +110,18 @@ public abstract class AbstractJFCrawler extends Thread {
 					p.close();
 				}
 				fetcher.close();
-				httpFetcher.close();
 				break;
 			}				
 		}
 		double duration = (System.currentTimeMillis() - time) / 1000.0;
-		System.err.println(
-				"[catalog:" + Statistic.get("catalog-counter").count() + "]");
-		System.err.println(
-				"[board:" + Statistic.get("board-counter").count() + "]");
-		System.err.println(
-				"[thread:" + Statistic.get("thread-counter").count() + "]");
-		
+
 		System.err.println(
 				"[time:" + duration+ "]");
 		System.err.println(
 				"[speed:" + 
 				(Statistic.get("download-size-counter").count() / 
 						(double)duration) + 
-				"]");
+		"]");
 	}
 
 	public void addExtractor(Extractor e) {
