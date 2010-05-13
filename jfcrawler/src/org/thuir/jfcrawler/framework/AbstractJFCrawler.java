@@ -9,6 +9,7 @@ import org.thuir.jfcrawler.framework.filter.Filter;
 import org.thuir.jfcrawler.framework.frontier.Frontier;
 import org.thuir.jfcrawler.framework.processor.Fetcher;
 import org.thuir.jfcrawler.framework.processor.Crawler;
+import org.thuir.jfcrawler.io.httpclient.MultiThreadHttpFetcher;
 import org.thuir.jfcrawler.util.BasicThread;
 import org.thuir.jfcrawler.util.stat.Statistic;
 
@@ -24,6 +25,8 @@ public abstract class AbstractJFCrawler extends Thread {
 
 	//processor
 	protected Fetcher fetcher = null;
+	
+	protected MultiThreadHttpFetcher httpFetcher = null;
 
 	//cache
 	protected Cache cache = null;
@@ -38,6 +41,8 @@ public abstract class AbstractJFCrawler extends Thread {
 		Factory.initAllModuleWithDefault();
 		cache = Factory.getCacheInstance();
 		frontier = Factory.getFrontierInstance();
+		httpFetcher =
+			(MultiThreadHttpFetcher)Factory.getModule(Factory.MODULE_HTTPFETCHER);
 	}
 
 	public void initializeFetcher(
@@ -102,7 +107,7 @@ public abstract class AbstractJFCrawler extends Thread {
 					break;
 				}
 			}
-			if(!fetcher.idle())
+			if(!httpFetcher.idle())
 				allIdle = false;
 			if(cache.size() == 0 && frontier.size() == 0 && allIdle) {
 				System.err.println("finish");

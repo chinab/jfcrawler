@@ -33,10 +33,6 @@ public class FetchUnit extends BasicThread {
 	
 	private FetchExchange exchange = null;
 
-	//flag
-//	private boolean idle = true;
-//	private boolean alive = true;
-
 	public FetchUnit(String threadName, HttpClient client) {
 		this.setName(threadName);
 		this.httpClient = client;
