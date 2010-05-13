@@ -12,13 +12,14 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
+import org.thuir.jfcrawler.util.BasicThread;
 import org.thuir.jfcrawler.util.ConfigUtil;
 
 /**
  * @author ruKyzhc
  *
  */
-public class MultiThreadHttpFetcher extends Thread{
+public class MultiThreadHttpFetcher extends BasicThread{
 	private final static long INTERVAL = 
 		ConfigUtil.getConfig().getLong("basic.thread-interval");
 	private HttpClient client = null;
@@ -28,7 +29,7 @@ public class MultiThreadHttpFetcher extends Thread{
 
 	private int threadCounter = 0;
 
-	private boolean working = false;
+//	private boolean working = false;
 	
 	protected String userAgent = 
 		ConfigUtil.getConfig().getString("fetcher.user-agent");
@@ -64,7 +65,7 @@ public class MultiThreadHttpFetcher extends Thread{
 	}
 
 	protected void doStart() {
-		working = true;
+		setAlive(true);
 		for(FetchUnit u : threadPool) {
 			u.start();
 		}
@@ -73,8 +74,13 @@ public class MultiThreadHttpFetcher extends Thread{
 
 	@Override
 	public void run() {
-		while(working) {
+		super.run();
+		setIdle(false);
+		while(alive()) {
 			try {
+				Thread.sleep(INTERVAL);
+				
+				boolean isIdle = true;
 				for(int i = 0; i < nThread; i++) {
 					if(threadPool[i].timeout()) {
 						threadPool[i].expired();
@@ -84,16 +90,21 @@ public class MultiThreadHttpFetcher extends Thread{
 									client);
 						threadPool[i].start();
 					}
+					if(!threadPool[i].idle()) {
+						isIdle = false;
+					}
 				}
-
-				Thread.sleep(1000);
+				setIdle(isIdle);
 			} catch (InterruptedException e) {
+			} finally {
 			}
 		}
 	}
 
+	@Override
 	public void close() {
-		working = false;
+		super.close();
+		setAlive(false);
 
 		try {
 			Thread.sleep(INTERVAL * 2);
@@ -105,7 +116,7 @@ public class MultiThreadHttpFetcher extends Thread{
 	}
 
 	public boolean access(FetchExchange exchange) {
-		if(working == false)
+		if(alive() == false)
 			return false;
 
 		FetchUnit u = getIdleUnit();
@@ -118,7 +129,7 @@ public class MultiThreadHttpFetcher extends Thread{
 	}
 	
 	public void fetch(FetchExchange exchange) {
-		if(working == false)
+		if(alive() == false)
 			return;
 
 		FetchUnit u = null;

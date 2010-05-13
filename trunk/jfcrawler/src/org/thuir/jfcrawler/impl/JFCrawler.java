@@ -25,12 +25,12 @@ public class JFCrawler extends AbstractJFCrawler {
 		crawler.initializeCrawler(DefaultCrawler.class, 2);
 		
 		HostFilter f = new HostFilter();
-		f.setHost("www.discuz.net");
+		f.setHost("www.hiapk.com");
 		crawler.addFilter(f);
 		
 		crawler.addExtractor(new HTMLExtractor());
 		
-		crawler.addSeed("http://www.discuz.net/");
+		crawler.addSeed("http://www.hiapk.com/bbs/");
 		
 		crawler.start();
 	}
