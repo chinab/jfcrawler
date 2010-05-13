@@ -1,4 +1,4 @@
-package org.thuir.jfcrawler.util.stat;
+package org.thuir.jfcrawler.util;
 
 import java.util.HashMap;
 import java.util.Map;
