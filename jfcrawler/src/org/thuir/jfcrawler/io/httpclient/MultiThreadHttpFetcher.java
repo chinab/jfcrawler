@@ -128,7 +128,7 @@ public class MultiThreadHttpFetcher extends BasicThread{
 		return true;
 	}
 	
-	public void fetch(FetchExchange exchange) {
+	public synchronized void fetch(FetchExchange exchange) {
 		if(alive() == false)
 			return;
 

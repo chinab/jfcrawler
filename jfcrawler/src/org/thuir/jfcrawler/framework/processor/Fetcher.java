@@ -1,10 +1,13 @@
 package org.thuir.jfcrawler.framework.processor;
 
+import java.sql.SQLException;
+
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.Factory;
 import org.thuir.jfcrawler.framework.cache.Cache;
 import org.thuir.jfcrawler.framework.frontier.Frontier;
+import org.thuir.jfcrawler.io.database.UrlDB;
 import org.thuir.jfcrawler.io.httpclient.FetchExchange;
 import org.thuir.jfcrawler.io.httpclient.MultiThreadHttpFetcher;
 import org.thuir.jfcrawler.io.httpclient.FetchingListener;
@@ -32,6 +35,8 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 	
 	protected AccessController accessCtrl = null;
 	
+	protected UrlDB urldb = null;
+	
 	public Fetcher() {
 		frontier = 
 			Factory.getFrontierInstance();
@@ -41,6 +46,8 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 			(AccessController)Factory.getModule(Factory.MODULE_ACCESSCONTROLLER);
 		fetcher =
 			(MultiThreadHttpFetcher)Factory.getModule(Factory.MODULE_HTTPFETCHER);
+		urldb = 
+			(UrlDB)Factory.getModule(Factory.MODULE_URLDB);
 	}
 
 	@Override
@@ -48,6 +55,7 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 		super.run();
 		while(alive()) {
 			try {
+				long cur_time = System.currentTimeMillis();
 				Url url = frontier.next();
 				if(url == null) {
 					Thread.sleep(INTERVAL);
@@ -55,18 +63,28 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 				}
 				setIdle(false);
 				long temp = 
-					System.currentTimeMillis() -
+					cur_time -
 					accessCtrl.lastAccess(url.getHost());
 				
 				if(temp < ACCESS_INTERVAL ) {
 					frontier.schedule(url);
 					continue;
 				}
-				accessCtrl.access(url.getHost(), System.currentTimeMillis());
+				accessCtrl.access(url.getHost(), cur_time);
 				
-				fetcher.fetch(new FetchExchange(new Page(url), this));
+
+				if(urldb != null) {
+					url.setLastVisit(cur_time);
+					if(urldb.save(url))
+						System.err.println("[urldb:exists]" + url);
+					else
+						fetcher.fetch(new FetchExchange(new Page(url), this));
+				}
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} finally {
 				setIdle(true);
 			}
@@ -76,7 +94,12 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 	@Override
 	public void onComplete(FetchExchange exchange) {
 		System.err.println("finish:" + exchange.getUrl());
-		cache.offer(exchange.getPage());
+		while(!cache.offer(exchange.getPage())) {
+			try {
+				Thread.sleep(INTERVAL);
+			} catch (InterruptedException e) {
+			}
+		}
 	}
 
 	@Override

@@ -32,6 +32,9 @@ public class DefaultFileWriter extends Writer {
 		if(!path.exists()) {
 			path.mkdirs();
 		}
+		if(file.exists()) {
+			System.err.println("[writer:file exists]" + page.getUrl());
+		}
 		FileOutputStream writer = new FileOutputStream(file);
 		writer.write(page.getHtmlContent());
 		writer.close();
