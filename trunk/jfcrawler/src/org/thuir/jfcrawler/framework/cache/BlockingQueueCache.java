@@ -11,7 +11,7 @@ import org.thuir.jfcrawler.data.Page;
 public class BlockingQueueCache extends Cache {
 
 	private ArrayBlockingQueue<Page> queue = null;
-	private final static int size = 512;
+	private final static int size = 1024;
 	
 	public BlockingQueueCache() {
 		queue = new ArrayBlockingQueue<Page>(size);

@@ -92,14 +92,20 @@ public abstract class AbstractJFCrawler extends Thread {
 			p.start();
 		}
 		fetcher.start();
+		int accumulate = 0;
 
 		while(true) {
 			try {
 				Thread.sleep(
-						BasicThread.INTERVAL * 10);
+						BasicThread.INTERVAL * 20);
 			} catch (InterruptedException e) {
 			}
-			
+			System.err.println(
+					"[cache:" + 
+					cache.size() +
+					"][frontier:" + 
+					frontier.size() + 
+			"]");
 			boolean allIdle = true;
 			for(Crawler p : crawlerPool) {
 				if(!p.idle()) {
@@ -109,16 +115,32 @@ public abstract class AbstractJFCrawler extends Thread {
 			}
 			if(!httpFetcher.idle())
 				allIdle = false;
-			if(cache.size() == 0 && frontier.size() == 0 && allIdle) {
-				System.err.println("finish");
-				for(Crawler p : crawlerPool) {
-					p.close();
+
+			if(cache.size() == 0 && frontier.size() == 0 
+					&& allIdle ) {
+				if(accumulate >= 2) {
+					System.err.println("finish");
+					for(Crawler p : crawlerPool) {
+						p.close();
+					}
+					fetcher.close();
+					httpFetcher.close();
+					break;
+				} else {
+					accumulate ++;
 				}
-				fetcher.close();
-				break;
-			}				
+			} else {
+				accumulate = 0;
+			}
 		}
 		double duration = (System.currentTimeMillis() - time) / 1000.0;
+
+		System.err.println(
+				"[catalog:" + Statistic.get("catalog-counter").count() + "]");
+		System.err.println(
+				"[board:" + Statistic.get("board-counter").count() + "]");
+		System.err.println(
+				"[thread:" + Statistic.get("thread-counter").count() + "]");
 
 		System.err.println(
 				"[time:" + duration+ "]");

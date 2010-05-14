@@ -5,7 +5,7 @@ public abstract class BasicThread extends Thread {
 		ConfigUtil.getConfig().getLong("basic.thread-interval");
 	
 	private boolean alive = true;
-	private boolean idle = true;
+	private boolean idle = false;
 	
 	@Override
 	public void run() {

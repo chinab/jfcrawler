@@ -60,8 +60,8 @@ public class UrlDB {
 				"id int(10) unsigned NOT NULL AUTO_INCREMENT," +
 				"url varchar(1023) NOT NULL," +
 				"status int(10) unsigned NOT NULL," +
-				"last_visit mediumtext NOT NULL," +
-				"last_modify mediumtext NOT NULL," +
+				"last_visit bigint NOT NULL," +
+				"last_modify bigint NOT NULL," +
 				"reversed int(10) unsigned DEFAULT 1," +
 				"PRIMARY KEY (id)" +
 				") ENGINE=InnoDB DEFAULT CHARSET=utf8;"
