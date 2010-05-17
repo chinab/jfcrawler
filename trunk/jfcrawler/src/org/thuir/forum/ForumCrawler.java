@@ -3,9 +3,11 @@ package org.thuir.forum;
 import org.thuir.forum.classifier.ForumUrlClassifier;
 import org.thuir.forum.data.ForumUrl;
 import org.thuir.forum.extractor.ForumExtractor;
+import org.thuir.forum.frontier.ForumFrontier;
 import org.thuir.forum.template.TemplateRepository;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.framework.AbstractJFCrawler;
+import org.thuir.jfcrawler.framework.Factory;
 import org.thuir.jfcrawler.framework.filter.HostFilter;
 import org.thuir.jfcrawler.framework.processor.DefaultCrawler;
 import org.thuir.jfcrawler.framework.processor.DefaultFetcher;
@@ -26,6 +28,8 @@ public class ForumCrawler extends AbstractJFCrawler {
 		ForumUrl.registerToUrlFactory();
 		TemplateRepository.load("./template");
 		ForumCrawler crawler = new ForumCrawler("forum");
+		
+		Factory.registerFrontierClass(ForumFrontier.class);
 
 		crawler.initialize();
 		crawler.initializeFetcher(DefaultFetcher.class);
