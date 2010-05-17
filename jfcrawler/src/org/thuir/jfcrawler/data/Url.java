@@ -6,6 +6,7 @@ import java.util.TreeMap;
 import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
+import org.thuir.jfcrawler.util.ConfigUtil;
 
 /**
  * basic data structure of page urls
@@ -13,14 +14,15 @@ import org.apache.log4j.Logger;
  * @author ruKyzhc
  *
  */
-public class Url implements Serializable {
+public class Url implements Serializable, Comparable<Url> {
 	private static final Logger logger = 
 		Logger.getLogger(Url.class);
 
-	/**
-	 * generated serialVersionUID
-	 */
 	private static final long serialVersionUID = -207345866948400297L;
+	private static final long DEFAULT_REVISIT = 
+		ConfigUtil.getConfig().getLong("revisit-interval");
+	
+	protected long revisitInterval = DEFAULT_REVISIT;
 
 	protected String url;
 
@@ -44,6 +46,11 @@ public class Url implements Serializable {
 	
 	private static Class<? extends Url> urlClass = Url.class;
 
+	@Override
+	public int compareTo(Url other) {
+		return url.compareTo(other.url);
+	}
+	
 	protected Url() {
 		params = new HashMap<String, String>();
 	}
@@ -143,6 +150,13 @@ public class Url implements Serializable {
 	}
 	public long getLastModify() {
 		return lastModify;
+	}
+	
+	public void setRevisitInterval(long interval) {
+		this.revisitInterval = interval;
+	}
+	public long getRevisitInterval() {
+		return revisitInterval;
 	}
 	
 	public void setFetched() {

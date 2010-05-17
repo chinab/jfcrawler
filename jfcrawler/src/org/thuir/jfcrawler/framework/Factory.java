@@ -20,20 +20,20 @@ import org.thuir.jfcrawler.util.AccessController;
  *
  */
 public class Factory {
-	private static Class<? extends Url> urlClass = Url.class;	
+//	private static Class<? extends Url> urlClass = Url.class;	
 	public static void registerUrlClass(
 			Class<? extends Url> urlClazz) {
-		urlClass = urlClazz;
+		Url.setUrlClass(urlClazz);
 	}	
-	public static Url getUrlInstance() {
-		try {
-			return urlClass.newInstance();
-		} catch (InstantiationException e) {
-			return null;
-		} catch (IllegalAccessException e) {
-			return null;
-		}
-	}
+//	public static Url getUrlInstance() {
+//		try {
+//			return urlClass.newInstance();
+//		} catch (InstantiationException e) {
+//			return null;
+//		} catch (IllegalAccessException e) {
+//			return null;
+//		}
+//	}
 
 	private static Class<? extends Page> pageClass = Page.class;
 	public static void registerPageClass(
