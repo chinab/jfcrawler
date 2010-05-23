@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jfcrawler>
 	<basic>
-		<accessing-interval>1000</accessing-interval>
-		<thread-interval>100</thread-interval>;
+		<accessing-interval>200</accessing-interval>
+		<thread-interval>200</thread-interval>
 	</basic>
-	<fetcher>	
-		<max-connections>2</max-connections>
+	<fetcher>
 		<max-pool-size>10</max-pool-size>
-		<max-timeout>30000</max-timeout>
-		<user-agent>THUIR-bot</user-agent>
+		<max-timeout>300000</max-timeout>
+		<user-agent>jfcrawler(THUIR-bot)</user-agent>
 	</fetcher>
 	<crawler>
 		<revisit-interval>86400000</revisit-interval>
