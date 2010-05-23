@@ -6,9 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collections;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.util.ConfigUtil;
@@ -16,18 +13,20 @@ import org.thuir.jfcrawler.util.ConfigUtil;
 public class UrlDB {
 	private Connection conn = null;
 
-	private Set<String> tables = null;
+	private static final String table = "urlstatus";
 
 	private static final String SQL_LOAD = 
-		"SELECT * FROM ? WHERE url = ?;";
+		"SELECT * FROM " + table + " WHERE url = ?;";
 	private static final String SQL_SAVE = 
-		"UPDATE ? SET status = ?, last_visit = ?, last_modify = ? " +
+		"UPDATE " + table + 
+		" SET status = ?, last_visit = ?, last_modify = ? " +
 		"WHERE url = ?;";
 	private static final String SQL_CREATE = 
-		"INSERT INTO ? (url, status, last_visit, last_modify)" +
+		"INSERT INTO " + table +
+		" (url, status, last_visit, last_modify)" +
 		" VALUES (?, ?, ?, ?)";
 	private static final String SQL_CHECK = 
-		"SELECT last_visit FROM ? WHERE url = ?;";
+		"SELECT last_visit FROM " + table + " WHERE url = ?;";
 
 	private PreparedStatement stmt_load = null;
 	private PreparedStatement stmt_save = null;
@@ -50,57 +49,28 @@ public class UrlDB {
 		stmt_save = conn.prepareStatement(SQL_SAVE);
 		stmt_check = conn.prepareStatement(SQL_CHECK);
 		stmt_create = conn.prepareStatement(SQL_CREATE);
-
-		tables = Collections.synchronizedSet(new TreeSet<String>());
 	}
 
 	public void clear() throws SQLException {
-
-	}
-
-	private void initTable(String table) throws SQLException {
 		Statement stmt = conn.createStatement();
 		stmt.executeUpdate(
-				"DROP TABLE IF EXISTS urldb." + table + ";"
-		);
+		"DROP TABLE IF EXISTS urldb.urlstatus;" );
 		stmt.executeUpdate(
-				"CREATE TABLE urldb." + 
-				table + " (" +
+				"CREATE TABLE  urldb.urlstatus (" +
 				"id int(10) unsigned NOT NULL AUTO_INCREMENT," +
 				"url varchar(1023) NOT NULL," +
 				"status int(10) unsigned NOT NULL," +
-				"last_visit bigint NOT NULL," +
-				"last_modify bigint NOT NULL," +
+				"last_visit mediumtext NOT NULL," +
+				"last_modify mediumtext NOT NULL," +
 				"reversed int(10) unsigned DEFAULT 1," +
-				"PRIMARY KEY (url)" +
+				"PRIMARY KEY (id)" +
 				") ENGINE=InnoDB DEFAULT CHARSET=utf8;"
 		);
 		stmt.close();
 	}
 
-	private String checkTable(Url url){
-		String table = String.valueOf(url.getHost().hashCode());
-		if(tables.contains(table)) {
-			return table;
-		} else {
-			try {
-				initTable(table);
-			} catch (SQLException e) {
-				return null;
-			}
-			tables.add(table);
-			return table;
-		}
-	}
-
 	public synchronized boolean load(Url url) throws SQLException {
-		String table = checkTable(url);
-		if(table != null)
-			stmt_load.setString(1, table);
-		else
-			return false;
-		
-		stmt_load.setString(2, url.getUrl());
+		stmt_load.setString(1, url.getUrl());
 		ResultSet res = stmt_load.executeQuery();
 		if(res.next()) {
 			url.setStatus(res.getInt("status"));
@@ -113,10 +83,6 @@ public class UrlDB {
 	}
 
 	public synchronized boolean save(Url url) throws SQLException {
-		String table = checkTable(url);
-		if(table != null)
-			stmt_check.setString(2, table);
-		
 		stmt_check.setString(1, url.getUrl());
 		ResultSet res = stmt_check.executeQuery();
 		if(res.next()) {
@@ -141,13 +107,12 @@ public class UrlDB {
 	}
 
 	public synchronized long check(Url url) throws SQLException {
-		checkTable(url);
-		stmt_check.setString(1, url.getUrl());
-		ResultSet res = stmt_check.executeQuery();
-		if(res.next())
-			return res.getLong("last_visit");
-		else
-			return -1l;
+			stmt_check.setString(1, url.getUrl());
+			ResultSet res = stmt_check.executeQuery();
+			if(res.next())
+				return res.getLong("last_visit");
+			else
+				return -1l;
 	}
 
 	public void close() throws SQLException {
