@@ -13,5 +13,10 @@ public class TestDynamicUrlUtil extends TestCase {
 		System.out.println(url);
 		System.out.println(url.getPath());
 		System.out.println(DynamicUrlUtil.danymicUrlToString(url));
+		
+		url = Url.parseWithParent(null, "http://www.google.cn/");
+		System.out.println(url);
+		System.out.println(url.getPath());
+		System.out.println(DynamicUrlUtil.danymicUrlToString(url));
 	}
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forum id="newsmth">
+	<sites>
+		<site root="http://www.newsmth.net" 
+			entrance="http://www.newsmth.net/bbsfav.php?x"/>
+	</sites>
+	<sitemap>
+		<vertex id="catalog" classification="CATALOG">
+			<pattern type="REGEX">^bbsfav\.php\?(select=[\d]+)?x$</pattern>
+			<paging type="NONE"/>
+			<child ref="catalog" xpath=""/>
+			<child ref="board" xpath=""/>
+		</vertex>
+		<vertex id="board" classification="BOARD">
+			<pattern type="REGEX">^bbsdoc\.php\?([\S]+&amp;)*board=[\w]+(&amp;[\S]+)*$</pattern>
+			<paging type="NEXT" xpath=""/>
+			<child ref="thread" xpath=""/>
+		</vertex>
+		<vertex id="thread" classification="THREAD">
+			<pattern type="REGEX">^bbscon\.php\?([\S]+&amp;)*bid=[\d]+(&amp;[\S]+)*&amp;id=[\d]+(&amp;[\S]+)*$</pattern>
+			<paging type="NEXT" xpath=""/>
+		</vertex>
+	</sitemap>
+</forum>
