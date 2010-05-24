@@ -20,11 +20,13 @@ public class Url implements Serializable, Comparable<Url> {
 
 	private static final long serialVersionUID = -207345866948400297L;
 	private static final long DEFAULT_REVISIT = 
-		ConfigUtil.getConfig().getLong("revisit-interval");
-	
+		ConfigUtil.getConfig().getLong("crawler.revisit-interval");
+
 	protected long revisitInterval = DEFAULT_REVISIT;
 
 	protected String url;
+	
+	protected String uri;
 
 	protected String protocol;
 
@@ -37,20 +39,20 @@ public class Url implements Serializable, Comparable<Url> {
 	protected String path;
 
 	protected HashMap<String, String> params;
-	
+
 	protected long lastVisit = 0l;
-	
+
 	protected long lastModify = 0l;
-	
+
 	protected int status = 0;
-	
+
 	private static Class<? extends Url> urlClass = Url.class;
 
 	@Override
 	public int compareTo(Url other) {
 		return url.compareTo(other.url);
 	}
-	
+
 	protected Url() {
 		params = new HashMap<String, String>();
 	}
@@ -58,12 +60,12 @@ public class Url implements Serializable, Comparable<Url> {
 	public static void setUrlClass(Class<? extends Url> c) {
 		urlClass= c;
 	}
-	
+
 	public static Url parseWithParent(Url parent, String url) 
 	throws BadUrlFormatException {
 		if(urlClass == null) 
 			return null;
-		
+
 		Url inst = null;
 		try {
 			inst = urlClass.newInstance();
@@ -75,12 +77,12 @@ public class Url implements Serializable, Comparable<Url> {
 		normalizeUrl(inst, parent, url);
 		return inst;
 	}
-	
+
 	public static Url parse(String url) 
 	throws BadUrlFormatException {
 		if(urlClass == null) 
 			return null;
-		
+
 		Url inst = null;
 		try {
 			inst = urlClass.newInstance();
@@ -98,6 +100,12 @@ public class Url implements Serializable, Comparable<Url> {
 	}
 	protected void setUrl(String url) {
 		this.url = url;
+	}
+	public String getUri() {
+		return uri;
+	}
+	protected void setUri(String uri) {
+		this.uri = uri;
 	}
 	public String getHost() {
 		return host;
@@ -138,7 +146,7 @@ public class Url implements Serializable, Comparable<Url> {
 	public String getPath() {
 		return path;
 	}
-	
+
 	public void setLastVisit(long lastVisit) {
 		this.lastVisit = lastVisit;
 	}
@@ -151,42 +159,42 @@ public class Url implements Serializable, Comparable<Url> {
 	public long getLastModify() {
 		return lastModify;
 	}
-	
+
 	public void setRevisitInterval(long interval) {
 		this.revisitInterval = interval;
 	}
 	public long getRevisitInterval() {
 		return revisitInterval;
 	}
-	
+
 	public void setFetched() {
 		status = UrlStatus.setFetchingStatus(status, UrlStatus.FETCHED);
 	}
 	public boolean isFetched() {
 		return UrlStatus.fetchingStatus(status) == UrlStatus.FETCHED;
 	}
-	
+
 	public void setDiscarded() {
 		status = UrlStatus.setFetchingStatus(status, UrlStatus.DISCARD);
 	}
 	public boolean isDiscarded() {
 		return UrlStatus.fetchingStatus(status) == UrlStatus.DISCARD;
 	}
-	
+
 	public void setMissing() {
 		status = UrlStatus.setFetchingStatus(status, UrlStatus.MISSING);
 	}
 	public boolean isMissing() {
 		return UrlStatus.fetchingStatus(status) == UrlStatus.MISSING;
 	}
-	
+
 	public void setHttpCode(int code) {
 		status = UrlStatus.setHttpCode(status, code);
 	}
 	public int getHttpCode() {
 		return UrlStatus.httpCode(status);
 	}
-	
+
 	public void setStatus(int status) {
 		this.status = status;
 	}
@@ -250,7 +258,7 @@ public class Url implements Serializable, Comparable<Url> {
 		String value = null;
 
 		int pointer = 0;
-		
+
 		//Email
 		pointer = url.indexOf(EMAIL);
 		if(pointer >= 0) {
@@ -264,10 +272,10 @@ public class Url implements Serializable, Comparable<Url> {
 		if(pointer >= 0)  {
 			url = url.substring(0, pointer);
 		}
-		
+
 		StringBuffer urlbuf = 
 			new StringBuffer(url.trim().replaceAll("\\\\", "/"));
-		
+
 		//protocol
 		pointer = urlbuf.indexOf(PREFIX);
 		if(pointer >= 0) {
@@ -370,17 +378,26 @@ public class Url implements Serializable, Comparable<Url> {
 		TreeMap<String, String> temp_map = new TreeMap<String, String>();
 		String[] params = urlbuf.toString().split(PARAMETERS);
 		for(String param : params) {
-			temp_array = param.split(EQUAL);
-			if(temp_array.length >= 2) {
-				key = temp_array[0].trim();
-				value = temp_array[1].trim();
-				temp_map.put(key, value);
+			if(param.indexOf(EQUAL) >= 0) {
+				temp_array = param.split(EQUAL);
+				if(temp_array.length >= 2) {
+					key = temp_array[0].trim();
+					value = temp_array[1].trim();
+					temp_map.put(key, value);
+				} else if(temp_array.length == 1){
+					key = temp_array[0];
+					temp_map.put(key, null);
+				}
+			} else if(param.length() > 0){
+				key = param;
+				temp_map.put(key, null);
 			} else {
 				continue;
 			}
 		}
 
 		StringBuffer buf = new StringBuffer();
+		StringBuffer buf_uri = new StringBuffer();
 
 		target.setProtocol(protocol);
 		buf.append(protocol);
@@ -398,38 +415,49 @@ public class Url implements Serializable, Comparable<Url> {
 		buf.append(SEPERATOR);
 
 		target.setPath(path);
-		buf.append(path);
+		buf_uri.append(path);
 
 		if(page == null) {
-			target.setPage("#");
+			target.setPage("");
+			target.setUri(buf_uri.toString());
+			
+			buf.append(buf_uri);
 			target.setUrl(buf.toString());
 			return;
 		}
 
 		target.setPage(page);
-		buf.append(page);
+		buf_uri.append(page);
 
 		Entry<String, String> iter = null;
 		int count = 0;
 		while((iter = temp_map.pollFirstEntry()) != null) {
 			if(count == 0)
-				buf.append(QUERY);
+				buf_uri.append(QUERY);
 			else
-				buf.append(PARAMETERS);
+				buf_uri.append(PARAMETERS);
+
 
 			key = iter.getKey();
 			value = iter.getValue();
 			target.addParameter(key, value);
-			buf.append(key);
-			buf.append(EQUAL);
-			buf.append(value);
+			if(value == null) {
+				buf_uri.append(key);
+			} else {
+				buf_uri.append(key);
+				buf_uri.append(EQUAL);
+				buf_uri.append(value);
+			}
 
 			count++;
 		}
-
+		
+		target.setUri(buf_uri.toString());
+		
+		buf.append(buf_uri);
 		target.setUrl(buf.toString());
 	}
-	
+
 	public static void normalizeUrl(Url target, String url) 
 	throws BadUrlFormatException{
 		if(url.startsWith("http://"))

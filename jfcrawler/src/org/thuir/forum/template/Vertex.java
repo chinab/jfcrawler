@@ -78,7 +78,7 @@ public class Vertex {
 	
 	public boolean match(Url url) {
 		for(UrlPattern p : patterns) {
-			if(!p.match(url.getPage()))
+			if(!p.match(url.getUri()))
 				return false;
 		}
 		return true;
