@@ -372,6 +372,7 @@ public class Url implements Serializable, Comparable<Url> {
 			} else {
 				path = path + urlbuf.toString() + "/";
 			}
+			urlbuf.delete(0, urlbuf.length());
 		}
 
 		//query
