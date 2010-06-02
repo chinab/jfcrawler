@@ -12,5 +12,6 @@
 		<dependency org="mysql" name="mysql-connector-java" rev="5.1.9" />
 		<dependency org="org.apache.httpcomponents" name="httpclient"
 			rev="4.0.1" />
+		<dependency org="nekohtml" name="nekohtml" rev="1.9.6.2" />
 	</dependencies>
 </ivy-module>

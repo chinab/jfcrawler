@@ -1,0 +1,1008 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=gbk" /> 
+<title> Discuz! 官方站 论坛|BBS|社区 - Powered by Discuz!</title> 
+<meta name="keywords" content="php论坛,社区论坛,论坛社区,超级站长,Discuz!论坛,产品服务" /> 
+<meta name="description" content=" Discuz! 官方站 康盛创想（北京）科技有限公司提供社区产品服务、社区产品交流以及最新社区产品演示的官方唯一指定站点，提供服务的产品包括Discuz!（BBS）、UCenter（用户中心）、UCenter Home（SNS）、SupeSite（社区门户）、X-Space（个人空间）等，主要提供上述社区产品的安装使用、程序发布、模板插件、BUG反馈等方面的技术支持的服务。 - Discuz! Board" /> 
+<meta name="generator" content="Discuz! X1" /> 
+<meta name="author" content="Discuz! Team and Comsenz UI Team" /> 
+<meta name="copyright" content="2001-2010 Comsenz Inc." /> 
+<meta name="MSSmartTagsPreventParsing" content="True" /> 
+<meta http-equiv="MSThemeCompatible" content="Yes" /> 
+<link rel="alternate" type="application/rss+xml" title="Discuz! 官方站" href="http://www.discuz.net/forum.php?mod=rss&auth=0" /> 
+<link rel="stylesheet" type="text/css" href="data/cache/style_1_common.css?77Q" /><link rel="stylesheet" type="text/css" href="data/cache/style_1_forum_index.css?77Q" /><script type="text/javascript">var STYLEID = '1', STATICURL = 'static/', IMGDIR = 'static/image/common', VERHASH = '77Q', charset = 'gbk', discuz_uid = '0', cookiepre = 't7Hq_', cookiedomain = '.discuz.net', cookiepath = '/', attackevasive = '0', disallowfloat = 'newthread|reply|viewvote|tradeorder|activity|debate', creditnotice = '1|威望|,2|金币|个,5|体力|,6|激情|'</script> 
+<script src="static/js/common.js?77Q" type="text/javascript"></script> 
+<script src="static/js/home_friendselector.js?77Q" type="text/javascript"></script> 
+<script src="static/js/forum.js?77Q" type="text/javascript"></script> 
+</head> 
+ 
+<body id="nv_forum" class="pg_index" onkeydown="if(event.keyCode==27) return false;"> 
+<div id="append_parent"></div><div id="ajaxwaitid"></div> 
+<div class="wp a_h" style="line-height:50px;height:50px"><a href="http://www.discuz.net/topic-x1.html" target="_blank"><img src="data/attachment/common/cf/143806bz3lmbw87we385v3.jpg" height="50" width="970" alt="Discuz! X1 正式版" border="0"></a></div><div id="hd"> 
+<div class="wp"> 
+<div class="hdc cl"> 
+<h2><a href="http://www.discuz.net/index.php" title="Discuz! 官方站"><img src="static/image/common/logo.png" alt="Discuz! 官方站" border="0" /></a></h2> 
+<form id="sc" class="y" method="post" autocomplete="off" action="search.php?searchsubmit=yes" target="_blank"> 
+<input name="mod" value="search" type="hidden" /> 
+<input type="hidden" name="formhash" value="a4b10cb5" /> 
+<input name="srchtype" value="title" type="hidden" /> 
+<label id="sctype" onmouseover="showMenu(this.id)" class="z">搜索</label> 
+<input type="text" name="srchtxt" id="srchtxt" class="px z" value="请输入搜索内容" prompt="search_kw" autocomplete="off" onfocus="searchFocus(this);" onblur="searchBlur(this);" /> 
+<button id="searchsubmit" name="searchsubmit" prompt="search_submit" type="submit" value="true" class="y">搜索</button> 
+<div id="sctype_menu" class="p_pop cl" style="display: none"> 
+<ul><li><a href="javascript:;"><label for="mod_article" onclick="$('sctype').innerHTML = '文章';"><input type="radio" id="mod_article" class="pr" name="mod" value="portal" />文章</label></a></li><li><a href="javascript:;"><label for="mod_thread" onclick="$('sctype').innerHTML = '广场';"><input type="radio" id="mod_thread" class="pr" name="mod" value="forum" checked="checked" />广场</label></a></li><li><a href="javascript:;"><label for="mod_blog" onclick="$('sctype').innerHTML = '日志';"><input type="radio" id="mod_blog" class="pr" name="mod" value="blog" />日志</label></a></li><li><a href="javascript:;"><label for="mod_album" onclick="$('sctype').innerHTML = '相册';"><input type="radio" id="mod_album" class="pr" name="mod" value="album" /> 相册</label></a></li><li><a href="javascript:;"><label for="mod_group" onclick="$('sctype').innerHTML = '群组';"><input type="radio" id="mod_group" class="pr" name="mod" value="group" />群组</label></a></li></ul> 
+</div> 
+</form> 
+<script type="text/javascript"> 
+if(BROWSER.ie){
+var a = $('sctype_menu').getElementsByTagName('label');
+for(var i=0; i<a.length; i++){
+a[i].onmouseover = function(){
+this.className = 'sca';
+}
+a[i].onmouseout = function(){
+this.className = '';
+}
+}
+}
+</script> 
+<div id="nv"> 
+<ul><li class="menu_1"><a href="http://x.discuz.net/portal.php" hidefocus="true" title="Home" id="mn_portal">门户<span>Home</span></a></li><li class="menu_2"><a href="http://www.discuz.net/forum.php" hidefocus="true" title="BBS" id="mn_forum">广场<span>BBS</span></a></li><li class="menu_3"><a href="http://group.discuz.net/group.php" hidefocus="true" title="Group" id="mn_group">群组<span>Group</span></a></li><li class="menu_4"><a href="http://www.discuz.net/home.php" hidefocus="true" title="Space" id="mn_home">家园<span>Space</span></a></li><li class="menu_56" id="440u9H" onmouseover="showMenu({'ctrlid':this.id})"><a href="http://www.discuz.net/topic-X1.html" hidefocus="true" title="Topic" target="_blank"  class="dropmenu">专题<span>Topic</span></a></li><li class="menu_5"><a href="http://www.discuz.net/userapp.php" hidefocus="true" title="Manyou" id="mn_userapp">应用<span>Manyou</span></a></li><li class="menu_16"><a href="http://games.discuz.net" hidefocus="true" title="Yeswan" target="_blank" id="mn_games">游戏<span>Yeswan</span></a></li></ul> 
+</div> 
+<ul class="p_pop h_pop" id="440u9H_menu" style="display: none"><li><a href="http://www.discuz.net/topic-X1.html" hidefocus="true" target="_blank" >产品发布</a></li></ul></div> 
+ 
+<div id="mu"> 
+<ul class="cl"><li><a href="forum-86-1.html" hidefocus="true" >团队日志</a></li> 
+<li><a href="forum-193-1.html" hidefocus="true" >Manyou 黑板报</a></li> 
+<li><a href="forum-23-1.html" hidefocus="true" >建站交流</a></li> 
+</ul> 
+</div><div class="a_mu"><div id="dzf" class="cl"> 
+<style type="text/css"> 
+#pp {zoom:1;}
+#dzf{padding:15px 0;line-height:160%}
+#dzf p{width:321px;text-indent:70px;background:url(http://www.discuz.net/data/attachment/album/201005/14/0953351hcnq10n6w4zqnwh.png) no-repeat 10px 2px}
+.dzfbl{border-left:1px solid #FFF}
+.dzfbr{border-right:1px solid #DDD}
+#dzf em{display:block;color:#D3DFDF}
+#dzf .xg2{color:#666}
+#dzf em a{color:#369}
+</style> 
+<p class="z dzfbr"> 
+	<a href="http://zz.comsenz.com/2010zz/" target="_blank" class="xw1">2010第五届中国互联网站长年会</a> 
+	<em class="xg2">自强·求变，跨界实践绿色增长</em> 
+	<em><a href="http://www.discuz.net/thread-1621485-1-1.html" target="_blank">来宾访谈</a> — <a href="http://www.discuz.net/thread-1613786-1-1.html" target="_blank">来宾名单</a> - <a href="http://www.discuz.net/thread-1684331-1-1.html" target="_blank">现场直播</a></em> 
+</p> 
+<p class="z dzfbr dzfbl" style="background-position:10px -85px"> 
+	<a href="http://www.discuz.net/topic-X1.html" target="_blank" class="xw1">Discuz! X1 正式版发布</a> 
+	<em class="xg2">帮助网站实现一站式服务</em> 
+	<em><a href="http://www.comsenz.com/downloads/install/discuzX1#down_open" target="_blank">下载</a> — <a href="http://faq.comsenz.com/viewnews-944" target="_blank">安装教程</a> — <a href="http://www.discuz.net/thread-1630664-1-1.html" target="_blank">常见问题</a> — <a href="http://www.discuz.net/forum-213-1.html" target="_blank">版块讨论</a></em> 
+</p> 
+<p class="z dzfbl" style="text-indent:15px;background:none"> 
+	<em><a href="http://www.comsenz.com/purchase" target="_blank">Comsenz 产品服务购买</a> — <a href="http://idc.comsenz.com/" target="_blank">官方主机</a> — <a href="http://www.phpchina.com/html/trainsubject.html?utm_source=phpchina&utm_medium=banner&utm_campaign=item" target="_blank">PHP培训</a></em> 
+	<em><a href="http://www.discuz.net/thread-1268232-1-1.html" target="_blank">招贤纳士</a> — <a href="http://www.5d6d.com" target="_blank">5d6d免费论坛</a> — <a href="http://nt.discuz.net/showtopic-80777.html" target="_blank">Discuz!NT3.1发布</a></em> 
+	<em><a href="http://www.discuz.net/thread-1664859-1-1.html" target="_blank">Yeswan-绑定域名插件</a> — <a href="http://www.discuz.net/thread-989303-1-1.html" target="_blank">Manyou诚邀开发者加盟</a></em> 
+</p> 
+</div></div></div> 
+</div> 
+ 
+<div id="um" class="wp"> 
+<p> 
+<a href="http://www.discuz.net/member.php?mod=register" onclick="showWindow('register', this.href);hideWindow('login');" class="noborder">注册</a> 
+<span class="pipe">|</span><a href="http://www.discuz.net/member.php?mod=logging&amp;action=login" onclick="showWindow('login', this.href);hideWindow('register');">登录</a> 
+</p> 
+</div> 
+ 
+ 
+<div id="wp" class="wp"><div id="pt" class="wp"> 
+<a href="http://www.discuz.net/index.php" class="nvhm">Discuz! 官方站</a> &rsaquo; 广场</div><style id="diy_style" type="text/css">#portal_block_101 {margin-top: 10px !important;margin-bottom: 10px !important;}#portal_block_102 {margin-top: 10px !important;margin-bottom: 10px !important;}#portal_block_103 {margin-top: 10px !important;margin-bottom: 10px !important;}#portal_block_104 {margin-top: 10px !important;}</style> 
+<div class="wp"> 
+<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]--> 
+</div> 
+ 
+<div id="ct" class="wp cl"> 
+ 
+<div class="mn"> 
+<div class="content"> 
+ 
+<div class="ch"> 
+<label class="wx"><a href="http://www.discuz.net/forum.php">广场</a></label> 
+</div> 
+ 
+<div class="bm cl mtn"> 
+<div class="ptn pbm bbda cl"> 
+<button type="button" id="postbtn" class="pn pnc z vm" onclick="showWindow('nav', 'forum.php?mod=misc&action=nav&special=0')" style="margin: -6px 10px 0 0;"><strong>发帖</strong></button> 
+<p><p>你可以<a href="http://www.discuz.net/member.php?mod=register" onclick="showWindow('register', this.href);return false;">注册</a>一个帐号，并以此<a href="http://www.discuz.net/member.php?mod=logging&amp;action=login" onclick="showWindow('login', this.href);return false;">登录</a>，以浏览更多精彩内容，并随时发布观点，与大家交流。</p></p> 
+</div> 
+<div id="an"> 
+<dl class="mtm cl"> 
+<dt>公告:</dt> 
+<dd> 
+<div id="anc"><ul id="ancl"><li><a href="http://www.comsenz.com/2009/huoju/" target="_blank">火炬计划回馈新老客户<em>(2009-8-7)</em></a></li><li><a href="http://www.discuz.net/thread-1268232-1-1.html" target="_blank">Comsenz 诚聘英才<em>(2009-3-31)</em></a></li><li><a href="http://www.discuz.net/thread-1298338-1-1.html" target="_blank">Discuz! 论坛官方管理规定（试行）<em>(2009-5-27)</em></a></li><li><a href="http://www.discuz.net/thread-1328769-1-1.html" target="_blank">Discuz! 论坛官方金币管理规定（试行）<em>(2009-6-17)</em></a></li><li><a href="http://www.discuz.net/thread-1298369-1-1.html" target="_blank">Discuz! 论坛官方版主管理规定（试行）<em>(2009-5-27)</em></a></li><li><a href="http://faq.comsenz.com/viewtopic-10" target="_blank">新手建站向导<em>(2009-4-7)</em></a></li></ul></div> 
+</dd> 
+</dl> 
+</div> 
+<script type="text/javascript">announcement();</script> 
+</div> 
+ 
+<div class="fl flg cl"> 
+<div class="h cl"> 
+<span class="o"> 
+<img id="category_30_img" src="static/image/common/fl_collapsed_no.gif" title="收起/展开" alt="收起/展开" onclick="toggle_collapse('category_30');" /> 
+</span> 
+<h2><a href="http://www.discuz.net/forum.php?gid=30" style="">Comsenz 产品与服务</a></h2> 
+</div> 
+<div id="category_30" class="c cl" style=""><hr class="da" style="display: none;" /> 
+<div id="forum29" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-29-1.html">产品销售</a><em> (<strong>12</strong>)</em></dt> 
+<dd class="i"><em>主题: 3520</em><em>帖数: 29296</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1686919&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 16:39">25&nbsp;分钟前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum33" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-33-1.html">商业用户支持</a><em> (<strong>31</strong>)</em></dt> 
+<dd class="i"><em>主题: 42428</em><em>帖数: 308097</em></dd> 
+<dd> 
+私密版块
+</dd> 
+</dl> 
+</div> 
+<div id="forum86" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-86-1.html" style="color: red;">Comsenz团队日志</a><em> (<strong>6</strong>)</em></dt> 
+<dd class="i"><em>主题: 490</em><em>帖数: 43847</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1677348&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 16:26">半小时前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<hr class="da"  /> 
+<div id="forum46" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-46-1.html" target="_blank">专用主机业务</a></dt> 
+<dd> 
+私密版块
+</dd> 
+</dl> 
+</div> 
+<div id="forum118" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-118-1.html" target="_blank">PHP技术讨论版</a></dt> 
+<dd> 
+<a href="http://www.discuz.net/forum-118-1.html" class="xi2">链接到外部地址</a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum89" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-89-1.html" target="_blank">Discuz! NT（外部连接）</a></dt> 
+<dd> 
+<a href="http://www.discuz.net/forum-89-1.html" class="xi2">链接到外部地址</a> 
+</dd> 
+</dl> 
+</div> 
+</div> 
+</div><div class="fl flg cl"> 
+<div class="h cl"> 
+<span class="o"> 
+<img id="category_1_img" src="static/image/common/fl_collapsed_no.gif" title="收起/展开" alt="收起/展开" onclick="toggle_collapse('category_1');" /> 
+</span> 
+<h2><a href="http://www.discuz.net/forum.php?gid=1" style="">Discuz! 交流与讨论</a></h2> 
+</div> 
+<div id="category_1" class="c cl" style=""><hr class="da" style="display: none;" /> 
+<div id="forum10" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-10-1.html" style="color: red;">Discuz!-程序发布</a></dt> 
+<dd class="i"><em>主题: 160</em><em>帖数: 2753</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1670489&amp;goto=lastpost#lastpost">最后发表: 2010-5-19 13:41</a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum213" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-213-1.html" style="color: red;">Discuz! X1 - 专版</a><em> (<strong>3415</strong>)</em></dt> 
+<dd class="i"><em>主题: 21588</em><em>帖数: 147787</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1686827&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 17:05">14&nbsp;秒前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum22" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-22-1.html">Discuz!-发展建议</a><em> (<strong>32</strong>)</em></dt> 
+<dd class="i"><em>主题: 14386</em><em>帖数: 92957</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1686905&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 16:27">半小时前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<hr class="da"  /> 
+<div id="forum70" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-70-1.html">Discuz!-BUG反馈</a><em> (<strong>27</strong>)</em></dt> 
+<dd class="i"><em>主题: 19916</em><em>帖数: 78678</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1686965&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 17:04">45&nbsp;秒前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum212" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-212-1.html">Discuz!-安装升级</a><em> (<strong>98</strong>)</em></dt> 
+<dd class="i"><em>主题: 1197</em><em>帖数: 6517</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1686769&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 16:40">25&nbsp;分钟前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum2" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-2-1.html">Discuz!-使用维护</a><em> (<strong>409</strong>)</em></dt> 
+<dd class="i"><em>主题: 465534</em><em>帖数: 3442097</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1686928&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 17:04">51&nbsp;秒前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<hr class="da"  /> 
+<div id="forum88" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-88-1.html">Discuz!-帮助文档</a><em> (<strong>22</strong>)</em></dt> 
+<dd class="i"><em>主题: 561</em><em>帖数: 27143</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1668079&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 16:31">半小时前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum21" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-21-1.html">Discuz!-模板风格</a><em> (<strong>547</strong>)</em></dt> 
+<dd class="i"><em>主题: 111642</em><em>帖数: 1191671</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1685111&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 17:05">31&nbsp;秒前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum26" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-26-1.html">Discuz!-插件Hack</a><em> (<strong>323</strong>)</em></dt> 
+<dd class="i"><em>主题: 128383</em><em>帖数: 1413074</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=854175&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 17:04">56&nbsp;秒前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<hr class="da"  /> 
+<div id="forum64" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-64-1.html">环境搭建</a><em> (<strong>3</strong>)</em></dt> 
+<dd class="i"><em>主题: 13761</em><em>帖数: 69328</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1562333&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 14:52">2&nbsp;小时前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum187" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-187-1.html">超级站长工具</a><em> (<strong>14</strong>)</em></dt> 
+<dd class="i"><em>主题: 2524</em><em>帖数: 11621</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1686385&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 17:02">2&nbsp;分钟前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum45" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-45-1.html">数据转换</a><em> (<strong>19</strong>)</em></dt> 
+<dd class="i"><em>主题: 19765</em><em>帖数: 103751</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1624679&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 16:53">12&nbsp;分钟前</span></a> 
+</dd> 
+</dl> 
+</div> 
+</div> 
+</div><div class="fl flg cl"> 
+<div class="h cl"> 
+<span class="d">分区版主: <a class="notabs" href="home.php?mod=space&username=%B0%B2%B5%D1">安笛</a>, <a class="notabs" href="home.php?mod=space&username=%B2%A3%C1%A7%CE%DD%C5%AE%BA%A2">玻璃屋女孩</a></span><span class="o"> 
+<img id="category_141_img" src="static/image/common/fl_collapsed_no.gif" title="收起/展开" alt="收起/展开" onclick="toggle_collapse('category_141');" /> 
+</span> 
+<h2><a href="http://www.discuz.net/forum.php?gid=141" style="">UCenter Home 交流与讨论</a></h2> 
+</div> 
+<div id="category_141" class="c cl" style=""><hr class="da" style="display: none;" /> 
+<div id="forum149" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-149-1.html">UCenter Home-程序发布</a></dt> 
+<dd class="i"><em>主题: 18</em><em>帖数: 5378</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1392810&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-28 20:49">3&nbsp;天前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum138" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-138-1.html">UCenter Home-安装使用</a><em> (<strong>52</strong>)</em></dt> 
+<dd class="i"><em>主题: 55153</em><em>帖数: 296627</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1686622&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 16:54">11&nbsp;分钟前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum142" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-142-1.html" target="_blank">UCenter Home-发展建议</a></dt> 
+<dd> 
+<a href="http://www.discuz.net/forum-142-1.html" class="xi2">链接到外部地址</a> 
+</dd> 
+</dl> 
+</div> 
+<hr class="da"  /> 
+<div id="forum150" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-150-1.html">UCenter Home-帮助文档</a></dt> 
+<dd class="i"><em>主题: 107</em><em>帖数: 4214</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1602194&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-27 23:07">4&nbsp;天前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum148" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-148-1.html">UCenter Home-BUG 反馈</a><em> (<strong>2</strong>)</em></dt> 
+<dd class="i"><em>主题: 4546</em><em>帖数: 18086</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1620105&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 15:47">1&nbsp;小时前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum153" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-153-1.html">UCenter Home-模板插件</a><em> (<strong>134</strong>)</em></dt> 
+<dd class="i"><em>主题: 37139</em><em>帖数: 523036</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1620305&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 16:55">10&nbsp;分钟前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<hr class="da"  /> 
+<div id="forum188" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-188-1.html"><font color=green>UCenter Home-运营经验</font></a><em> (<strong>1</strong>)</em></dt> 
+<dd class="i"><em>主题: 3907</em><em>帖数: 28317</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1652812&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 10:32">6&nbsp;小时前</span></a> 
+</dd> 
+</dl> 
+</div> 
+</div> 
+</div><div class="fl flg cl"> 
+<div class="h cl"> 
+<span class="d">分区版主: <a class="notabs" href="home.php?mod=space&username=%B2%AE%C4%C9%CE%DA">伯纳乌</a>, <a class="notabs" href="home.php?mod=space&username=%B0%B2%B5%D1">安笛</a>, <a class="notabs" href="home.php?mod=space&username=%C9%B3%C9%AF">沙莎</a>, <a class="notabs" href="home.php?mod=space&username=%CC%F0%CC%F0%CC%C7">甜甜糖</a>, <a class="notabs" href="home.php?mod=space&username=%BF%C9%DC%B0">可馨</a>, <a class="notabs" href="home.php?mod=space&username=%B9%FB%B6%B3%B8%E7">果冻哥</a>, <a class="notabs" href="home.php?mod=space&username=%D7%CF%C9%AB%D2%B9%C0%B4%CF%E3">紫色夜来香</a>, <a class="notabs" href="home.php?mod=space&username=liulv">liulv</a>, <a class="notabs" href="home.php?mod=space&username=zhaoshuo1020">zhaoshuo1020</a>, <a class="notabs" href="home.php?mod=space&username=kstsca">kstsca</a></span><span class="o"> 
+<img id="category_192_img" src="static/image/common/fl_collapsed_no.gif" title="收起/展开" alt="收起/展开" onclick="toggle_collapse('category_192');" /> 
+</span> 
+<h2><a href="http://www.discuz.net/forum.php?gid=192" style="">Manyou 交流与讨论</a></h2> 
+</div> 
+<div id="category_192" class="c cl" style=""><hr class="da" style="display: none;" /> 
+<div id="forum193" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-193-1.html"><font color=red>Manyou 黑板报</font></a><em> (<strong>5</strong>)</em></dt> 
+<dd class="i"><em>主题: 378</em><em>帖数: 6867</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1686836&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 15:25">1&nbsp;小时前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum168" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-168-1.html">MYOP-应用BUG反馈</a><em> (<strong>54</strong>)</em></dt> 
+<dd class="i"><em>主题: 20935</em><em>帖数: 118101</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1685108&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 15:34">1&nbsp;小时前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum3859" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-3859-1.html">Manyou 搜索交流区</a><em> (<strong>4</strong>)</em></dt> 
+<dd class="i"><em>主题: 10</em><em>帖数: 71</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1669366&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 16:27">半小时前</span></a> 
+</dd> 
+</dl> 
+</div> 
+</div> 
+</div><div class="fl flg cl"> 
+<div class="h cl"> 
+<span class="d">分区版主: <a class="notabs" href="home.php?mod=space&username=Pray4U">Pray4U</a>, <a class="notabs" href="home.php?mod=space&username=%B0%C5%B0%C5%E0%E0">芭芭噜</a>, <a class="notabs" href="home.php?mod=space&username=%B3%F5%CE%E5">初五</a>, <a class="notabs" href="home.php?mod=space&username=%D0%A1%D0%BD">小薪</a></span><span class="o"> 
+<img id="category_178_img" src="static/image/common/fl_collapsed_no.gif" title="收起/展开" alt="收起/展开" onclick="toggle_collapse('category_178');" /> 
+</span> 
+<h2><a href="http://www.discuz.net/forum.php?gid=178" style="">网页游戏（Yeswan）</a></h2> 
+</div> 
+<div id="category_178" class="c cl" style=""><hr class="da" style="display: none;" /> 
+<div id="forum203" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-203-1.html"><font color=red>Yes玩黑板报</font></a><em> (<strong>2</strong>)</em></dt> 
+<dd class="i"><em>主题: 101</em><em>帖数: 3708</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1664859&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 12:42">4&nbsp;小时前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum175" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-175-1.html">Yes玩交流区</a><em> (<strong>27</strong>)</em></dt> 
+<dd class="i"><em>主题: 1675</em><em>帖数: 10901</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1686966&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 17:05">3&nbsp;秒前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum121" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-121-1.html">社区营销专区</a></dt> 
+<dd class="i"><em>主题: 3704</em><em>帖数: 24759</em></dd> 
+<dd> 
+私密版块
+</dd> 
+</dl> 
+</div> 
+</div> 
+</div><div class="fl flg cl"> 
+<div class="h cl"> 
+<span class="d">分区版主: <a class="notabs" href="home.php?mod=space&username=%CF%C2%C9%B0">下砂</a>, <a class="notabs" href="home.php?mod=space&username=monkeye">monkeye</a></span><span class="o"> 
+<img id="category_133_img" src="static/image/common/fl_collapsed_no.gif" title="收起/展开" alt="收起/展开" onclick="toggle_collapse('category_133');" /> 
+</span> 
+<h2><a href="http://www.discuz.net/forum.php?gid=133" style="">UCenter 交流与讨论</a></h2> 
+</div> 
+<div id="category_133" class="c cl" style=""><hr class="da" style="display: none;" /> 
+<div id="forum151" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-151-1.html">UCenter-程序发布</a><em> (<strong>1</strong>)</em></dt> 
+<dd class="i"><em>主题: 5</em><em>帖数: 1430</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1670193&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 15:15">1&nbsp;小时前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum130" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-130-1.html">UCenter-安装使用</a><em> (<strong>38</strong>)</em></dt> 
+<dd class="i"><em>主题: 11448</em><em>帖数: 56792</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1686830&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 15:20">1&nbsp;小时前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum131" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-131-1.html">UCenter-发展建议</a></dt> 
+<dd class="i"><em>主题: 477</em><em>帖数: 2490</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1558419&amp;goto=lastpost#lastpost">最后发表: 2010-5-22 17:21</a> 
+</dd> 
+</dl> 
+</div> 
+<hr class="da"  /> 
+<div id="forum132" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-132-1.html">UCenter-BUG反馈</a></dt> 
+<dd class="i"><em>主题: 1759</em><em>帖数: 6362</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=949287&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-30 09:03">昨天&nbsp;09:03</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum155" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-155-1.html">UCenter-应用开发</a><em> (<strong>3</strong>)</em></dt> 
+<dd class="i"><em>主题: 1648</em><em>帖数: 10643</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1686685&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 13:29">3&nbsp;小时前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum184" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-184-1.html">UCenter-帮助文档</a></dt> 
+<dd class="i"><em>主题: 32</em><em>帖数: 644</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1563873&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-29 20:28">前天&nbsp;20:28</span></a> 
+</dd> 
+</dl> 
+</div> 
+</div> 
+</div><div class="fl flg cl"> 
+<div class="h cl"> 
+<span class="d">分区版主: <a class="notabs" href="home.php?mod=space&username=%B7%E8%CA%F3">疯鼠</a></span><span class="o"> 
+<img id="category_61_img" src="static/image/common/fl_collapsed_no.gif" title="收起/展开" alt="收起/展开" onclick="toggle_collapse('category_61');" /> 
+</span> 
+<h2><a href="http://www.discuz.net/forum.php?gid=61" style="">SS/XS 交流与讨论</a></h2> 
+</div> 
+<div id="category_61" class="c cl" style=""><hr class="da" style="display: none;" /> 
+<div id="forum74" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-74-1.html">SS/XS-程序发布</a></dt> 
+<dd class="i"><em>主题: 67</em><em>帖数: 7691</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1454911&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-29 06:10">前天&nbsp;06:10</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum75" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-75-1.html">SS/XS-安装使用</a><em> (<strong>45</strong>)</em></dt> 
+<dd class="i"><em>主题: 83659</em><em>帖数: 407984</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1686943&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 16:54">11&nbsp;分钟前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum77" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-77-1.html">SS/XS-帮助文档</a><em> (<strong>1</strong>)</em></dt> 
+<dd class="i"><em>主题: 445</em><em>帖数: 11649</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1409174&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 12:37">4&nbsp;小时前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<hr class="da"  /> 
+<div id="forum73" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-73-1.html">SS/XS-模板插件</a><em> (<strong>48</strong>)</em></dt> 
+<dd class="i"><em>主题: 26043</em><em>帖数: 303614</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=758321&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 16:57">8&nbsp;分钟前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum72" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-72-1.html">SS/XS-BUG反馈</a></dt> 
+<dd class="i"><em>主题: 6216</em><em>帖数: 26119</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1685394&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-30 02:01">昨天&nbsp;02:01</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum62" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-62-1.html">SS/XS-发展建议</a><em> (<strong>7</strong>)</em></dt> 
+<dd class="i"><em>主题: 8227</em><em>帖数: 44325</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1686813&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 15:12">1&nbsp;小时前</span></a> 
+</dd> 
+</dl> 
+</div> 
+</div> 
+</div><div class="fl flg cl"> 
+<div class="h cl"> 
+<span class="o"> 
+<img id="category_24_img" src="static/image/common/fl_collapsed_no.gif" title="收起/展开" alt="收起/展开" onclick="toggle_collapse('category_24');" /> 
+</span> 
+<h2><a href="http://www.discuz.net/forum.php?gid=24" style="">站长之家</a></h2> 
+</div> 
+<div id="category_24" class="c cl" style=""><hr class="da" style="display: none;" /> 
+<div id="forum23" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-23-1.html">建站交流</a><em> (<strong>742</strong>)</em></dt> 
+<dd class="i"><em>主题: 288634</em><em>帖数: 3262262</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1686894&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 17:05">35&nbsp;秒前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum95" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-95-1.html">中国站长俱乐部</a><em> (<strong>10</strong>)</em></dt> 
+<dd class="i"><em>主题: 6564</em><em>帖数: 45172</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1682770&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 17:00">5&nbsp;分钟前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum52" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-52-1.html">管理策略交流</a></dt> 
+<dd class="i"><em>主题: 3120</em><em>帖数: 17371</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=281337&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-30 16:58">昨天&nbsp;16:58</span></a> 
+</dd> 
+</dl> 
+</div> 
+<hr class="da"  /> 
+<div id="forum32" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-32-1.html">代码交流</a><em> (<strong>3</strong>)</em></dt> 
+<dd class="i"><em>主题: 14758</em><em>帖数: 70747</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1575429&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 15:21">1&nbsp;小时前</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum69" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-69-1.html">奇虎论坛搜索讨论区</a><em> (<strong>6</strong>)</em></dt> 
+<dd class="i"><em>主题: 2660</em><em>帖数: 10660</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=1686851&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-31 15:40">1&nbsp;小时前</span></a> 
+</dd> 
+</dl> 
+</div> 
+</div> 
+</div><div class="fl flg cl"> 
+<div class="h cl"> 
+<span class="o"> 
+<img id="category_165_img" src="static/image/common/fl_collapsed_no.gif" title="收起/展开" alt="收起/展开" onclick="toggle_collapse('category_165');" /> 
+</span> 
+<h2><a href="http://www.discuz.net/forum.php?gid=165" style="">合作产品专区</a></h2> 
+</div> 
+<div id="category_165" class="c cl" style=""><hr class="da" style="display: none;" /> 
+<div id="forum144" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-144-1.html" target="_blank">ECShop 交流与讨论</a></dt> 
+<dd> 
+<a href="http://www.discuz.net/forum-144-1.html" class="xi2">链接到外部地址</a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum145" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-145-1.html" target="_blank">ECMall 交流与讨论</a></dt> 
+<dd> 
+<a href="http://www.discuz.net/forum-145-1.html" class="xi2">链接到外部地址</a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum146" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-146-1.html" target="_blank">SupeV 交流与讨论</a></dt> 
+<dd> 
+<a href="http://www.discuz.net/forum-146-1.html" class="xi2">链接到外部地址</a> 
+</dd> 
+</dl> 
+</div> 
+</div> 
+</div><div class="fl flg cl"> 
+<div class="h cl"> 
+<span class="o"> 
+<img id="category_5_img" src="static/image/common/fl_collapsed_no.gif" title="收起/展开" alt="收起/展开" onclick="toggle_collapse('category_5');" /> 
+</span> 
+<h2><a href="http://www.discuz.net/forum.php?gid=5" style="">站务公告</a></h2> 
+</div> 
+<div id="category_5" class="c cl" style=""><hr class="da" style="display: none;" /> 
+<div id="forum47" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-47-1.html">论坛公告区</a></dt> 
+<dd class="i"><em>主题: 1211</em><em>帖数: 29596</em></dd> 
+<dd> 
+<a href="http://www.discuz.net/forum.php?mod=redirect&amp;tid=451124&amp;goto=lastpost#lastpost">最后发表: <span title="2010-5-30 22:52">昨天&nbsp;22:52</span></a> 
+</dd> 
+</dl> 
+</div> 
+<div id="forum206" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-206-1.html">站务区</a><em> (<strong>20</strong>)</em></dt> 
+<dd class="i"><em>主题: 500</em><em>帖数: 2446</em></dd> 
+<dd> 
+私密版块
+</dd> 
+</dl> 
+</div> 
+<div id="forum6" class="flc cl" style="width: 32.9%"> 
+<div class="icn"> 
+<img src="static/image/common/forum_new.gif" alt="" /> 
+</div> 
+<dl> 
+<dt><a href="http://www.discuz.net/forum-6-1.html">Discuz!内部交流</a></dt> 
+<dd class="i"><em>主题: 2970</em><em>帖数: 70533</em></dd> 
+<dd> 
+私密版块
+</dd> 
+</dl> 
+</div> 
+</div> 
+</div> 
+<div id="online" class="bm oll"> 
+<span class="o"><a href="http://www.discuz.net/forum.php?showoldetails=yes#online" class="nobdr"><img src="static/image/common/collapsed_yes.gif" alt="" /></a></span> 
+<h3> 
+<strong><a href="http://www.discuz.net/home.php?mod=space&amp;do=top&amp;view=online">在线会员</a></strong> 
+<span class="xs1">- 总计 <strong>9649</strong> 人在线
+- 最高记录是 <strong>9685</strong> 于 <strong>2010-5-31</strong>.</span> 
+</h3> 
+</div> 
+ 
+</div> 
+</div> 
+ 
+<div id="sd" class="sd pph"><div class="ch"> 
+<label class="wx">你没有登录</label> 
+</div> 
+ 
+<div class="tns"> 
+<table cellpadding="4" cellspacing="0" border="0"> 
+<tr> 
+<th><p>6163</p>今日发帖</th> 
+<th><p>12465176</p>帖子</th> 
+<td><p>1372033</p>会员</td> 
+</tr> 
+</table> 
+</div> 
+<hr class="l" /> 
+<div class="drag"> 
+<!--[diy=diy2]--><div id="diy2" class="area"><div id="framejm85ZI" class=" frame move-span cl frame-1"><div id="framejm85ZI_left" class="column col-c"><div id="framejm85ZI_left_temp" class="move-span temp"></div><div id="portal_block_101" class="block move-span"><div style="background-repeat: repeat repeat; " class="blocktitle title"><span style="float:;margin-left:px;font-size:;color:;" class="titletext">当前新帖</span></div><div id="portal_block_101_content" class="content"><div class="module cl xl xl1"> 
+<ul><li><a href="http://www.discuz.net/thread-1686913-1-1.html" title="Discuz! X1 模板免费下载非官方展示" target="_blank">Discuz! X1 模板免费下载非官方展示</a></li><li><a href="http://www.discuz.net/thread-1686912-1-1.html" title="uchome 随便看看日志数据调用，怎么调用都是 ..." target="_blank">uchome 随便看看日志数据调用，怎么调用都是 ...</a></li><li><a href="http://www.discuz.net/thread-1686911-1-1.html" title="phpwind8 群组就比dz x的强！" target="_blank">phpwind8 群组就比dz x的强！</a></li><li><a href="http://www.discuz.net/thread-1686909-1-1.html" title="期待SP1的出现，让这个最重要的功能有了再升 ..." target="_blank">期待SP1的出现，让这个最重要的功能有了再升 ...</a></li><li><a href="http://www.discuz.net/thread-1686910-1-1.html" title="选择海外虚拟主机需慎重，不能被价格蒙蔽双 ..." target="_blank">选择海外虚拟主机需慎重，不能被价格蒙蔽双 ...</a></li><li><a href="http://www.discuz.net/thread-1686908-1-1.html" title="哪个diy高手DIY个人人网的首页啊！谢谢咯！" target="_blank">哪个diy高手DIY个人人网的首页啊！谢谢咯！</a></li><li><a href="http://www.discuz.net/thread-1686907-1-1.html" title="炫一下刚制作好的网站ICO图标，顺便分享下I ..." target="_blank">炫一下刚制作好的网站ICO图标，顺便分享下I ...</a></li><li><a href="http://www.discuz.net/thread-1686906-1-1.html" title="动物们的六一儿童节。" target="_blank">动物们的六一儿童节。</a></li><li><a href="http://www.discuz.net/thread-1686905-1-1.html" title="早泄，怎样进行自我判断？" target="_blank">早泄，怎样进行自我判断？</a></li><li><a href="http://www.discuz.net/thread-1686904-1-1.html" title="发现一个新的网站赚钱方法，有兴趣的看下" target="_blank">发现一个新的网站赚钱方法，有兴趣的看下</a></li> 
+</ul> 
+</div></div></div><div id="portal_block_133" class="block move-span"><div id="portal_block_133_content" class="content"><div class="portal_block_summary"><hr class='da' /></div></div></div><div id="portal_block_102" class="block move-span"><div style="background-repeat: repeat repeat; " class="blocktitle title"><span style="float:;margin-left:px;font-size:;color:;" class="titletext">热门主题</span></div><div id="portal_block_102_content" class="content"><div class="module cl xl xl1"> 
+<ul><li><a href="http://www.discuz.net/thread-1656157-1-1.html" title="文章最上角出现多余字段" target="_blank">文章最上角出现多余字段</a></li><li><a href="http://www.discuz.net/thread-1656161-1-1.html" title="家园的CSS 样式文件是在哪个文件夹" target="_blank">家园的CSS 样式文件是在哪个文件夹</a></li><li><a href="http://www.discuz.net/thread-1628762-1-1.html" title="UCHOME已顺利升级并转换完成！" target="_blank">UCHOME已顺利升级并转换完成！</a></li><li><a href="http://www.discuz.net/thread-1685616-1-1.html" title="怎么让首页底部的友情链接一行显示10个" target="_blank">怎么让首页底部的友情链接一行显示10个</a></li><li><a href="http://www.discuz.net/thread-1686390-1-1.html" title="红版DX已经发布，全新的风格，近期共享" target="_blank">红版DX已经发布，全新的风格，近期共享</a></li><li><a href="http://www.discuz.net/thread-1656130-1-1.html" title="beta版本的数据是否升级入正式版" target="_blank">beta版本的数据是否升级入正式版</a></li><li><a href="http://www.discuz.net/thread-1655444-1-1.html" title="全新安装都出现了1970年1月1日" target="_blank">全新安装都出现了1970年1月1日</a></li><li><a href="http://www.discuz.net/thread-1685974-1-1.html" title="请教一下7.2搬家只搬会员资料其他全部不要可 ..." target="_blank">请教一下7.2搬家只搬会员资料其他全部不要可 ...</a></li><li><a href="http://www.discuz.net/thread-1686395-1-1.html" title="空间被格式化了，我该怎么办？" target="_blank">空间被格式化了，我该怎么办？</a></li><li><a href="http://www.discuz.net/thread-1686411-1-1.html" title="为什么我的网站中漫游不显示动态？斑竹帮忙" target="_blank">为什么我的网站中漫游不显示动态？斑竹帮忙</a></li> 
+</ul> 
+</div></div></div><div id="portal_block_134" class="block move-span"><div id="portal_block_134_content" class="content"><div class="portal_block_summary"><hr class='l' /></div></div></div><div id="portal_block_103" class="block move-span"> 
+<DIV class="blocktitle title"><SPAN style="FONT-SIZE: 14px" class=titletext>今日热图</SPAN></DIV><div id="portal_block_103_content" class="content"><div class="module cl ml"> 
+<ul><li style="width: 64px;"> 
+	<a href="http://www.discuz.net/thread-1686252-1-1.html" target="_blank"><img src="data/attachment/block/76/76c06e0def52359d6e2baf94d720dc1d.jpg" width="64" height="64" alt="aaaa.png" /></a> 
+	<p><a href="http://www.discuz.net/thread-1686252-1-1.html" title="DX非常强大" target="_blank">DX非常强大</a></p> 
+</li><li style="width: 64px;"> 
+	<a href="http://www.discuz.net/thread-1686271-1-1.html" target="_blank"><img src="data/attachment/block/9f/9f57b59714ebe38cffac68dc90d00df8.jpg" width="64" height="64" alt="01.jpg" /></a> 
+	<p><a href="http://www.discuz.net/thread-1686271-1-1.html" title="discuz!X1 特殊主题插件" target="_blank">discuz!X1 特殊主题插件</a></p> 
+</li><li style="width: 64px;"> 
+	<a href="http://www.discuz.net/thread-1686668-1-1.html" target="_blank"><img src="data/attachment/block/f9/f961bfcab507c3e8b253e6c24855e8a3.jpg" width="64" height="64" alt="1005221419ad3fbfc789e848a2.gif" /></a> 
+	<p><a href="http://www.discuz.net/thread-1686668-1-1.html" title="求修改个图片" target="_blank">求修改个图片</a></p> 
+</li><li style="width: 64px;"> 
+	<a href="http://www.discuz.net/thread-1686412-1-1.html" target="_blank"><img src="data/attachment/block/f8/f8f7508403679d10f3927bba68e5b23b.jpg" width="64" height="64" alt="六一广告.jpg" /></a> 
+	<p><a href="http://www.discuz.net/thread-1686412-1-1.html" title="《开心店铺》六一活动通知!" target="_blank">《开心店铺》六一活动通知!</a></p> 
+</li><li style="width: 64px;"> 
+	<a href="http://www.discuz.net/thread-1686600-1-1.html" target="_blank"><img src="data/attachment/block/c5/c5058f99d9cf2daff8fa66313a939c65.jpg" width="64" height="64" alt="AD.jpg" /></a> 
+	<p><a href="http://www.discuz.net/thread-1686600-1-1.html" title="很牛的一张图...." target="_blank">很牛的一张图....</a></p> 
+</li><li style="width: 64px;"> 
+	<a href="http://www.discuz.net/thread-1686290-1-1.html" target="_blank"><img src="data/attachment/block/03/03b799fe39880503520ec8b7902ed5cf.jpg" width="64" height="64" alt="17zz yd.png" /></a> 
+	<p><a href="http://www.discuz.net/thread-1686290-1-1.html" title="██【创意天空】Discuz!7.2 酷黑风格 免费 ..." target="_blank">██【创意天空】Discuz!7.2 酷黑风格 免费 ...</a></p> 
+</li><li style="width: 64px;"> 
+	<a href="http://www.discuz.net/thread-1686696-1-1.html" target="_blank"><img src="data/attachment/block/7c/7cab2b30aa45c672a1afb4936a6d831e.jpg" width="64" height="64" alt="sss.jpg" /></a> 
+	<p><a href="http://www.discuz.net/thread-1686696-1-1.html" title="discuz6.0升级到7.0后出现如下提示：" target="_blank">discuz6.0升级到7.0后出现如下提示：</a></p> 
+</li><li style="width: 64px;"> 
+	<a href="http://www.discuz.net/thread-1686686-1-1.html" target="_blank"><img src="data/attachment/block/97/97631cd0f8ab602cd962f61131669b3d.jpg" width="64" height="64" alt="kang.gif" /></a> 
+	<p><a href="http://www.discuz.net/thread-1686686-1-1.html" title="★★★★★搜索框位置调整" target="_blank">★★★★★搜索框位置调整</a></p> 
+</li> 
+</ul> 
+</div></div></div><div id="portal_block_135" class="block move-span"><div id="portal_block_135_content" class="content"><div class="portal_block_summary"><hr class='da' /></div></div></div><div id="portal_block_104" class="block move-span"><div style="background-repeat: repeat repeat; " class="blocktitle title"><span style="float:;margin-left:px;font-size:;color:;" class="titletext">本日活跃会员</span></div><div id="portal_block_104_content" class="content"><div class="module cl ml mls"> 
+<ul><li> 
+		<a href="http://www.discuz.net/space-uid-486449.html" target="_blank"><img src="http://uc.discuz.net/data/avatar/000/48/64/49_avatar_small.jpg" width="48" height="48" alt="下砂" /></a> 
+		<p><a href="http://www.discuz.net/space-uid-486449.html" target="_blank">下砂</a></p> 
+	</li><li> 
+		<a href="http://www.discuz.net/space-uid-62005.html" target="_blank"><img src="http://uc.discuz.net/data/avatar/000/06/20/05_avatar_small.jpg" width="48" height="48" alt="第5季" /></a> 
+		<p><a href="http://www.discuz.net/space-uid-62005.html" target="_blank">第5季</a></p> 
+	</li><li> 
+		<a href="http://www.discuz.net/space-uid-1234.html" target="_blank"><img src="http://uc.discuz.net/data/avatar/000/00/12/34_avatar_small.jpg" width="48" height="48" alt="蓝苹果" /></a> 
+		<p><a href="http://www.discuz.net/space-uid-1234.html" target="_blank">蓝苹果</a></p> 
+	</li><li> 
+		<a href="http://www.discuz.net/space-uid-783673.html" target="_blank"><img src="http://uc.discuz.net/data/avatar/000/78/36/73_avatar_small.jpg" width="48" height="48" alt="小强。" /></a> 
+		<p><a href="http://www.discuz.net/space-uid-783673.html" target="_blank">小强。</a></p> 
+	</li><li> 
+		<a href="http://www.discuz.net/space-uid-196972.html" target="_blank"><img src="http://uc.discuz.net/data/avatar/000/19/69/72_avatar_small.jpg" width="48" height="48" alt="fhg007" /></a> 
+		<p><a href="http://www.discuz.net/space-uid-196972.html" target="_blank">fhg007</a></p> 
+	</li><li> 
+		<a href="http://www.discuz.net/space-uid-686486.html" target="_blank"><img src="http://uc.discuz.net/data/avatar/000/68/64/86_avatar_small.jpg" width="48" height="48" alt="滚骨碌" /></a> 
+		<p><a href="http://www.discuz.net/space-uid-686486.html" target="_blank">滚骨碌</a></p> 
+	</li><li> 
+		<a href="http://www.discuz.net/space-uid-8888.html" target="_blank"><img src="http://uc.discuz.net/data/avatar/000/00/88/88_avatar_small.jpg" width="48" height="48" alt="mmx2003" /></a> 
+		<p><a href="http://www.discuz.net/space-uid-8888.html" target="_blank">mmx2003</a></p> 
+	</li><li> 
+		<a href="http://www.discuz.net/space-uid-296238.html" target="_blank"><img src="http://uc.discuz.net/data/avatar/000/29/62/38_avatar_small.jpg" width="48" height="48" alt="qw2006" /></a> 
+		<p><a href="http://www.discuz.net/space-uid-296238.html" target="_blank">qw2006</a></p> 
+	</li><li> 
+		<a href="http://www.discuz.net/space-uid-4813.html" target="_blank"><img src="http://uc.discuz.net/data/avatar/000/00/48/13_avatar_small.jpg" width="48" height="48" alt="Angel" /></a> 
+		<p><a href="http://www.discuz.net/space-uid-4813.html" target="_blank">Angel</a></p> 
+	</li><li> 
+		<a href="http://www.discuz.net/space-uid-1018348.html" target="_blank"><img src="http://uc.discuz.net/data/avatar/001/01/83/48_avatar_small.jpg" width="48" height="48" alt="肥爺" /></a> 
+		<p><a href="http://www.discuz.net/space-uid-1018348.html" target="_blank">肥爺</a></p> 
+	</li><li> 
+		<a href="http://www.discuz.net/space-uid-1375.html" target="_blank"><img src="http://uc.discuz.net/data/avatar/000/00/13/75_avatar_small.jpg" width="48" height="48" alt="jjh" /></a> 
+		<p><a href="http://www.discuz.net/space-uid-1375.html" target="_blank">jjh</a></p> 
+	</li><li> 
+		<a href="http://www.discuz.net/space-uid-924809.html" target="_blank"><img src="http://uc.discuz.net/data/avatar/000/92/48/09_avatar_small.jpg" width="48" height="48" alt="popuppp" /></a> 
+		<p><a href="http://www.discuz.net/space-uid-924809.html" target="_blank">popuppp</a></p> 
+	</li> 
+</ul> 
+</div></div></div></div></div></div><!--[/diy]--> 
+</div> 
+<div class="bn lk"> 
+<h2>友情链接</h2> 
+<ul class="m cl"><li><div class="forumlogo"><img src="static/image/common/logo_88_31.gif" border="0" alt="Discuz!产品" /></div><div class="forumcontent"><h5><a href="http://www.comsenz.com/products/discuz" target="_blank">Discuz!产品</a></h5><p>Discuz! 官方网站 用户会员区</p></div><li><div class="forumlogo"><img src="http://www.discuz.net/site_logo/5d6d.gif" border="0" alt="免费论坛" /></div><div class="forumcontent"><h5><a href="http://www.5d6d.com/" target="_blank">免费论坛</a></h5><p>Discuz!免费论坛申请,不限空间流量</p></div></ul> 
+<div class="cl mbm"> 
+<a href="http://www.phpchina.com" target="_blank"><img src="http://www.discuz.net/site_logo/phpchina.gif" border="0" alt="PHP中国" /></a> <a href="http://www.discuzunion.com/" target="_blank"><img src="http://www.discuz.net/site_logo/discuzunion.gif" border="0" alt="Discuz! 站点收录.推广.合作平台" /></a> <a href="http://bbs.blueidea.com/" target="_blank"><img src="http://www.discuz.net/site_logo/blueidea.gif" border="0" alt="蓝色理想" /></a> <a href="http://un.lvren.cn/" target="_blank"><img src="http://www.comsenz.com/pics/lvren.gif" border="0" alt="绿人旅游联盟" /></a> <a href="http://www.7dps.com/" target="_blank"><img src="http://www.comsenz.com/pics/7dps.gif" border="0" alt="7dps" /></a> <a href="http://media.discuz.net" target="_blank"><img src="http://www.discuz.net/site_logo/media.gif" border="0" alt="合作媒体" /></a> <a href="http://bbs.yeswan.com/" target="_blank"><img src="http://bbs.yeswan.com/attachments/month_0809/20080926_9b2baec56b95a9ae46ab8ir8uBrEJQjx.gif" border="0" alt="yes玩" /></a> <a href="http://zz.comsenz.com/" target="_blank"><img src="http://zz.comsenz.com/zzlogo.gif" border="0" alt="《站长》" /></a> <a href="http://www.hudong.com/" target="_blank"><img src="http://www.comsenz.com/pics/hudonglogo.gif" border="0" alt="互动百科" /></a> </div> 
+<ul class="x cl"> 
+<li><a href="http://bbs.yesky.com" target="_blank" title="天极网社区">天极网社区</a></li><li><a href="http://bbs.shudoo.com/index.php" target="_blank" title="电脑报论坛">电脑报论坛</a></li><li><a href="http://www.chinaunix.net/" target="_blank" title="ChinaUnix.">ChinaUnix.</a></li><li><a href="http://www.phpchina.com/html/trainsubject.html?utm_source=phpchina&utm_medium=banner&utm_campaign=item" target="_blank" title="PHP培训">PHP培训</a></li><li><a href="http://www.im286.com" target="_blank" title="落伍者论坛">落伍者论坛</a></li><li><a href="http://bbs.7gg.cn" target="_blank" title="7gg游戏热线">7gg游戏热线</a></li><li><a href="http://union.5d6d.com/" target="_blank" title="广告联盟">广告联盟</a></li><li><a href="http://wowo.5d6d.com/kxnc/" target="_blank" title="开心农场">开心农场</a></li><li><a href="http://www.netadmin.com.cn" target="_blank" title="网管员世界">网管员世界</a></li><li><a href="http://bbs.51cto.com" target="_blank" title="51CTO">51CTO</a></li><li><a href="http://www.54master.com/" target="_blank" title="我是网管">我是网管</a></li><li><a href="http://bbs.zdnet.com.cn" target="_blank" title="ZDNetChina中文社区">ZDNetChina中文社区</a></li><li><a href="http://www.ecshop.com/" target="_blank" title="ECShop">ECShop</a></li><li><a href="http://www.jcwcn.com" target="_blank" title="中国教程网">中国教程网</a></li><li><a href="http://www.k666.com" target="_blank" title="k666">k666</a></li><li><a href="http://www.haodf.com" target="_blank" title="好大夫">好大夫</a></li><li><a href="http://wowo.5d6d.com/kxbb/" target="_blank" title="开心宝贝">开心宝贝</a></li><li><a href="http://www.seowhy.com/bbs" target="_blank" title="SEO论坛">SEO论坛</a></li><li><a href="http://game.yeswan.com/ddt" target="_blank" title="弹弹堂">弹弹堂</a></li><li><a href="http://www.freediscuz.net" target="_blank" title="Free Discuz!">Free Discuz!</a></li><li><a href="http://www.5dforum.com/" target="_blank" title="免費論壇">免費論壇</a></li><li><a href="http://www.bitscn.com/" target="_blank" title="中国网管联盟">中国网管联盟</a></li><li><a href="http://www.ismole.net" target="_blank" title="奇矩互动">奇矩互动</a></li><li><a href="http://www.eshopun.com/" target="_blank" title="中国网商联盟">中国网商联盟</a></li><li><a href="http://softbbs.it168.com" target="_blank" title="IT168软件乐园">IT168软件乐园</a></li><li><a href="http://picunion.qihoo.com" target="_blank" title="奇虎组图联盟">奇虎组图联盟</a></li><li><a href="http://www.jz123.cn" target="_blank" title="中国建站之家">中国建站之家</a></li><li><a href="http://www.cnzz.cn" target="_blank" title="中国站长">中国站长</a></li><li><a href="http://www.cncms.com" target="_blank" title="WEB开发网">WEB开发网</a></li><li><a href="http://www.joy666.com/" target="_blank" title="中国电脑论坛">中国电脑论坛</a></li><li><a href="http://www.136z.com" target="_blank" title="中国建站网">中国建站网</a></li><li><a href="http://xbbs.enet.com.cn/" target="_blank" title="eNet学院">eNet学院</a></li><li><a href="http://wowo.5d6d.com/" target="_blank" title="窝窝">窝窝</a></li><li><a href="http://www.zzchn.com" target="_blank" title="站长中国">站长中国</a></li><li><a href="http://bbs.winzheng.com/" target="_blank" title="赢政天下">赢政天下</a></li><li><a href="http://www.80sec.com/" target="_blank" title="WEB安全研究">WEB安全研究</a></li><li><a href="http://softbbs.pconline.com.cn/" target="_blank" title="太平洋软件论坛">太平洋软件论坛</a></li><li><a href="http://www.msg2me.com" target="_blank" title="Discuz!外文支持">Discuz!外文支持</a></li><li><a href="http://www.webmasterhome.cn" target="_blank" title="中国站长之家">中国站长之家</a></li><li><a href="http://www.iemate.com/" target="_blank" title="IE修复">IE修复</a></li><li><a href="http://www.58.com/" target="_blank" title="58同城网">58同城网</a></li><li><a href="http://www.6688.com" target="_blank" title="6688">6688</a></li><li><a href="http://www.webjx.com" target="_blank" title="网页教学网">网页教学网</a></li><li><a href="http://union.yeswan.com" target="_blank" title="Yes玩运营平台">Yes玩运营平台</a></li><li><a href="http://www.ganji.com/index.htm" target="_blank" title="赶集网">赶集网</a></li><li><a href="http://www.shopnc.net" target="_blank" title="ShopNC多店商城">ShopNC多店商城</a></li><li><a href="http://www.chinesehonker.org" target="_blank" title="红客联盟">红客联盟</a></li><li><a href="http://www.wabei.cn/" target="_blank" title="挖贝网">挖贝网</a></li></ul> 
+</div> 
+</div> 
+</div> 
+ 
+<div class="wp mtn"> 
+<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]--> 
+</div>	</div> 
+<div class="wp a_f"><a href="http://www.phpchina.com/html/train.html?utm_source=discuz.net&utm_medium=banner&utm_campaign=dznetposts" target="_blank"><img src="http://www.comsenz.com/pics/phptrain96080.jpg" height="80" width="970" border="0"></a></div><div class="wp a_f"><a href="http://www.netstarchina.com.cn/DCCI/DCCI.ASPX" target="_blank"><img src="data/attachment/common/cf/133220l3lniqtuqwi3dqd3.jpg" border="0"></a></div><div id="ft" class="wp cl"> 
+<div id="flk" class="y"> 
+<p> 
+<strong><a href="http://www.comsenz.com/" target="_blank">Comsenz Technology Ltd.</a></strong> 
+( <a href="http://www.miibeian.gov.cn/" target="_blank">京ICP备05079575号|京ICP证040387号</a>)<span class="pipe">|</span><a href="mailto:noreply@comsenz.com">联系我们</a><script type="text/javascript"> 
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script> 
+<script type="text/javascript"> 
+try {
+var pageTracker = _gat._getTracker("UA-8055587-1");
+pageTracker._trackPageview();
+} catch(err) {}</script></p> 
+<p class="xs0"> 
+GMT+8, 2010-5-31 17:05, <span id="debuginfo">Processed in 0.038550 second(s), 0 queries, Memcache On</span>.
+</p> 
+</div> 
+<div id="frt"> 
+<p>Powered by <strong><a href="http://www.discuz.net" target="_blank">Discuz!</a></strong> <em>X1</em></p> 
+<p class="xs0">&copy; 2001-2010 <a href="http://www.comsenz.com" target="_blank">Comsenz Inc.</a></p> 
+</div></div> 
+<script src="home.php?mod=misc&ac=sendmail&rand=1275296745" type="text/javascript"></script> 
+</body> 
+</html>

@@ -9,14 +9,13 @@ import org.thuir.forum.template.TemplateRepository;
 import org.thuir.forum.template.Vertex;
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.Url;
-import org.thuir.jfcrawler.framework.extractor.HTMLExtractor;
 import org.thuir.jfcrawler.util.Statistic;
 
 /**
  * @author ruKyzhc
  *
  */
-public class ForumExtractor extends HTMLExtractor {
+public class ForumExtractor extends JsExtractor {
 	TemplateRepository lib = TemplateRepository.getInstance();
 
 	@Override

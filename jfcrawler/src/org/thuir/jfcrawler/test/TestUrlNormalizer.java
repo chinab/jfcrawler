@@ -14,7 +14,7 @@ public class TestUrlNormalizer extends TestCase {
 		String[] urls = {
 				"www.google.com:8080",
 				"www.renren.com/home.do?userid=&pass=2&home=3",
-				"https://www.googlecode.com:443/",
+				"https://www.googlecode.com:443/index.php",
 				"plugin/index.html",
 				"http://www.discuz.net/#",
 				"http://www.newsmth.net/bbsavv.php?select=1?x"
@@ -40,8 +40,8 @@ public class TestUrlNormalizer extends TestCase {
 		assertEquals(page.getHost(), "www.googlecode.com");
 		assertEquals(page.getProtocol(), "https");
 		assertEquals(page.getPort(), "443");
-		assertEquals(page.getPage(), "");
-		assertEquals(page.getUrl(), "https://www.googlecode.com:443/");
+		assertEquals(page.getPage(), "index.php");
+		assertEquals(page.getUrl(), "https://www.googlecode.com:443/index.php");
 		
 		Url temp = Url.parseWithParent(null, "http://www.baidu.com/more");
 		System.out.println(temp);
