@@ -3,11 +3,14 @@ package org.thuir.forum.extractor;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.script.ScriptException;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.thuir.forum.data.ForumUrl;
+import org.thuir.forum.js.JavaScriptRepository;
+import org.thuir.forum.js.JavaScriptRepository.JsHandler;
 import org.thuir.forum.template.Template;
 import org.thuir.forum.template.TemplateRepository;
 import org.thuir.forum.template.Vertex;
@@ -17,6 +20,7 @@ import org.thuir.jfcrawler.framework.extractor.HTMLExtractor;
 import org.thuir.jfcrawler.util.Statistic;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -24,7 +28,10 @@ import org.w3c.dom.NodeList;
  *
  */
 public class ForumExtractor extends HTMLExtractor {
-	TemplateRepository lib = TemplateRepository.getInstance();
+	private TemplateRepository lib = TemplateRepository.getInstance();
+	private JavaScriptRepository jsRepository = JavaScriptRepository.getRepository();
+
+	private List<JsHandler> js = new ArrayList<JsHandler>();
 
 	@Override
 	public List<Url> extractUrls(Page page) {
@@ -68,24 +75,87 @@ public class ForumExtractor extends HTMLExtractor {
 		Document doc = parse(page);
 
 		NodeList nodes = null;
-		XPathExpression xpathExpr = null;
-		if((xpathExpr = vertex.getXPathExpression()) == null) {
-			nodes = doc.getElementsByTagName("a");
-		} else {
-			try {
-				nodes = (NodeList)xpathExpr.evaluate(doc, XPathConstants.NODESET);
-			} catch (XPathExpressionException e1) {
-				nodes = doc.getElementsByTagName("a");
-			} 
+
+		//javascript
+		NodeList scriptNodes = null;
+		XPathExpression scriptExpr = null;
+		scriptNodes = doc.getElementsByTagName("script");
+		for(int i = 0; i < scriptNodes.getLength(); i++) {
+			String token = ((Element)scriptNodes.item(i)).getAttribute("src");
+			js.add(jsRepository.getJsHandler(page.getUrl(), token));
 		}
-		
+		String script = "";
+		String content = "";
+		if((scriptExpr = vertex.getXPathExpression()) != null) {
+			try {
+				scriptNodes = (NodeList)scriptExpr.evaluate(doc, XPathConstants.NODESET);
+
+				int len = scriptNodes.getLength();
+				for(int i = 0; i < len; i++) {
+					script = scriptNodes.item(i).getTextContent();
+					for(JsHandler handler : js) {
+						try {
+							content += handler.eval(script);
+						} catch (ScriptException e) {
+							continue;
+						}
+					}
+				}
+				
+				content = "";
+			} catch (XPathExpressionException e1) {
+
+			}
+		} else {
+			scriptNodes = (NodeList)doc.getElementsByTagName("script");
+
+			int len = scriptNodes.getLength();
+			for(int i = 0; i < len; i++) {
+				script = scriptNodes.item(i).getTextContent();
+				for(JsHandler handler : js) {
+					try {
+						content += handler.eval(script);
+					} catch (ScriptException e) {
+						continue;
+					}
+				}
+			}
+			
+			content = "";
+		}
+
+		//xpath
+		NodeList xpathNodes = null;
+		XPathExpression xpathExpr = null;
+		if((xpathExpr = vertex.getXPathExpression()) != null) {
+			try {
+				xpathNodes = (NodeList)xpathExpr.evaluate(doc, XPathConstants.NODESET);
+
+				int len = xpathNodes.getLength();
+				for(int i = 0; i < len; i++) {
+					extractUrlsFromNodes(vertex, url, xpathNodes, ret);
+				}
+			} catch (XPathExpressionException e1) {
+
+			}
+		} else {
+			nodes = (NodeList)doc.getElementsByTagName("a"); 
+			extractUrlsFromNodes(vertex, url, nodes, ret);
+		}
+
+		js.clear();
+		return ret;
+	}
+
+	private void extractUrlsFromNodes(
+			Vertex vertex, ForumUrl url, NodeList nodes, List<Url> ret) {
 		int len = nodes.getLength();
 		for(int i = 0; i < len; i++) {
 			String href = ((Element)nodes.item(i)).getAttribute("href");
 
 			ForumUrl f;
 			try {
-				f = (ForumUrl) Url.parseWithParent(page.getUrl(), href);
+				f = (ForumUrl) Url.parseWithParent(url, href);
 			} catch (Exception e) {
 				continue;
 			}
@@ -104,8 +174,6 @@ public class ForumExtractor extends HTMLExtractor {
 				}
 			}
 		}
-
-		return ret;
 	}
 
 }
