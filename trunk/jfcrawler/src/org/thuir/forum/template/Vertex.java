@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import org.thuir.jfcrawler.data.Url;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -13,6 +18,8 @@ import org.w3c.dom.NodeList;
  *
  */
 public class Vertex {
+	private static XPath xpath = XPathFactory.newInstance().newXPath();
+	
 	public static void create(Map<String, Vertex> index, Element e) {
 		Vertex v = new Vertex(e.getAttribute("id"));
 		index.put(v.getId(), v);
@@ -26,7 +33,18 @@ public class Vertex {
 		} catch(IllegalArgumentException exception) {
 			v.tag = Tag.UNKNOWN;
 		}
-
+		
+		String exprStr = e.getAttribute("xpath");
+		if(exprStr.trim().length() == 0) {
+			v.xpathExpr = null;
+		} else {
+			try {
+				v.xpathExpr = xpath.compile(exprStr);
+			} catch (XPathExpressionException e1) {
+				v.xpathExpr = null;
+			}
+		}
+		
 		NodeList list = null;
 		list = e.getElementsByTagName("pattern");
 		for(int i = 0; i < list.getLength(); i++)
@@ -47,6 +65,7 @@ public class Vertex {
 
 	private List<Vertex> children = null;
 	private List<UrlPattern> patterns = null;
+	private XPathExpression xpathExpr = null;
 	private Paging paging = null;
 	private String id = null;
 
@@ -66,6 +85,10 @@ public class Vertex {
 	
 	public List<UrlPattern> getPatterns() {
 		return patterns;
+	}
+	
+	public XPathExpression getXPathExpression() {
+		return xpathExpr;
 	}
 	
 	public Paging getPaging() {

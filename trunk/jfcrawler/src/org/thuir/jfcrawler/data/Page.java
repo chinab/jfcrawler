@@ -1,24 +1,31 @@
 package org.thuir.jfcrawler.data;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import net.htmlparser.jericho.Source;
+import org.thuir.jfcrawler.util.ConfigUtil;
 
 /**
  * @author ruKyzhc
  *
  */
 public class Page {
+	private static Pattern pattern = 
+		Pattern.compile("charset=([\\w|\\d|-]+)", Pattern.CASE_INSENSITIVE);
+	
 	private Url url = null;
 
 	private byte[] html = null;
-	private String charset = "gbk";
+	private String charset = ConfigUtil.getConfig().getString("basic.default-encode");
 
-	private boolean isReady = false;
+//	private boolean isReady = false;
 
 	public Page() {
-		isReady = false;
+//		isReady = false;
 	}
 
 	public Page(Url url) {
@@ -50,19 +57,30 @@ public class Page {
 		charset = parseCharset(html);
 	}
 
-	private String parseCharset(byte[] src) {
+	private static String parseCharset(byte[] src) {
+		BufferedReader reader = 
+			new BufferedReader(
+					new InputStreamReader(new ByteArrayInputStream(src)));
+		String line = "";
+		String charset = ConfigUtil.getConfig().getString("basic.default-encode");
 		try {
-			return new Source(new ByteArrayInputStream(html)).getEncoding();
+			while((line = reader.readLine()) != null) {
+				Matcher m = pattern.matcher(line); 
+				if(m.find()) {
+					charset = m.group(1);
+				}
+			}
 		} catch (IOException e) {
-			return "utf-8";
+			return charset;
 		}
+		return charset;
 	}
 
-	public synchronized void ready() {
-		isReady = true;
-	}
-
-	public synchronized boolean isReady() {
-		return isReady;
-	}
+//	public synchronized void ready() {
+//		isReady = true;
+//	}
+//
+//	public synchronized boolean isReady() {
+//		return isReady;
+//	}
 }
