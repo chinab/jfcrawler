@@ -42,6 +42,16 @@ public class JavaScriptRepository {
 	public static JavaScriptRepository getRepository() {
 		return instance;
 	}
+	
+//	public static JsHandler newInstance() {
+//		JsHandler handler =  new JsHandler(manager.getEngineByName("javascript"));
+//		try {
+//			handler.eval(browserJs);
+//		} catch (ScriptException e) {
+//			return null;
+//		}
+//		return handler;
+//	}
 
 	private Map<String, JsHandler> jsCache = null;
 	private HttpClient httpClient = null;
@@ -74,7 +84,7 @@ public class JavaScriptRepository {
 			ScriptEngine engine = manager.getEngineByName("javascript");
 			try {
 				engine.eval(browserJs);
-
+				
 				HttpContext contextPage = new BasicHttpContext();
 				HttpGet httpget = new HttpGet(token);
 

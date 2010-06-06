@@ -45,6 +45,17 @@ public class Vertex {
 			}
 		}
 		
+		String scriptExpr = e.getAttribute("script");
+		if(exprStr.trim().length() == 0) {
+			v.scriptExpr = null;
+		} else {
+			try {
+				v.scriptExpr = xpath.compile(scriptExpr);
+			} catch (XPathExpressionException e1) {
+				v.scriptExpr = null;
+			}
+		}
+		
 		NodeList list = null;
 		list = e.getElementsByTagName("pattern");
 		for(int i = 0; i < list.getLength(); i++)
@@ -65,7 +76,10 @@ public class Vertex {
 
 	private List<Vertex> children = null;
 	private List<UrlPattern> patterns = null;
+	
 	private XPathExpression xpathExpr = null;
+	private XPathExpression scriptExpr = null;
+	
 	private Paging paging = null;
 	private String id = null;
 
@@ -89,6 +103,10 @@ public class Vertex {
 	
 	public XPathExpression getXPathExpression() {
 		return xpathExpr;
+	}
+	
+	public XPathExpression getScriptExpression() {
+		return scriptExpr;
 	}
 	
 	public Paging getPaging() {
