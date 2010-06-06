@@ -49,23 +49,23 @@ public class TestJFCrawler extends TestCase implements FetchingListener{
 		for(int i = 0; i < pages.length; i++)
 			fetcher.fetch(new FetchExchange(pages[i], this));
 		
-		while(true) {
-			boolean flag = true;
-			for(Page p : pages) {
-				if(!p.isReady()) {
-					flag = false;
-					break;
-				}
-			}
-			if(flag)
-				break;
-		}
+//		while(true) {
+//			boolean flag = true;
+//			for(Page p : pages) {
+//				if(!p.isReady()) {
+//					flag = false;
+//					break;
+//				}
+//			}
+//			if(flag)
+//				break;
+//		}
 	}
 
 	@Override
 	public void onComplete(FetchExchange exchange) {
 		System.out.println(exchange.getPage().getHtmlContent().length);
-		exchange.getPage().ready();
+//		exchange.getPage().ready();
 	}
 
 	@Override
