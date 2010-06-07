@@ -35,8 +35,6 @@ public class ForumExtractor extends HTMLExtractor {
 	private TemplateRepository lib = TemplateRepository.getInstance();
 	private JavaScriptRepository jsRepository = JavaScriptRepository.getRepository();
 
-	private List<JsHandler> js = new ArrayList<JsHandler>();
-
 	@Override
 	public List<Url> extractUrls(Page page) {
 		//		List<Url> urls = super.extractUrls(page);
@@ -84,7 +82,9 @@ public class ForumExtractor extends HTMLExtractor {
 		NodeList scriptNodes = null;
 		XPathExpression scriptExpr = null;
 		scriptNodes = doc.getElementsByTagName("script");
+		List<JsHandler> js = new ArrayList<JsHandler>();
 		JsHandler jsHandler = null;
+		
 		for(int i = 0; i < scriptNodes.getLength(); i++) {
 			String token = ((Element)scriptNodes.item(i)).getAttribute("src");
 			if(token.trim().isEmpty()) {

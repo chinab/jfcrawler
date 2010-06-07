@@ -95,7 +95,7 @@ public class JavaScriptRepository {
 				handler = new JsHandler(engine);
 			} catch (ScriptException e) {
 				logger.error(
-						LogUtil.message("script errors when generating JsHandler.", e));
+						LogUtil.message("script errors when generating JsHandler '" + token + "'.", e));
 				return null;
 			} catch (ClientProtocolException e) {
 				logger.error(
