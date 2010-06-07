@@ -9,6 +9,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.log4j.Logger;
 import org.thuir.jfcrawler.data.Url;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -18,6 +19,7 @@ import org.w3c.dom.NodeList;
  *
  */
 public class Vertex {
+	private static Logger logger = Logger.getLogger(Vertex.class);
 	private static XPath xpath = XPathFactory.newInstance().newXPath();
 	
 	public static void create(Map<String, Vertex> index, Element e) {
@@ -41,6 +43,7 @@ public class Vertex {
 			try {
 				v.xpathExpr = xpath.compile(exprStr);
 			} catch (XPathExpressionException e1) {
+				logger.error("error xpath expression '" + exprStr + "'.", e1);
 				v.xpathExpr = null;
 			}
 		}
@@ -52,6 +55,7 @@ public class Vertex {
 			try {
 				v.scriptExpr = xpath.compile(scriptExpr);
 			} catch (XPathExpressionException e1) {
+				logger.error("error script xpath expression '" + scriptExpr + "'.", e1);
 				v.scriptExpr = null;
 			}
 		}

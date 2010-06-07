@@ -8,6 +8,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.apache.log4j.Logger;
 import org.thuir.forum.data.ForumUrl;
 import org.thuir.forum.js.JavaScriptRepository;
 import org.thuir.forum.js.JavaScriptRepository.JsHandler;
@@ -17,6 +18,7 @@ import org.thuir.forum.template.Vertex;
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.extractor.HTMLExtractor;
+import org.thuir.jfcrawler.util.LogUtil;
 import org.thuir.jfcrawler.util.Statistic;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -27,6 +29,9 @@ import org.w3c.dom.NodeList;
  *
  */
 public class ForumExtractor extends HTMLExtractor {
+	private static Logger logger = 
+		Logger.getLogger(ForumExtractor.class);
+	
 	private TemplateRepository lib = TemplateRepository.getInstance();
 	private JavaScriptRepository jsRepository = JavaScriptRepository.getRepository();
 
@@ -79,12 +84,15 @@ public class ForumExtractor extends HTMLExtractor {
 		NodeList scriptNodes = null;
 		XPathExpression scriptExpr = null;
 		scriptNodes = doc.getElementsByTagName("script");
+		JsHandler jsHandler = null;
 		for(int i = 0; i < scriptNodes.getLength(); i++) {
 			String token = ((Element)scriptNodes.item(i)).getAttribute("src");
 			if(token.trim().isEmpty()) {
 				continue;
 			}
-			js.add(jsRepository.getJsHandler(page.getUrl(), token));
+			jsHandler = jsRepository.getJsHandler(page.getUrl(), token);
+			if(jsHandler != null)
+				js.add(jsHandler);
 		}
 		String script = "";
 		String content = "";
@@ -104,7 +112,9 @@ public class ForumExtractor extends HTMLExtractor {
 					}
 				}
 			} catch (XPathExpressionException e1) {
-
+				logger.error(
+						LogUtil.message("script xpath expression '" 
+								+ scriptExpr.toString() + "' error.", e1));
 			}
 		} else {
 			scriptNodes = (NodeList)doc.getElementsByTagName("script");
@@ -138,7 +148,8 @@ public class ForumExtractor extends HTMLExtractor {
 					extractUrlsFromNodes(vertex, url, xpathNodes, ret);
 				}
 			} catch (XPathExpressionException e1) {
-
+				logger.error(LogUtil.message("xpath expression '"+ scriptExpr.toString() 
+						+ "' error.", e1));
 			}
 		} else {
 			nodes = (NodeList)doc.getElementsByTagName("a"); 

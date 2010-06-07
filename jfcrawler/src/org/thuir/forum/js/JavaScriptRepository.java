@@ -28,30 +28,24 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
+import org.apache.log4j.Logger;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Url;
+import org.thuir.jfcrawler.util.LogUtil;
 
 /**
  * @author ruKyzhc
  *
  */
 public class JavaScriptRepository {
+	private static Logger logger = Logger.getLogger(JavaScriptRepository.class);
+
 	private static JavaScriptRepository instance = new JavaScriptRepository();
 	private static ScriptEngineManager manager = new ScriptEngineManager();
 
 	public static JavaScriptRepository getRepository() {
 		return instance;
 	}
-	
-//	public static JsHandler newInstance() {
-//		JsHandler handler =  new JsHandler(manager.getEngineByName("javascript"));
-//		try {
-//			handler.eval(browserJs);
-//		} catch (ScriptException e) {
-//			return null;
-//		}
-//		return handler;
-//	}
 
 	private Map<String, JsHandler> jsCache = null;
 	private HttpClient httpClient = null;
@@ -84,7 +78,7 @@ public class JavaScriptRepository {
 			ScriptEngine engine = manager.getEngineByName("javascript");
 			try {
 				engine.eval(browserJs);
-				
+
 				HttpContext contextPage = new BasicHttpContext();
 				HttpGet httpget = new HttpGet(token);
 
@@ -94,16 +88,22 @@ public class JavaScriptRepository {
 
 				BufferedReader pageReader = 
 					new BufferedReader(
-						new InputStreamReader(jsPage.getContent()));
-				
+							new InputStreamReader(jsPage.getContent()));
+
 				engine.eval(pageReader);
-				
+
 				handler = new JsHandler(engine);
 			} catch (ScriptException e) {
+				logger.error(
+						LogUtil.message("script errors when generating JsHandler.", e));
 				return null;
 			} catch (ClientProtocolException e) {
+				logger.error(
+						LogUtil.message("error when downloading js file '" + token + "'.", e));
 				return null;
 			} catch (IOException e) {
+				logger.error(
+						LogUtil.message("error when downloading js file '" + token + "'.", e));
 				return null;
 			}
 

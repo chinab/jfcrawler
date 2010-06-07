@@ -1,5 +1,6 @@
 package org.thuir.forum;
 
+import org.apache.log4j.Logger;
 import org.thuir.forum.classifier.ForumUrlClassifier;
 import org.thuir.forum.data.ForumUrl;
 import org.thuir.forum.extractor.ForumExtractor;
@@ -18,6 +19,8 @@ import org.thuir.jfcrawler.util.Statistic;
  *
  */
 public class ForumCrawler extends AbstractJFCrawler {
+	private static Logger logger =
+		Logger.getLogger(ForumCrawler.class);
 
 	public ForumCrawler(String jobName) {
 		super(jobName);
@@ -27,7 +30,8 @@ public class ForumCrawler extends AbstractJFCrawler {
 	throws BadUrlFormatException {
 		ForumUrl.registerToUrlFactory();
 		TemplateRepository.load("./template");
-		ForumCrawler crawler = new ForumCrawler("newsmth");
+		String job = "newsmth";
+		ForumCrawler crawler = new ForumCrawler(job);
 		
 		Factory.registerFrontierClass(BlockingQueueFrontier.class);
 
@@ -47,7 +51,8 @@ public class ForumCrawler extends AbstractJFCrawler {
 		Statistic.create("catalog-counter");
 		Statistic.create("board-counter");
 		Statistic.create("thread-counter");
-
+		
+		logger.info("crawler " + job + " starts");
 		crawler.start();
 	}
 
