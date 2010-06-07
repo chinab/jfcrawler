@@ -1,5 +1,6 @@
 package org.thuir.forum.classifier;
 
+import org.apache.log4j.Logger;
 import org.thuir.forum.data.ForumUrl;
 import org.thuir.forum.template.Tag;
 import org.thuir.forum.template.Template;
@@ -9,6 +10,8 @@ import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.classifier.Classifier;
 
 public class ForumUrlClassifier extends Classifier {
+	private static Logger logger = Logger.getLogger(ForumUrlClassifier.class);
+	
 	TemplateRepository lib = TemplateRepository.getInstance();
 
 	@Override

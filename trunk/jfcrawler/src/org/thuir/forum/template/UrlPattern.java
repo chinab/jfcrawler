@@ -2,6 +2,7 @@ package org.thuir.forum.template;
 
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 /**
@@ -9,6 +10,7 @@ import org.w3c.dom.Element;
  *
  */
 public class UrlPattern {
+	private static Logger logger = Logger.getLogger(UrlPattern.class);
 	public static enum Type {
 		REGEX,
 		INCLUDE,

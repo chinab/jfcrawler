@@ -7,10 +7,12 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Url;
 
 public class TemplateRepository {
+	private static Logger logger = Logger.getLogger(TemplateRepository.class);
 	private static TemplateRepository repository = null;
 	
 	public static TemplateRepository load(String folder) {
@@ -58,6 +60,8 @@ public class TemplateRepository {
 				in = null;
 				continue;
 			}
+
+			logger.info("loading template '" + f + "'");
 			Template.load(library, rootIndex, in);
 		}
 	}

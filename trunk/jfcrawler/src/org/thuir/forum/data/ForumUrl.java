@@ -1,5 +1,6 @@
 package org.thuir.forum.data;
 
+import org.apache.log4j.Logger;
 import org.thuir.forum.template.Tag;
 import org.thuir.forum.template.Template;
 import org.thuir.forum.template.TemplateRepository;
@@ -8,6 +9,7 @@ import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Url;
 
 public class ForumUrl extends Url {
+	private static Logger logger = Logger.getLogger(ForumUrl.class);
 	private static final long serialVersionUID = -8806556896198541103L;
 	
 	public static void registerToUrlFactory() {
