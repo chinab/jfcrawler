@@ -97,6 +97,8 @@ public class JavaScriptRepository {
 						new InputStreamReader(jsPage.getContent()));
 				
 				engine.eval(pageReader);
+				
+				handler = new JsHandler(engine);
 			} catch (ScriptException e) {
 				return null;
 			} catch (ClientProtocolException e) {
@@ -169,6 +171,5 @@ public class JavaScriptRepository {
 		"this.getElementById	= function(id) {};\n" +
 		"this.write = function(s) {printer+=(s+'\\n');};\n" +
 		"}\n" +
-		"var document = new _DOCUMENT(window, new Object(), new Object());\n" +
-		"};";
+		"var document = new _DOCUMENT(window, new Object(), new Object());\n";
 }

@@ -63,4 +63,25 @@ public class HTMLExtractor extends Extractor {
 			return null;
 		}
 	}
+	
+	protected Document parse(String content, String charset) {
+		try {
+			DOMParser parser = new DOMParser();
+			parser.setProperty(
+					"http://cyberneko.org/html/properties/default-encoding",
+					charset
+			);
+			parser.setFeature("http://xml.org/sax/features/namespaces", false);
+			//input file
+			parser.parse(new InputSource(
+					new ByteArrayInputStream(content.getBytes(charset))));
+			Document doc = parser.getDocument();
+
+			return doc;
+		} catch (SAXException e) {
+			return null;
+		} catch (IOException e) {
+			return null;
+		}
+	}
 }

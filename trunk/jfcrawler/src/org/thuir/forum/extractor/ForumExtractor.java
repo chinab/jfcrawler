@@ -20,7 +20,6 @@ import org.thuir.jfcrawler.framework.extractor.HTMLExtractor;
 import org.thuir.jfcrawler.util.Statistic;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -82,11 +81,14 @@ public class ForumExtractor extends HTMLExtractor {
 		scriptNodes = doc.getElementsByTagName("script");
 		for(int i = 0; i < scriptNodes.getLength(); i++) {
 			String token = ((Element)scriptNodes.item(i)).getAttribute("src");
+			if(token.trim().isEmpty()) {
+				continue;
+			}
 			js.add(jsRepository.getJsHandler(page.getUrl(), token));
 		}
 		String script = "";
 		String content = "";
-		if((scriptExpr = vertex.getXPathExpression()) != null) {
+		if((scriptExpr = vertex.getScriptExpression()) != null) {
 			try {
 				scriptNodes = (NodeList)scriptExpr.evaluate(doc, XPathConstants.NODESET);
 
@@ -101,8 +103,6 @@ public class ForumExtractor extends HTMLExtractor {
 						}
 					}
 				}
-				
-				content = "";
 			} catch (XPathExpressionException e1) {
 
 			}
@@ -120,10 +120,12 @@ public class ForumExtractor extends HTMLExtractor {
 					}
 				}
 			}
-			
-			content = "";
 		}
-
+		js.clear();
+		Document jsDoc = parse(content, page.getCharset());
+		NodeList jsNodes = jsDoc.getElementsByTagName("a");
+		extractUrlsFromNodes(vertex, url, jsNodes, ret);
+		
 		//xpath
 		NodeList xpathNodes = null;
 		XPathExpression xpathExpr = null;
@@ -143,7 +145,6 @@ public class ForumExtractor extends HTMLExtractor {
 			extractUrlsFromNodes(vertex, url, nodes, ret);
 		}
 
-		js.clear();
 		return ret;
 	}
 
