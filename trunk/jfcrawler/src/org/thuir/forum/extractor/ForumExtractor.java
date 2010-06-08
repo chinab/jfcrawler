@@ -37,8 +37,6 @@ public class ForumExtractor extends HTMLExtractor {
 
 	@Override
 	public List<Url> extractUrls(Page page) {
-		//		List<Url> urls = super.extractUrls(page);
-
 		if(!(page.getUrl() instanceof ForumUrl)) {
 			return super.extractUrls(page);
 		}
@@ -122,10 +120,13 @@ public class ForumExtractor extends HTMLExtractor {
 			int len = scriptNodes.getLength();
 			for(int i = 0; i < len; i++) {
 				script = scriptNodes.item(i).getTextContent();
+				if(script.trim().length() == 0)
+					continue;
 				for(JsHandler handler : js) {
 					try {
 						content += handler.eval(script);
 					} catch (ScriptException e) {
+						e.printStackTrace();
 						continue;
 					}
 				}
