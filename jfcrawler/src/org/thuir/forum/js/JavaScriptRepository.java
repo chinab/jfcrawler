@@ -1,6 +1,8 @@
 package org.thuir.forum.js;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -51,6 +53,7 @@ public class JavaScriptRepository {
 
 	protected JavaScriptRepository() {
 		jsCache = new HashMap<String, JsHandler>();
+		loadBrowserJs();
 
 		HttpParams params = new BasicHttpParams();
 		ConnManagerParams.setMaxTotalConnections(params, 5);
@@ -131,41 +134,24 @@ public class JavaScriptRepository {
 		}
 	}
 
-	private final static String browserJs = 
-		"var printer = \"\";\n" +
-		"reset = function() { printer = \"\";\n}" +
-		"//navigator\n" +
-		"function _NAVIGATOR() {\n" +
-		"this.userAgent = \"jfcrawler(THUIR-bot)\";\n" +
-		"}\n" +
-		"var navigator = new _NAVIGATOR();\n" +
-		"//window\n" +
-		"function _WINDOW() {\n" +
-		"this.self = this;\n" +
-		"this.top  = this;\n" +
-		"}\n" +
-		"var window = new _WINDOW();\n" +
-		"var top    = window;\n" +
-		"var self   = window;\n" +
-		"//document\n" +
-		"function _DOCUMENT(_window, _obj, _cookie) {\n" +
-		"this.cookie    = _cookie;\n" +
-		"this.frame     = _obj;\n" +
-		"this.frames    = _obj;\n" +
-		"this.history   = _obj;\n" +
-		"this.document  = this;\n" +
-		"this.length    = 0;\n" +
-		"this.defaultStatus = \"\";\n" +
-		"this.location  = \"\";\n" +
-		"this.name      = \"\";\n" +
-		"this.status    = \"\";\n" +
-		"this.opener    = _window;\n" +
-		"this.parent    = _window;\n" +
-		"this.self      = _window;\n" +
-		"this.top       = _window;\n" +
-		"this.window    = _window;\n" +
-		"this.getElementById	= function(id) {};\n" +
-		"this.write = function(s) {printer+=(s+'\\n');};\n" +
-		"}\n" +
-		"var document = new _DOCUMENT(window, new Object(), new Object());\n";
+	private final static String BROWSER_JS_LOC = "./src/org/thuir/forum/js/browser.js";
+	private static String browserJs = "";
+	
+	private static void loadBrowserJs() {
+		try {
+			FileReader reader = new FileReader(BROWSER_JS_LOC);
+			browserJs = "";
+
+			char[] buf = new char[65536];
+			while(reader.read(buf) > 0) {
+				browserJs += new String(buf);
+			}
+			
+		} catch (FileNotFoundException e) {
+			logger.error("cannot find browser js file", e);
+			browserJs = "";
+		} catch (IOException e) {
+			browserJs = "";
+		}
+	}
 }
