@@ -3,6 +3,7 @@ package org.thuir.jfcrawler.framework;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.cache.BlockingQueueCache;
@@ -20,20 +21,12 @@ import org.thuir.jfcrawler.util.AccessController;
  *
  */
 public class Factory {
-//	private static Class<? extends Url> urlClass = Url.class;	
+	private static Logger logger = Logger.getLogger(Factory.class);
+	
 	public static void registerUrlClass(
 			Class<? extends Url> urlClazz) {
 		Url.setUrlClass(urlClazz);
 	}	
-//	public static Url getUrlInstance() {
-//		try {
-//			return urlClass.newInstance();
-//		} catch (InstantiationException e) {
-//			return null;
-//		} catch (IllegalAccessException e) {
-//			return null;
-//		}
-//	}
 
 	private static Class<? extends Page> pageClass = Page.class;
 	public static void registerPageClass(
@@ -120,6 +113,7 @@ public class Factory {
 			urldb.clear();
 			modules.put(MODULE_URLDB, urldb);
 		} catch (Exception e) {
+			logger.fatal("database initialization failed", e);
 			modules.put(MODULE_URLDB, null);
 		}
 	}

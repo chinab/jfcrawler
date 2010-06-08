@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.cyberneko.html.parsers.DOMParser;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Page;
@@ -20,6 +21,7 @@ import org.xml.sax.SAXException;
  *
  */
 public class HTMLExtractor extends Extractor {
+	private static Logger logger = Logger.getLogger(HTMLExtractor.class);
 
 	@Override
 	public List<Url> extractUrls(Page page) {
@@ -33,7 +35,7 @@ public class HTMLExtractor extends Extractor {
 				try {
 					urls.add(Url.parseWithParent(page.getUrl(), href));
 				} catch(BadUrlFormatException e) {
-					//TODO
+					continue;
 				}
 			}
 		}
@@ -58,8 +60,10 @@ public class HTMLExtractor extends Extractor {
 
 			return doc;
 		} catch (SAXException e) {
+			logger.error("error while parsing '" + page.getUrl().toString() + "'", e);
 			return null;
 		} catch (IOException e) {
+			logger.error("error while parsing '" + page.getUrl().toString() + "'", e);
 			return null;
 		}
 	}
@@ -79,8 +83,10 @@ public class HTMLExtractor extends Extractor {
 
 			return doc;
 		} catch (SAXException e) {
+			logger.error("error while parsing string.", e);
 			return null;
 		} catch (IOException e) {
+			logger.error("error while parsing string.", e);
 			return null;
 		}
 	}

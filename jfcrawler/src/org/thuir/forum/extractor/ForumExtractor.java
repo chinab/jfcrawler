@@ -18,7 +18,6 @@ import org.thuir.forum.template.Vertex;
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.extractor.HTMLExtractor;
-import org.thuir.jfcrawler.util.LogUtil;
 import org.thuir.jfcrawler.util.Statistic;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -110,9 +109,8 @@ public class ForumExtractor extends HTMLExtractor {
 					}
 				}
 			} catch (XPathExpressionException e1) {
-				logger.error(
-						LogUtil.message("script xpath expression '" 
-								+ scriptExpr.toString() + "' error.", e1));
+				logger.error("script xpath expression '" 
+								+ scriptExpr.toString() + "' error.", e1);
 			}
 		} else {
 			scriptNodes = (NodeList)doc.getElementsByTagName("script");
@@ -149,8 +147,8 @@ public class ForumExtractor extends HTMLExtractor {
 					extractUrlsFromNodes(vertex, url, xpathNodes, ret);
 				}
 			} catch (XPathExpressionException e1) {
-				logger.error(LogUtil.message("xpath expression '"+ scriptExpr.toString() 
-						+ "' error.", e1));
+				logger.error("xpath expression '"+ scriptExpr.toString() 
+						+ "' error.", e1);
 			}
 		} else {
 			nodes = (NodeList)doc.getElementsByTagName("a"); 

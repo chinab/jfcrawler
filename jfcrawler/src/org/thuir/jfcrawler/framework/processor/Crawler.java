@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.Factory;
@@ -24,6 +25,7 @@ import org.thuir.jfcrawler.util.Statistic;
  *
  */
 public abstract class Crawler extends BasicThread {
+	private static Logger logger = Logger.getLogger(Crawler.class);
 
 	protected List<Extractor> extractors = null;
 
@@ -107,6 +109,10 @@ public abstract class Crawler extends BasicThread {
 				System.out.println("[" + this.getName() + 
 						"][url-counter]" + 
 						Statistic.get("url-counter").count());
+				
+				logger.info("[" + this.getName() + 
+						"][url]" + page.getUrl() + 
+						"\t[counter]" + Statistic.get("url-counter").count());
 
 				for(Extractor e : extractors) {
 					List<Url> ret = e.extractUrls(page);
@@ -173,11 +179,11 @@ public abstract class Crawler extends BasicThread {
 						+ "[s time]" + s_t + "[s avg]" + ((double)s_t/c_c)
 						);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				continue;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				logger.error("IO excetpion in [" + this.getName() + "]", e);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				logger.error("SQL excetpion in [" + this.getName() + "]", e);
 			} finally {
 				setIdle(true);
 				urls.clear();

@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.thuir.jfcrawler.util.ConfigUtil;
 
 /**
@@ -14,6 +15,8 @@ import org.thuir.jfcrawler.util.ConfigUtil;
  *
  */
 public class Page {
+	private static Logger logger = Logger.getLogger(Page.class);
+	
 	private static Pattern pattern = 
 		Pattern.compile("charset=([\\w|\\d|-]+)", Pattern.CASE_INSENSITIVE);
 	
@@ -22,10 +25,7 @@ public class Page {
 	private byte[] html = null;
 	private String charset = ConfigUtil.getConfig().getString("basic.default-encode");
 
-//	private boolean isReady = false;
-
 	public Page() {
-//		isReady = false;
 	}
 
 	public Page(Url url) {
@@ -71,16 +71,9 @@ public class Page {
 				}
 			}
 		} catch (IOException e) {
+			logger.error("cannot get charset.", e);
 			return charset;
 		}
 		return charset;
 	}
-
-//	public synchronized void ready() {
-//		isReady = true;
-//	}
-//
-//	public synchronized boolean isReady() {
-//		return isReady;
-//	}
 }

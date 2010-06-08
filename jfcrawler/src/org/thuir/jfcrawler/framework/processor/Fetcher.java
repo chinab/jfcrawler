@@ -2,6 +2,7 @@ package org.thuir.jfcrawler.framework.processor;
 
 import java.sql.SQLException;
 
+import org.apache.log4j.Logger;
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.Factory;
@@ -20,6 +21,7 @@ import org.thuir.jfcrawler.util.ConfigUtil;
  *
  */
 public abstract class Fetcher extends BasicThread implements FetchingListener{
+	private static Logger logger = Logger.getLogger(Fetcher.class);
 
 	private static final long INTERVAL = 
 		ConfigUtil.getConfig().getLong("basic.thread-interval");
@@ -81,10 +83,9 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 						fetcher.fetch(new FetchExchange(new Page(url), this));
 				}
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				continue;
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("error when check with database.", e);
 			} finally {
 				setIdle(true);
 			}
@@ -94,6 +95,7 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 	@Override
 	public void onComplete(FetchExchange exchange) {
 		System.err.println("finish:" + exchange.getUrl());
+		logger.info("finish:" + exchange.getUrl());
 		while(!cache.offer(exchange.getPage())) {
 			try {
 				Thread.sleep(INTERVAL);
@@ -105,16 +107,19 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 	@Override
 	public void onExcepted(FetchExchange exchange) {
 		System.err.println("excepted:" + exchange.getUrl());
+		logger.info("excepted:" + exchange.getUrl());
 	}
 
 	@Override
 	public void onExpired(FetchExchange exchange) {
 		System.err.println("expired:" + exchange.getUrl());
+		logger.info("expired:" + exchange.getUrl());
 	}
 	
 	@Override
 	public void onFailed(FetchExchange exchange) {
 		System.err.println("failed:" + exchange.getUrl());
+		logger.info("failed:" + exchange.getUrl());
 	}
 	
 	@Override

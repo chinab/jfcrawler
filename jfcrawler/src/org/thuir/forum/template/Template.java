@@ -13,7 +13,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Url;
-import org.thuir.jfcrawler.util.LogUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -61,17 +60,13 @@ public class Template {
 				root.put(r.getHost(), e.getUrl());
 			}
 		} catch (SAXException e) {
-			logger.error(
-					LogUtil.message("error when loading template '" + tmpl.identify + "'.", e));
+			logger.error("error when loading template '" + tmpl.identify + "'.", e);
 		} catch (IOException e) {
-			logger.error(
-					LogUtil.message("error when loading template '" + tmpl.identify + "'.", e));
+			logger.error("error when loading template '" + tmpl.identify + "'.", e);
 		} catch (ParserConfigurationException e) {
-			logger.error(
-					LogUtil.message("error when loading template '" + tmpl.identify + "'.", e));
+			logger.error("error when loading template '" + tmpl.identify + "'.", e);
 		} catch (BadUrlFormatException e) {
-			logger.error(
-					LogUtil.message("error when loading template '" + tmpl.identify + "'.", e));
+			logger.error("error when loading template '" + tmpl.identify + "'.", e);
 		}
 	}
 	

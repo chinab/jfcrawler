@@ -1,5 +1,6 @@
 package org.thuir.jfcrawler.framework;
 
+import org.apache.log4j.Logger;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.cache.Cache;
@@ -18,6 +19,8 @@ import org.thuir.jfcrawler.util.Statistic;
  *
  */
 public abstract class AbstractJFCrawler extends Thread {
+	private static Logger logger = Logger.getLogger(AbstractJFCrawler.class);
+
 	protected Crawler[] crawlerPool = null;
 	protected int crawlerPoolSize = 0;
 
@@ -25,7 +28,7 @@ public abstract class AbstractJFCrawler extends Thread {
 
 	//processor
 	protected Fetcher fetcher = null;
-	
+
 	protected MultiThreadHttpFetcher httpFetcher = null;
 
 	//cache
@@ -36,7 +39,7 @@ public abstract class AbstractJFCrawler extends Thread {
 	public AbstractJFCrawler(String jobName) {
 		this.jobName = jobName;
 	}
-	
+
 	public void initialize() {
 		Factory.initAllModuleWithDefault();
 		cache = Factory.getCacheInstance();
@@ -50,9 +53,9 @@ public abstract class AbstractJFCrawler extends Thread {
 		try {
 			fetcher = T.newInstance();
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
+			logger.fatal("fetcher initialization failed", e);
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
+			logger.fatal("fetcher initialization failed", e);
 		}
 	}
 
@@ -68,9 +71,9 @@ public abstract class AbstractJFCrawler extends Thread {
 						Factory.getWriterInstance(jobName));
 			}
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
+			logger.fatal("crawler initialization failed", e);
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
+			logger.fatal("crawler initialization failed", e);
 		}
 	}
 
@@ -84,6 +87,8 @@ public abstract class AbstractJFCrawler extends Thread {
 
 	@Override
 	public void run() {
+		logger.info("job " + this.jobName + " starts!!");
+
 		Statistic.create("url-counter");
 		Statistic.create("download-size-counter");
 		long time = System.currentTimeMillis();
@@ -149,6 +154,23 @@ public abstract class AbstractJFCrawler extends Thread {
 				(Statistic.get("download-size-counter").count() / 
 						(double)duration) + 
 		"]");
+
+		logger.info("job " + this.jobName + " finished!!");
+		logger.info(
+				"[catalog:" + Statistic.get("catalog-counter").count() + "]");
+		logger.info(
+				"[board:" + Statistic.get("board-counter").count() + "]");
+		logger.info(
+				"[thread:" + Statistic.get("thread-counter").count() + "]");
+
+		logger.info(
+				"[time:" + duration+ "]");
+		logger.info(
+				"[speed:" + 
+				(Statistic.get("download-size-counter").count() / 
+						(double)duration) + 
+				"]"
+		);
 	}
 
 	public void addExtractor(Extractor e) {
