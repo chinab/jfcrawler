@@ -15,7 +15,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * @author ruKyzhc
- *
+ * @deprecated
  */
 public class XpathExtractor extends HTMLExtractor {
 

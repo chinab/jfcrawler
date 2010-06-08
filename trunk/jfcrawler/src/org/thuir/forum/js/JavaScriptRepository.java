@@ -31,7 +31,6 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.log4j.Logger;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Url;
-import org.thuir.jfcrawler.util.LogUtil;
 
 /**
  * @author ruKyzhc
@@ -94,16 +93,13 @@ public class JavaScriptRepository {
 
 				handler = new JsHandler(engine);
 			} catch (ScriptException e) {
-				logger.error(
-						LogUtil.message("script errors when generating JsHandler '" + token + "'.", e));
+				logger.error("script errors when generating JsHandler '" + token + "'.", e);
 				return null;
 			} catch (ClientProtocolException e) {
-				logger.error(
-						LogUtil.message("error when downloading js file '" + token + "'.", e));
+				logger.error("error when downloading js file '" + token + "'.", e);
 				return null;
 			} catch (IOException e) {
-				logger.error(
-						LogUtil.message("error when downloading js file '" + token + "'.", e));
+				logger.error("error when downloading js file '" + token + "'.", e);
 				return null;
 			}
 
