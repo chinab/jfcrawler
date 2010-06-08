@@ -124,7 +124,6 @@ public class ForumExtractor extends HTMLExtractor {
 					try {
 						content += handler.eval(script);
 					} catch (ScriptException e) {
-						e.printStackTrace();
 						continue;
 					}
 				}
