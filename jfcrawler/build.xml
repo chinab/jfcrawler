@@ -45,10 +45,13 @@
 			destdir="${build.dir}" 
 			classpathref="lib.path.id" >
 			<include name="**/*.java"/>
-			<include name="**/log4j.properties"/>
+			<include name="log4j.properties"/>
 			<exclude name="**/.svn/**"/>
 			<exclude name="org/thuir/jfcrawler/test/**"/>
 		</javac>
+		<copy 
+			file="${src.dir}/log4j.properties" 
+			todir="${build.dir}"/>
 	</target>
 	
 	<target name="compile-without-resolve" 
@@ -60,10 +63,12 @@
 			destdir="${build.dir}" 
 			classpathref="lib.path.id" >
 			<include name="**/*.java"/>
-			<include name="**/log4j.properties"/>
 			<exclude name="**/.svn/**"/>
 			<exclude name="org/thuir/jfcrawler/test/**"/>
 		</javac>
+		<copy 
+			file="${src.dir}/log4j.properties" 
+			todir="${build.dir}"/>
 	</target>
 
 	<!--
