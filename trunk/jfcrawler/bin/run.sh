@@ -1,3 +1,3 @@
 #!/bin/sh
 
-java -cp ide-build -Djava.ext.dirs=lib org.thuir.forumcrawler.ForumCrawler
+java -cp build -Djava.ext.dirs=lib org.thuir.forum.ForumCrawler
