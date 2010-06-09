@@ -14,20 +14,14 @@ import javax.script.ScriptException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpVersion;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.params.ConnManagerParams;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.log4j.Logger;
@@ -54,18 +48,15 @@ public class JavaScriptRepository {
 	protected JavaScriptRepository() {
 		jsCache = new HashMap<String, JsHandler>();
 
-		HttpParams params = new BasicHttpParams();
-		ConnManagerParams.setMaxTotalConnections(params, 5);
-		HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		schemeRegistry.register(
-				new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+				new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
 
-		ClientConnectionManager cm = 
-			new ThreadSafeClientConnManager(params, schemeRegistry);
+		ThreadSafeClientConnManager cm = 
+			new ThreadSafeClientConnManager(schemeRegistry);
+		cm.setMaxTotalConnections(5);
 
-		httpClient = new DefaultHttpClient(cm, params);
+		httpClient = new DefaultHttpClient(cm);
 	}
 
 	public JsHandler getJsHandler(Url url, String uri) {

@@ -39,10 +39,6 @@ public class ForumCrawler extends AbstractJFCrawler {
 		crawler.initializeFetcher(DefaultFetcher.class);
 		crawler.initializeCrawler(DefaultCrawler.class, 15);
 
-		HostFilter f = new HostFilter();
-		f.setHost("www.newsmth.net");
-		crawler.addFilter(f);
-
 		crawler.addExtractor(new ForumExtractor());
 		crawler.addClassifier(new ForumUrlClassifier());
 
