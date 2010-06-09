@@ -1,5 +1,7 @@
 package org.thuir.forum;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 import org.thuir.forum.classifier.ForumUrlClassifier;
 import org.thuir.forum.data.ForumUrl;
@@ -28,6 +30,9 @@ public class ForumCrawler extends AbstractJFCrawler {
 
 	public static void main(String[] args) 
 	throws BadUrlFormatException {
+		File testFile = new File("");
+		System.out.println(testFile.getAbsolutePath());
+		
 		ForumUrl.registerToUrlFactory();
 		TemplateRepository.load("./template");
 		String job = "newsmth";
