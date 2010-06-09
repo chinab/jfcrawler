@@ -56,6 +56,15 @@ public class Page {
 
 		charset = parseCharset(html);
 	}
+	
+	public Url redirect(String uri) {
+		try {
+			this.url = Url.parseWithParent(url, uri);
+		} catch (BadUrlFormatException e) {
+			return null;
+		}
+		return this.url;
+	}
 
 	private static String parseCharset(byte[] src) {
 		BufferedReader reader = 

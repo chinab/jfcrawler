@@ -12,6 +12,7 @@ import org.thuir.jfcrawler.framework.processor.Fetcher;
 import org.thuir.jfcrawler.framework.processor.Crawler;
 import org.thuir.jfcrawler.io.httpclient.MultiThreadHttpFetcher;
 import org.thuir.jfcrawler.util.BasicThread;
+import org.thuir.jfcrawler.util.ConfigUtil;
 import org.thuir.jfcrawler.util.Statistic;
 
 /**
@@ -92,6 +93,8 @@ public abstract class AbstractJFCrawler extends Thread {
 		Statistic.create("url-counter");
 		Statistic.create("download-size-counter");
 		long time = System.currentTimeMillis();
+		long jobTimeout = 
+			ConfigUtil.getConfig().getLong("basic.job-timeout") * 3600 * 1000;
 
 		for(Crawler p : crawlerPool) {
 			p.start();
@@ -104,6 +107,17 @@ public abstract class AbstractJFCrawler extends Thread {
 				Thread.sleep(
 						BasicThread.INTERVAL * 20);
 			} catch (InterruptedException e) {
+			}
+			long checkJobTimeout = 
+				System.currentTimeMillis() - time - jobTimeout;
+			if(checkJobTimeout > 0) {
+				System.err.println("job timeout");
+				for(Crawler p : crawlerPool) {
+					p.close();
+				}
+				fetcher.close();
+				httpFetcher.close();
+				break;
 			}
 			System.err.println(
 					"[cache:" + 

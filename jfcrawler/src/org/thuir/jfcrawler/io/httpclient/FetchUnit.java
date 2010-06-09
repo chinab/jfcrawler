@@ -1,11 +1,14 @@
 package org.thuir.jfcrawler.io.httpclient;
 
 import java.io.IOException;
+import java.net.URI;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.RedirectLocations;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
@@ -36,8 +39,6 @@ public class FetchUnit extends BasicThread {
 	public FetchUnit(String threadName, HttpClient client) {
 		this.setName(threadName);
 		this.httpClient = client;
-		
-		context = new BasicHttpContext();
 	}
 
 	@Override
@@ -70,6 +71,15 @@ public class FetchUnit extends BasicThread {
 				
 				HttpEntity entity = response.getEntity();
 				if(entity != null) {
+					Object obj = context.getAttribute("http.protocol.redirect-locations");
+					if(obj != null) {
+						RedirectLocations locs = (RedirectLocations)obj;
+						List<URI> redirectUris = locs.getAll();
+						for(URI uri : redirectUris) {
+							System.out.println(exchange.getPage().getUrl() + " -->> " + uri.toString());
+							exchange.getPage().redirect(uri.toString());
+						}
+					}
 					exchange.getPage().load(EntityUtils.toByteArray(entity));
 					exchange.onComplete();
 				} else {
@@ -87,6 +97,8 @@ public class FetchUnit extends BasicThread {
 	
 	public synchronized void fetch(FetchExchange exchange) {
 		this.exchange = exchange;
+		
+		context = new BasicHttpContext();
 		httpget = new HttpGet(exchange.getUrl().getUrl());
 		String userAgent = null;
 		if((userAgent = exchange.getUserAgent()) != null)

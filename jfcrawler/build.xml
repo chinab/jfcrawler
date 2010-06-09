@@ -41,7 +41,7 @@
 			description="--> compile the project">
 		<mkdir dir="${build.dir}" />
 		<javac
-			debug="true" debuglevel="lines, vars, and source"
+			source="6.0"
 			srcdir="${src.dir}"
 			destdir="${build.dir}" 
 			classpathref="lib.path.id" >
@@ -55,7 +55,8 @@
 			description="--> compile the project without resolving">
 		<mkdir dir="${build.dir}" />
 		<javac 
-			debug="true" debuglevel="lines, vars, and source"
+			source="6.0"
+			debug="true" debuglevel="lines, vars, source"
 			srcdir="${src.dir}"
 			destdir="${build.dir}" 
 			classpathref="lib.path.id" >
@@ -70,7 +71,7 @@
 		target: jar
 		=================================
 	-->
-	<target name="jar" depends="compile" description="--> create jar file">
+	<target name="jar" depends="compile-without-resolve" description="--> create jar file">
 		<jar destfile="${dist.dir}/${ant.project.name}.jar">   
 			<fileset dir="${build.dir}">   
 				<include name="**/*.class"/>   

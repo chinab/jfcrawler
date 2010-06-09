@@ -53,7 +53,6 @@ public class JavaScriptRepository {
 
 	protected JavaScriptRepository() {
 		jsCache = new HashMap<String, JsHandler>();
-		loadBrowserJs();
 
 		HttpParams params = new BasicHttpParams();
 		ConnManagerParams.setMaxTotalConnections(params, 5);
@@ -136,15 +135,17 @@ public class JavaScriptRepository {
 
 	private final static String BROWSER_JS_LOC = "./src/org/thuir/forum/js/browser.js";
 	private static String browserJs = "";
-	
+	static {
+		loadBrowserJs();
+	}
 	private static void loadBrowserJs() {
 		try {
-			FileReader reader = new FileReader(BROWSER_JS_LOC);
+			BufferedReader reader = new BufferedReader(new FileReader(BROWSER_JS_LOC));
 			browserJs = "";
 
-			char[] buf = new char[65536];
-			while(reader.read(buf) > 0) {
-				browserJs += new String(buf);
+			String line = "";
+			while((line = reader.readLine()) != null) {
+				browserJs += line + "\n";
 			}
 			
 		} catch (FileNotFoundException e) {
