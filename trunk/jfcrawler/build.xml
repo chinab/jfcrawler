@@ -45,6 +45,7 @@
 			destdir="${build.dir}" 
 			classpathref="lib.path.id" >
 			<include name="**/*.java"/>
+			<include name="**/log4j.properties"/>
 			<exclude name="**/.svn/**"/>
 			<exclude name="org/thuir/jfcrawler/test/**"/>
 		</javac>
@@ -59,6 +60,7 @@
 			destdir="${build.dir}" 
 			classpathref="lib.path.id" >
 			<include name="**/*.java"/>
+			<include name="**/log4j.properties"/>
 			<exclude name="**/.svn/**"/>
 			<exclude name="org/thuir/jfcrawler/test/**"/>
 		</javac>
