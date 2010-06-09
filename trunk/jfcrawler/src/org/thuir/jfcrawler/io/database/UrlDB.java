@@ -54,7 +54,7 @@ public class UrlDB {
 	public void clear() throws SQLException {
 		Statement stmt = conn.createStatement();
 		stmt.executeUpdate(
-		"DROP TABLE IF EXISTS urldb.urlstatus;" );
+		"DROP TABLE IF EXISTS urlstatus;" );
 		stmt.executeUpdate(
 				"CREATE TABLE  urldb.urlstatus (" +
 				"id int(10) unsigned NOT NULL AUTO_INCREMENT," +
