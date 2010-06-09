@@ -56,7 +56,7 @@ public class UrlDB {
 		stmt.executeUpdate(
 		"DROP TABLE IF EXISTS urlstatus;" );
 		stmt.executeUpdate(
-				"CREATE TABLE  urldb.urlstatus (" +
+				"CREATE TABLE  urlstatus (" +
 				"id int(10) unsigned NOT NULL AUTO_INCREMENT," +
 				"url varchar(1023) NOT NULL," +
 				"status int(10) unsigned NOT NULL," +
