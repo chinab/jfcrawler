@@ -11,11 +11,13 @@ var navigator      = new _NAVIGATOR();
 function _WINDOW() {
 	this.self = this;
 	this.top  = this;
+	this.document = new _DOCUMENT(this, new Object(), new Object());
 }
 var window = new _WINDOW();
 
 var top    = window;
 var self   = window;
+var parent = window;
 
 //document
 function _DOCUMENT(_window, _obj, _cookie) {

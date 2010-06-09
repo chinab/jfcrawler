@@ -1,17 +1,11 @@
 package org.thuir.jfcrawler.io.httpclient;
 
-import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.params.ConnManagerParams;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
 import org.thuir.jfcrawler.util.BasicThread;
 import org.thuir.jfcrawler.util.ConfigUtil;
 
@@ -39,19 +33,20 @@ public class MultiThreadHttpFetcher extends BasicThread{
 		this.setName("MultiThreadHttpFetcher");
 
 		// initialize httpclient
-		HttpParams params = new BasicHttpParams();
-		ConnManagerParams.setMaxTotalConnections(params, 100);
-		HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+//		HttpParams params = new BasicHttpParams();
+//		HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
 
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		schemeRegistry.register(
-				new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+				new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
 
-		ClientConnectionManager cm = 
-			new ThreadSafeClientConnManager(params, schemeRegistry);
-
-		client = new DefaultHttpClient(cm, params);
-
+		ThreadSafeClientConnManager cm = 
+			new ThreadSafeClientConnManager(schemeRegistry);
+		cm.setMaxTotalConnections(100);
+		
+//		client = new DefaultHttpClient(cm, params);
+		client = new DefaultHttpClient(cm);
+		
 		// initialize thread pool
 		threadPool = new FetchUnit[nThread];
 
