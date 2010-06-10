@@ -107,7 +107,7 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 	@Override
 	public void onExcepted(FetchExchange exchange) {
 		System.err.println("excepted:" + exchange.getUrl());
-		logger.info("excepted:" + exchange.getUrl());
+		logger.error("excepted:" + exchange.getUrl(), exchange.getException());
 	}
 
 	@Override

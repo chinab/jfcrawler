@@ -15,6 +15,8 @@ public class FetchExchange {
 	
 	private String userAgent = null;
 	
+	private Exception exception = null;
+	
 	public FetchExchange(Page page, FetchingListener listener) {
 		this.listener = listener;
 		this.page = page;
@@ -56,6 +58,14 @@ public class FetchExchange {
 	
 	public Url getUrl() {
 		return page.getUrl();
+	}
+	
+	public void excepted(Exception cause) {
+		this.exception = cause;
+	}
+	
+	public Exception getException() {
+		return exception;
 	}
 
 }
