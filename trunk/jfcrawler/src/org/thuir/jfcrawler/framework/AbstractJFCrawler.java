@@ -129,6 +129,11 @@ public abstract class AbstractJFCrawler extends Thread {
 					"][frontier:" + 
 					frontier.size() + 
 			"]");
+			logger.info("[cache:" + 
+					cache.size() +
+					"][frontier:" + 
+					frontier.size() + 
+			"]");
 			boolean allIdle = true;
 			for(Crawler p : crawlerPool) {
 				if(!p.idle()) {
