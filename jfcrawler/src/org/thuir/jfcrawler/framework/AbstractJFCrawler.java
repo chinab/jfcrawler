@@ -63,7 +63,8 @@ public abstract class AbstractJFCrawler extends Thread {
 	}
 
 	public void initializeCrawler(
-			Class<? extends Crawler> T, int nThread) {
+			Class<? extends Crawler> T) {
+		int nThread = ConfigUtil.getConfig().getInt("basic.crawler-pool-size");
 		crawlerPoolSize = nThread;
 
 		try {			
