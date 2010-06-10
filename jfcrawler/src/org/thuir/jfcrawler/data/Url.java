@@ -40,12 +40,6 @@ public class Url implements Serializable, Comparable<Url> {
 
 	protected HashMap<String, String> params;
 
-	protected long lastVisit = 0l;
-
-	protected long lastModify = 0l;
-
-	protected int status = 0;
-
 	private static Class<? extends Url> urlClass = Url.class;
 
 	@Override
@@ -146,62 +140,13 @@ public class Url implements Serializable, Comparable<Url> {
 	public String getPath() {
 		return path;
 	}
-
-	public void setLastVisit(long lastVisit) {
-		this.lastVisit = lastVisit;
-	}
-	public long getLastVisit() {
-		return lastVisit;
-	}
-	public void setLastModify(long lastModify) {
-		this.lastModify = lastModify;
-	}
-	public long getLastModify() {
-		return lastModify;
-	}
-
 	public void setRevisitInterval(long interval) {
 		this.revisitInterval = interval;
-	}
+	}	
 	public long getRevisitInterval() {
 		return revisitInterval;
 	}
-
-	public void setFetched() {
-		status = UrlStatus.setFetchingStatus(status, UrlStatus.FETCHED);
-	}
-	public boolean isFetched() {
-		return UrlStatus.fetchingStatus(status) == UrlStatus.FETCHED;
-	}
-
-	public void setDiscarded() {
-		status = UrlStatus.setFetchingStatus(status, UrlStatus.DISCARD);
-	}
-	public boolean isDiscarded() {
-		return UrlStatus.fetchingStatus(status) == UrlStatus.DISCARD;
-	}
-
-	public void setMissing() {
-		status = UrlStatus.setFetchingStatus(status, UrlStatus.MISSING);
-	}
-	public boolean isMissing() {
-		return UrlStatus.fetchingStatus(status) == UrlStatus.MISSING;
-	}
-
-	public void setHttpCode(int code) {
-		status = UrlStatus.setHttpCode(status, code);
-	}
-	public int getHttpCode() {
-		return UrlStatus.httpCode(status);
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-	public int getStatus() {
-		return this.status;
-	}
-
+	
 	@Override
 	public String toString() {
 		return url;
@@ -466,5 +411,37 @@ public class Url implements Serializable, Comparable<Url> {
 		else
 			normalizeUrl(target, null, "http://" + url);
 	}
+	
+	
+	/////////////////////////////
+	public static final int STATUS_INITIAL  = 0;
+	public static final int STATUS_COMPLETE = 1;
+	public static final int STATUS_FAILED   = 2;
+	public static final int STATUS_EXCEPTED = 3;
+	public static final int STATUS_EXPIRED  = 4;
+	
+	private int status = 0;
+	private int code   = 0;
+	private long  visit  = 0l;
 
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	public int getStatus() {
+		return this.status;
+	}
+
+	public void setCode(int code) {
+		this.code = code;
+	}
+	public int getCode() {
+		return this.code;
+	}
+	
+	public void setVisit(long visit) {
+		this.visit = visit;
+	}
+	public long getVisit() {
+		return this.visit;
+	}
 }
