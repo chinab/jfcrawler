@@ -45,7 +45,7 @@ public abstract class Crawler extends BasicThread {
 		extractors  = new ArrayList<Extractor>();
 		filters     = new ArrayList<Filter>();
 		classifiers = new ArrayList<Classifier>();
-		
+
 		cache = Factory.getCacheInstance();
 		frontier = Factory.getFrontierInstance();
 		urldb = (UrlDB)Factory.getModule(Factory.MODULE_URLDB);
@@ -73,15 +73,15 @@ public abstract class Crawler extends BasicThread {
 		List<Url> urls = new ArrayList<Url>();
 		long revisit = 
 			ConfigUtil.getConfig().getLong("crawler.revisit-interval");
-//		long start = 0l;
+		
 		int c_c = 0;
 		int s_c = 0;
 		long p_t = 0l;
 		long p_a = 0l;
-		
+
 		long s_t = 0l;
 		long s_a = 0l;
-		
+
 		long c_t = 0l;
 		long c_a = 0l;
 		while(alive()) {
@@ -92,14 +92,8 @@ public abstract class Crawler extends BasicThread {
 					continue;
 				}
 				setIdle(false);
-//				System.err.println("[" + this.getName() + ":wating time]" +
-//						(System.currentTimeMillis() - start));
-//				start = System.currentTimeMillis();
 
 				writer.write(page);
-//				System.err.println("[" + this.getName() + ":writing time]" +
-//						(System.currentTimeMillis() - start));
-//				start = System.currentTimeMillis();
 				
 				Statistic.get("download-size-counter")
 				.inc(page.getHtmlContent().length);
@@ -109,7 +103,7 @@ public abstract class Crawler extends BasicThread {
 				System.out.println("[" + this.getName() + 
 						"][url-counter]" + 
 						Statistic.get("url-counter").count());
-				
+
 				logger.info("[" + this.getName() + 
 						"][url]" + page.getUrl() + 
 						"\t[counter]" + Statistic.get("url-counter").count());
@@ -124,10 +118,7 @@ public abstract class Crawler extends BasicThread {
 				boolean forbidden = false;
 
 				long cur_time = System.currentTimeMillis();
-				
-//				System.err.println("[" + this.getName() + ":extract time]" +
-//						(System.currentTimeMillis() - start));
-//				start = System.currentTimeMillis();
+
 				p_t = 0l;
 				s_t = 0l;
 				c_t = 0l;
@@ -149,7 +140,7 @@ public abstract class Crawler extends BasicThread {
 					c_a = System.currentTimeMillis();
 					p_t += c_a - p_a;
 					c_c++;
-					
+
 					if(urldb != null)
 						lastvisit = urldb.check(url);
 					else
@@ -157,7 +148,7 @@ public abstract class Crawler extends BasicThread {
 
 					s_a = System.currentTimeMillis();
 					c_t += s_a - c_a;
-					
+
 					if(!forbidden) {
 						if((lastvisit < 0) ||
 								(cur_time - lastvisit > revisit)) {
@@ -165,26 +156,26 @@ public abstract class Crawler extends BasicThread {
 							s_c++;
 						}
 					}
-					
+
 					s_t += System.currentTimeMillis() - s_a;
 				}
-				
-//				System.err.println("[" + this.getName() + ":check time]" +
-//						(System.currentTimeMillis() - start));
-//				start = System.currentTimeMillis();
+
 				System.err.println("[" + this.getName() + "]" 
 						+ "[" + c_c + ":" + s_c + "]"  
 						+ "[p time]" + p_t + "[p avg]" + ((double)p_t/c_c)
 						+ "[c time]" + c_t + "[c avg]" + ((double)c_t/c_c)
 						+ "[s time]" + s_t + "[s avg]" + ((double)s_t/c_c)
-						);
+				);
 			} catch (InterruptedException e) {
 				continue;
 			} catch (IOException e) {
 				logger.error("IO excetpion in [" + this.getName() + "]", e);
 			} catch (SQLException e) {
 				logger.error("SQL excetpion in [" + this.getName() + "]", e);
-			} finally {
+			} catch (Exception e) {
+				logger.error("Unknown error in [" + this.getName() + "]", e);
+			}
+			finally {
 				setIdle(true);
 				urls.clear();
 			}

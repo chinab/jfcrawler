@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -72,11 +73,16 @@ public class Page {
 					new InputStreamReader(new ByteArrayInputStream(src)));
 		String line = "";
 		String charset = ConfigUtil.getConfig().getString("basic.default-encode");
+		String temp = "";
 		try {
 			while((line = reader.readLine()) != null) {
 				Matcher m = pattern.matcher(line); 
 				if(m.find()) {
-					charset = m.group(1);
+					temp = m.group(1);
+					if(Charset.isSupported(temp))
+						return temp;
+					else
+						return charset;
 				}
 			}
 		} catch (IOException e) {

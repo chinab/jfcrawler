@@ -88,11 +88,27 @@
 			</fileset> 
 		</jar>
 	</target>
+	
+	<target name="tar" description="-->">
+		<tar destfile="${build.dir}/${ant.project.name}.tar">
+			<fileset dir="${basedir}" >
+				<exclude name="conf/crawler.xml" />
+				<exclude name="conf/crawler.xml.template" />
+				<exclude name=".project" />
+				<exclude name=".classpath" />
+				<exclude name="build/**" />
+				<exclude name="ide-built/**" />
+				<exclude name="jobs/*.*" />
+				<exclude name="lib/*.*" />
+				<exclude name="log/*.*" />
+			</fileset>
+		</tar>
+	</target>
 
 	<!--
-			================================= 
-			target: test
-			=================================
+		================================= 
+		target: test
+		=================================
 	-->
 	<target name="test" depends="compile" description="--> test unit">
 	</target>

@@ -64,6 +64,7 @@ public class FetchUnit extends BasicThread {
 						|| httpget == null 
 						|| context == null) {
 					logger.error("http fetcher isn't ready");
+					exchange.excepted(new NullPointerException());
 					exchange.onExcepted();
 					setIdle(true);
 					continue;
@@ -93,6 +94,8 @@ public class FetchUnit extends BasicThread {
 			} catch (IOException e) {
 				logger.error("error while fetching '" + 
 						exchange.getPage().getUrl().toString() + "'", e);
+
+				exchange.excepted(e);
 				exchange.onExcepted();
 			} finally {
 				setIdle(true);

@@ -1,5 +1,7 @@
 package org.thuir.jfcrawler.framework;
 
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Url;
@@ -88,7 +90,8 @@ public abstract class AbstractJFCrawler extends Thread {
 
 	@Override
 	public void run() {
-		logger.info("job " + this.jobName + " starts!!");
+		logger.info("job " + this.jobName + " starts at " 
+				+ new Date(System.currentTimeMillis()));
 
 		Statistic.create("url-counter");
 		Statistic.create("download-size-counter");
