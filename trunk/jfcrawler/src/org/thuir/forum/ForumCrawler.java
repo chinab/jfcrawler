@@ -10,7 +10,6 @@ import org.thuir.forum.template.TemplateRepository;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.framework.AbstractJFCrawler;
 import org.thuir.jfcrawler.framework.Factory;
-import org.thuir.jfcrawler.framework.filter.HostFilter;
 import org.thuir.jfcrawler.framework.frontier.BlockingQueueFrontier;
 import org.thuir.jfcrawler.framework.processor.DefaultCrawler;
 import org.thuir.jfcrawler.framework.processor.DefaultFetcher;
@@ -42,7 +41,7 @@ public class ForumCrawler extends AbstractJFCrawler {
 
 		crawler.initialize();
 		crawler.initializeFetcher(DefaultFetcher.class);
-		crawler.initializeCrawler(DefaultCrawler.class, 15);
+		crawler.initializeCrawler(DefaultCrawler.class);
 
 		crawler.addExtractor(new ForumExtractor());
 		crawler.addClassifier(new ForumUrlClassifier());

@@ -25,7 +25,7 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 
 	private static final long INTERVAL = 
 		ConfigUtil.getConfig().getLong("basic.thread-interval");
-	
+
 	private static final long ACCESS_INTERVAL = 
 		ConfigUtil.getConfig().getLong("basic.accessing-interval");
 
@@ -34,11 +34,11 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 	protected Frontier frontier = null;
 
 	protected Cache cache = null;
-	
+
 	protected AccessController accessCtrl = null;
-	
+
 	protected UrlDB urldb = null;
-	
+
 	public Fetcher() {
 		frontier = 
 			Factory.getFrontierInstance();
@@ -67,13 +67,13 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 				long temp = 
 					cur_time -
 					accessCtrl.lastAccess(url.getHost());
-				
+
 				if(temp < ACCESS_INTERVAL ) {
 					frontier.schedule(url);
 					continue;
 				}
 				accessCtrl.access(url.getHost(), cur_time);
-				
+
 
 				if(urldb != null) {
 					url.setLastVisit(cur_time);
@@ -86,7 +86,9 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 				continue;
 			} catch (SQLException e) {
 				logger.error("error when check with database.", e);
-			} finally {
+			} catch (Exception e) {
+				logger.error("unknown error.", e);
+			}finally {
 				setIdle(true);
 			}
 		}
@@ -115,13 +117,13 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 		System.err.println("expired:" + exchange.getUrl());
 		logger.info("expired:" + exchange.getUrl());
 	}
-	
+
 	@Override
 	public void onFailed(FetchExchange exchange) {
 		System.err.println("failed:" + exchange.getUrl());
 		logger.info("failed:" + exchange.getUrl());
 	}
-	
+
 	@Override
 	public void close() {
 		super.close();

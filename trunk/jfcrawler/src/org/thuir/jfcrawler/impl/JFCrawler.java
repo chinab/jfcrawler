@@ -22,7 +22,7 @@ public class JFCrawler extends AbstractJFCrawler {
 		
 		crawler.initialize();
 		crawler.initializeFetcher(DefaultFetcher.class);
-		crawler.initializeCrawler(DefaultCrawler.class, 2);
+		crawler.initializeCrawler(DefaultCrawler.class);
 		
 		HostFilter f = new HostFilter();
 		f.setHost("www.hiapk.com");
