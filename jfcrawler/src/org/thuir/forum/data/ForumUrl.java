@@ -1,14 +1,11 @@
 package org.thuir.forum.data;
 
 import org.apache.log4j.Logger;
-import org.thuir.forum.template.Tag;
-import org.thuir.forum.template.Template;
-import org.thuir.forum.template.TemplateRepository;
-import org.thuir.forum.template.Vertex;
+import org.thuir.forum.template.Vertex.Tag;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Url;
 
-public class ForumUrl extends Url {
+public final class ForumUrl extends Url {
 	private static Logger logger = Logger.getLogger(ForumUrl.class);
 	private static final long serialVersionUID = -8806556896198541103L;
 	
@@ -16,23 +13,25 @@ public class ForumUrl extends Url {
 		Url.setUrlClass(ForumUrl.class);
 	}
 	
-	public static ForumUrl parseToTag(String url) throws BadUrlFormatException {
-		ForumUrl u = (ForumUrl) Url.parse(url);
-		
-		Template tmpl = 
-			TemplateRepository.getInstance().getTemplate(u.getHost());
-		Vertex v = null;
-		if((v = tmpl.predict(u))==null)
-			u.setTag(Tag.UNKNOWN);
-		else
-			u.setTag(v.getTag());
-		return u;
+	private Identity identity = null;
+	public void setIdentity(Identity identity) {
+		this.identity = identity;
+	}
+	public Identity getIdentity() {
+		return this.identity;
+	}
+	public void setIdentityFromParent(Identity parent) {
+		this.identity = parent.toChild(this);
 	}
 	
 	public ForumUrl() throws BadUrlFormatException {
 		super();
 	}
-
+	
+	public ForumUrl(Url url) {
+		
+	}
+	
 	private Tag inlinkTag = null;
 	private Tag tag = null;
 	

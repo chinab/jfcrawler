@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.script.ScriptException;
+import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.log4j.Logger;
 import org.thuir.forum.data.ForumUrl;
@@ -15,13 +17,12 @@ import org.thuir.forum.js.JavaScriptRepository.JsHandler;
 import org.thuir.forum.template.Template;
 import org.thuir.forum.template.TemplateRepository;
 import org.thuir.forum.template.Vertex;
+import org.thuir.forum.template.Vertex.Tag;
+import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.extractor.HTMLExtractor;
-import org.thuir.jfcrawler.util.DomDumpHelper;
-import org.thuir.jfcrawler.util.Statistic;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /**
@@ -31,76 +32,76 @@ import org.w3c.dom.NodeList;
 public class ForumExtractor extends HTMLExtractor {
 	private static Logger logger = 
 		Logger.getLogger(ForumExtractor.class);
+
+	private static XPath xpath = XPathFactory.newInstance().newXPath();
 	
 	private TemplateRepository lib = TemplateRepository.getInstance();
 	private JavaScriptRepository jsRepository = JavaScriptRepository.getRepository();
+	
+	private XPathExpression scriptSrcExpr = null;
+	private XPathExpression hrefExpr = null;
 
+	public ForumExtractor() {
+		try {
+			scriptSrcExpr = xpath.compile("//SCRIPT[@src]/attitude::src");
+			hrefExpr = xpath.compile("//A[@href]/attitude::href");
+		} catch(Exception e) {
+			
+		}
+	}
+	
 	@Override
 	public List<Url> extractUrls(Page page) {
+		ForumUrl url = null;
+		
 		if(!(page.getUrl() instanceof ForumUrl)) {
-			return super.extractUrls(page);
+			url = new ForumUrl(page.getUrl());
+			page.setUrl(url);
 		}
-
-		ForumUrl url = (ForumUrl)page.getUrl();
-
-		if(url.getTag() != null) {
-			switch(url.getTag()) {
-			case CATALOG: {
-				Statistic.get("catalog-counter").inc();
-			};break;
-			case BOARD: {
-				Statistic.get("board-counter").inc();
-			};break;
-			case THREAD: {
-				Statistic.get("thread-counter").inc();
-			};break;
-			default:
-				break;
-			}
-		}
+		url = (ForumUrl)page.getUrl();
 
 		Template tmpl = lib.getTemplate(url.getHost());
 
-		Vertex vertex = null;
+		Vertex vertex = tmpl.getVertexByTag(Tag.OTHER);
 		if(url.getTag()==null)
 			vertex = tmpl.predict(url);
 		else
-			vertex = tmpl.predictByTag(url.getTag(), url);
-
-		if(vertex == null) {
-			return super.extractUrls(page);
-		}
+			vertex = tmpl.getVertexByTag(url.getTag());
 
 		List<Url> ret = new ArrayList<Url>();
 		Document doc = parse(page);
-
-		NodeList nodes = null;
-
-		//javascript
-		NodeList scriptNodes = null;
-		XPathExpression scriptExpr = null;
-		scriptNodes = doc.getElementsByTagName("script");
-		List<JsHandler> js = new ArrayList<JsHandler>();
-		JsHandler jsHandler = null;
+		int len = 0;
 		
-		for(int i = 0; i < scriptNodes.getLength(); i++) {
-			String token = ((Element)scriptNodes.item(i)).getAttribute("src");
-			if(token.trim().isEmpty()) {
-				continue;
-			}
-			jsHandler = jsRepository.getJsHandler(page.getUrl(), token);
-			if(jsHandler != null)
-				js.add(jsHandler);
-		}
-		String script = "";
-		String content = "";
-		if((scriptExpr = vertex.getScriptExpression()) != null) {
-			try {
-				scriptNodes = (NodeList)scriptExpr.evaluate(doc, XPathConstants.NODESET);
+		XPathExpression scriptExpr = vertex.getScriptExpr();
+		if(scriptExpr != null && scriptSrcExpr != null) {
+			String script = "";
+			String content = "";
+			
+			JsHandler jsHandler = null;
+			NodeList scriptNodes = null;
 
-				int len = scriptNodes.getLength();
+			List<JsHandler> js = new ArrayList<JsHandler>();
+			
+			try {
+				scriptNodes = (NodeList)scriptSrcExpr.evaluate(doc, XPathConstants.NODESET);
+
+				len = scriptNodes.getLength();
 				for(int i = 0; i < len; i++) {
-					script = scriptNodes.item(i).getTextContent();
+					String token = scriptNodes.item(i).getNodeValue();
+					if(token.trim().isEmpty()) {
+						continue;
+					}
+					jsHandler = jsRepository.getJsHandler(page.getUrl(), token);
+					if(jsHandler != null)
+						js.add(jsHandler);
+				}
+
+				scriptNodes = (NodeList)scriptExpr.evaluate(doc, XPathConstants.NODESET);
+				len = scriptNodes.getLength();
+				for(int i = 0; i < len; i++) {
+					script = scriptNodes.item(i).getNodeValue();
+					if(script.trim().length() == 0)
+						continue;
 					for(JsHandler handler : js) {
 						try {
 							content += handler.eval(script);
@@ -109,84 +110,35 @@ public class ForumExtractor extends HTMLExtractor {
 						}
 					}
 				}
-			} catch (XPathExpressionException e1) {
-				logger.error("script xpath expression '" 
-								+ scriptExpr.toString() + "' error.", e1);
-			}
-		} else {
-			scriptNodes = (NodeList)doc.getElementsByTagName("script");
 
-			int len = scriptNodes.getLength();
-			for(int i = 0; i < len; i++) {
-				script = scriptNodes.item(i).getTextContent();
-				if(script.trim().length() == 0)
-					continue;
-				for(JsHandler handler : js) {
-					try {
-						content += handler.eval(script);
-					} catch (ScriptException e) {
-						continue;
-					}
-				}
+				doc = parse(content, page.getCharset());
+			} catch (XPathExpressionException e1) {
+				logger.error("xpath expression error", e1);
 			}
 		}
-		js.clear();
-		Document jsDoc = parse(content, page.getCharset());
-		NodeList jsNodes = jsDoc.getElementsByTagName("a");
-		extractUrlsFromNodes(vertex, url, jsNodes, ret);
-		
-		//xpath
-		NodeList xpathNodes = null;
-		XPathExpression xpathExpr = null;
-		if((xpathExpr = vertex.getXPathExpression()) != null) {
-			try {
-				xpathNodes = (NodeList)xpathExpr.evaluate(doc, XPathConstants.NODESET);
 
-				int len = xpathNodes.getLength();
-				for(int i = 0; i < len; i++) {
-					extractUrlsFromNodes(vertex, url, xpathNodes, ret);
-				}
-			} catch (XPathExpressionException e1) {
-				logger.error("xpath expression '"+ scriptExpr.toString() 
-						+ "' error.", e1);
+		try {
+			NodeList nodes = (NodeList)hrefExpr.evaluate(doc, XPathConstants.NODESET);
+			len = nodes.getLength();
+			String href = null;
+			for(int i = 0; i < len; i++) {
+				href = nodes.item(i).getNodeValue();
+				ForumUrl u = (ForumUrl)Url.parseWithParent(url, href);
+				
+				u.setInlinkTag(url.getTag());
+				u.setTag(vertex.checkOutlink(u));
+				
+				u.setIdentityFromParent(url.getIdentity());
+				
+				if(u.getTag() != Tag.OTHER)
+					ret.add(u);
 			}
-		} else {
-			nodes = (NodeList)doc.getElementsByTagName("a"); 
-			extractUrlsFromNodes(vertex, url, nodes, ret);
+		} catch(BadUrlFormatException e) {
+			logger.error(e);
+		} catch (XPathExpressionException e) {
+			logger.error("xpath expression error", e);
 		}
 
 		return ret;
 	}
-
-	private void extractUrlsFromNodes(
-			Vertex vertex, ForumUrl url, NodeList nodes, List<Url> ret) {
-		int len = nodes.getLength();
-		for(int i = 0; i < len; i++) {
-			String href = ((Element)nodes.item(i)).getAttribute("href");
-
-			ForumUrl f;
-			try {
-				f = (ForumUrl) Url.parseWithParent(url, href);
-			} catch (Exception e) {
-				continue;
-			}
-			f.setInlinkTag(url.getTag());
-
-			if(vertex.match(f)) {
-				f.setTag(vertex.getTag());
-				ret.add(f);
-			}
-
-			for(Vertex v : vertex.getChildren()) {
-				if(v.match(f)) {
-					f.setTag(v.getTag());
-					ret.add(f);
-					break;
-				}
-			}
-		}
-	}
-
 }
-
-
