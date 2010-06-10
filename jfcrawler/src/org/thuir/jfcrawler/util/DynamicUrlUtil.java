@@ -1,5 +1,6 @@
 package org.thuir.jfcrawler.util;
 
+import java.io.File;
 import java.util.Map.Entry;
 
 import org.thuir.jfcrawler.data.Url;
@@ -42,8 +43,8 @@ public class DynamicUrlUtil {
 	
 	public static String generatePath(Url url) {
 		return
-			url.getHost() + "\\" 
-			+ url.getPath().replaceAll("/", "\\\\") + "\\" 
+			url.getHost() + File.separatorChar 
+			+ url.getPath().replaceAll("/", File.separator) + File.separatorChar 
 			+ danymicUrlToString(url);
 	}
 }

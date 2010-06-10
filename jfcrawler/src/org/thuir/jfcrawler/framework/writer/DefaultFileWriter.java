@@ -20,12 +20,12 @@ public class DefaultFileWriter extends Writer {
 	public void setRoot(String job) {
 		this.root = 
 			ConfigUtil.getConfig().getString("writer.root") 
-			+ File.pathSeparatorChar + job;		
+			+ File.separatorChar + job;		
 	}
 	
 	@Override
 	public void write(Page page) throws IOException {
-		File file = new File(root + File.pathSeparatorChar +
+		File file = new File(root + File.separatorChar +
 				DynamicUrlUtil.generatePath(page.getUrl()));
 		File path = new File(file.getParent());
 		
