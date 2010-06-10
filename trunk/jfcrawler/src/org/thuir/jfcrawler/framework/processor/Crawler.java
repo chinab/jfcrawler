@@ -94,6 +94,10 @@ public abstract class Crawler extends BasicThread {
 				setIdle(false);
 
 				writer.write(page);
+				if(urldb != null) {
+					Url url = page.getUrl();
+					urldb.insert(url);
+				}
 				
 				Statistic.get("download-size-counter")
 				.inc(page.getHtmlContent().length);
@@ -104,9 +108,9 @@ public abstract class Crawler extends BasicThread {
 						"][url-counter]" + 
 						Statistic.get("url-counter").count());
 
-				logger.info("[" + this.getName() + 
-						"][url]" + page.getUrl() + 
-						"\t[counter]" + Statistic.get("url-counter").count());
+//				logger.info("[" + this.getName() + 
+//						"][url]" + page.getUrl() + 
+//						"\t[counter]" + Statistic.get("url-counter").count());
 
 				for(Extractor e : extractors) {
 					List<Url> ret = e.extractUrls(page);

@@ -7,35 +7,45 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.http.HttpStatus;
 import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.util.ConfigUtil;
 
 public class UrlDB {
 	private Connection conn = null;
 
-	private static final String table = "urlstatus";
+	private static final String schema = 
+		ConfigUtil.getConfig().getString("url-database.schema");
+	private static final String table = 
+		ConfigUtil.getConfig().getString("url-database.table");
 
 	private static final String SQL_LOAD = 
 		"SELECT * FROM " + table + " WHERE url = ?;";
-	private static final String SQL_SAVE = 
-		"UPDATE " + table + 
-		" SET status = ?, last_visit = ?, last_modify = ? " +
-		"WHERE url = ?;";
-	private static final String SQL_CREATE = 
-		"INSERT INTO " + table +
-		" (url, status, last_visit, last_modify)" +
-		" VALUES (?, ?, ?, ?)";
+	private static final String SQL_INSERT = 
+		"INSERT INTO " + table + " (url, status, code, visit)" +
+		" VALUES (?, ?, ?, ?)" +
+		" ON DUPLICATE KEY UPDATE url= ?";
 	private static final String SQL_CHECK = 
-		"SELECT last_visit FROM " + table + " WHERE url = ?;";
+		"SELECT code, visit FROM " + table + " WHERE url = ?;";
+//	private static final String SQL_SAVE = 
+//		"UPDATE " + table + 
+//		" SET status = ?, code = ?, visit = ? " +
+//		"WHERE url = ?;";
+//	private static final String SQL_CREATE = 
+//		"INSERT INTO " + table +
+//		" (url, status, code, visit)" +
+//		" VALUES (?, ?, ?, ?)";
+
 
 	private PreparedStatement stmt_load = null;
-	private PreparedStatement stmt_save = null;
-	private PreparedStatement stmt_create = null;
+//	private PreparedStatement stmt_save = null;
+//	private PreparedStatement stmt_create = null;
 	private PreparedStatement stmt_check = null;
+	private PreparedStatement stmt_insert = null;
 
 	public UrlDB() throws Exception {
-		String url = 
-			ConfigUtil.getConfig().getString("url-database.host");
+		String host = 
+			ConfigUtil.getConfig().getString("url-database.host") + "/" + schema;
 		String username = 
 			ConfigUtil.getConfig().getString("url-database.user");
 		String password = 
@@ -43,28 +53,28 @@ public class UrlDB {
 
 		Class.forName( "org.gjt.mm.mysql.Driver" ); 
 		conn = DriverManager.getConnection( 
-				url, username, password );
+				host, username, password );
 
 		stmt_load = conn.prepareStatement(SQL_LOAD);
-		stmt_save = conn.prepareStatement(SQL_SAVE);
+//		stmt_save = conn.prepareStatement(SQL_SAVE);
+//		stmt_create = conn.prepareStatement(SQL_CREATE);
 		stmt_check = conn.prepareStatement(SQL_CHECK);
-		stmt_create = conn.prepareStatement(SQL_CREATE);
+		stmt_insert = conn.prepareStatement(SQL_INSERT);
 	}
 
 	public void clear() throws SQLException {
 		Statement stmt = conn.createStatement();
 		stmt.executeUpdate(
-		"DROP TABLE IF EXISTS urlstatus;" );
+		"DROP TABLE IF EXISTS " + table + ";" );
 		stmt.executeUpdate(
-				"CREATE TABLE  urlstatus (" +
-				"id int(10) unsigned NOT NULL AUTO_INCREMENT," +
-				"url varchar(1023) NOT NULL," +
-				"status int(10) unsigned NOT NULL," +
-				"last_visit mediumtext NOT NULL," +
-				"last_modify mediumtext NOT NULL," +
-				"reversed int(10) unsigned DEFAULT 1," +
+				"CREATE TABLE  " + table + " (" +
+				"id     int unsigned NOT NULL AUTO_INCREMENT," +
+				"url    varchar(1023) NOT NULL," +
+				"status int unsigned NOT NULL DEFAULT 0," +
+				"code   int unsigned NOT NULL DEFAULT 0," +
+				"visit  bigint NOT NULL," +
 				"PRIMARY KEY (id)" +
-				") ENGINE=InnoDB DEFAULT CHARSET=utf8;"
+				") ENGINE=InnoDB DEFAULT CHARSET=gb2312;"
 		);
 		stmt.close();
 	}
@@ -74,50 +84,57 @@ public class UrlDB {
 		ResultSet res = stmt_load.executeQuery();
 		if(res.next()) {
 			url.setStatus(res.getInt("status"));
-			url.setLastVisit(res.getLong("last_visit"));
-			url.setLastModify(res.getLong("last_modify"));
+			url.setCode(res.getInt("code"));
+			url.setVisit(res.getLong("visit"));
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public synchronized boolean save(Url url) throws SQLException {
-		stmt_check.setString(1, url.getUrl());
-		ResultSet res = stmt_check.executeQuery();
-		if(res.next()) {
-			stmt_save.setInt(1, url.getStatus());
-			stmt_save.setLong(2, url.getLastVisit());
-			stmt_save.setLong(3, url.getLastModify());
-
-			stmt_save.setString(4, url.getUrl());
-
-			stmt_save.executeUpdate();
-			return true;
-		} else {			
-			stmt_create.setString(1, url.getUrl());
-
-			stmt_create.setInt(2, url.getStatus());
-			stmt_create.setLong(3, url.getLastVisit());
-			stmt_create.setLong(4, url.getLastModify());
-
-			stmt_create.executeUpdate();
-			return false;
-		}
+//	public synchronized boolean save(Url url) throws SQLException {
+//		stmt_check.setString(1, url.getUrl());
+//		ResultSet res = stmt_check.executeQuery();
+//		if(res.next()) {
+//			stmt_save.setShort(1, url.getStatus());
+//			stmt_save.setShort(2, url.getCode());
+//			stmt_save.setLong(3, url.getVisit());
+//			stmt_save.setString(4, url.getUrl());
+//
+//			stmt_save.executeUpdate();
+//			return true;
+//		} else {			
+//			stmt_create.setString(1, url.getUrl());
+//
+//			stmt_create.setShort(2, url.getStatus());
+//			stmt_create.setShort(3, url.getCode());
+//			stmt_create.setLong(4, url.getVisit());
+//
+//			stmt_create.executeUpdate();
+//			return false;
+//		}
+//	}
+	public synchronized void insert(Url url) throws SQLException {
+		stmt_insert.setString(1, url.getUrl());
+		stmt_insert.setInt(2, url.getStatus());
+		stmt_insert.setInt(3, url.getCode());
+		stmt_insert.setLong(4, url.getVisit());
+		stmt_insert.setString(5, url.getUrl());
+		
+		stmt_insert.execute();
 	}
 
 	public synchronized long check(Url url) throws SQLException {
 			stmt_check.setString(1, url.getUrl());
 			ResultSet res = stmt_check.executeQuery();
-			if(res.next())
-				return res.getLong("last_visit");
+			if(res.next() && res.getInt("code") == HttpStatus.SC_OK)
+				return res.getLong("visit");
 			else
 				return -1l;
 	}
 
 	public void close() throws SQLException {
 		stmt_load.close();
-		stmt_save.close();
 		stmt_check.close();
 		conn.close();
 	}
