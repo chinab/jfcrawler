@@ -3,7 +3,6 @@ package org.thuir.forum;
 import java.io.File;
 
 import org.apache.log4j.Logger;
-import org.thuir.forum.classifier.ForumUrlClassifier;
 import org.thuir.forum.data.ForumUrl;
 import org.thuir.forum.extractor.ForumExtractor;
 import org.thuir.forum.template.TemplateRepository;
@@ -44,7 +43,6 @@ public class ForumCrawler extends AbstractJFCrawler {
 		crawler.initializeCrawler(DefaultCrawler.class);
 
 		crawler.addExtractor(new ForumExtractor());
-		crawler.addClassifier(new ForumUrlClassifier());
 
 		crawler.addSeed("http://www.newsmth.net/bbsfav.php?x");
 

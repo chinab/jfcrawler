@@ -1,47 +1,66 @@
 package org.thuir.forum.template;
 
 import java.util.regex.Pattern;
-
-import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 /**
  * @author ruKyzhc
  *
  */
-public class UrlPattern {
-	private static Logger logger = Logger.getLogger(UrlPattern.class);
+public final class UrlPattern {
 	public static enum Type {
 		REGEX,
-		INCLUDE,
-		EXCLUDE,
+		TOKEN,
 		UNKNOWN,
 	}
 	
 	private Type type = Type.UNKNOWN;
-	private String source = null;
 	
 	private Pattern regex = null;
 	
-	public UrlPattern(Element e) {
-		this.type = Type.valueOf(e.getAttribute("type"));
-		source = e.getTextContent();
-		
-		if(type == Type.REGEX)
-			regex = Pattern.compile(source);
-	}
+	/**
+	 * 0:unknown;<br/>
+	 * 1:${token}-123-1.html;<br/>
+	 * 2:forum/${token}/page.php;<br/>
+	 * 3:${token}.php?bid=1;<br/>
+	 * 4:bbs.php?${token}=1;<br/>
+	 */
+	private int tokenType = 0;
+	private String token = null;
 	
-	public boolean match(String url) {
-		switch(type) {
-		case REGEX:
-			return regex.matcher(url).matches();
-		case INCLUDE:
-			return url.contains(source);
-		case EXCLUDE:
-			return !url.contains(source);
-		default:
-			return true;
+	public UrlPattern(Element e) {
+		try {
+			type = Type.valueOf(e.getAttribute("type"));
+		} catch(Exception e1) {
+			type = Type.UNKNOWN;
 		}
 	}
-
+	
+	public boolean match(String uri) {
+		switch(type) {
+		case REGEX:
+			return matchRegex(uri);
+		case TOKEN:
+			return matchSubstring(uri);
+		default:
+			return false;
+		}
+	}
+	
+	private boolean matchRegex(String uri) {
+		return regex.matcher(uri).matches();
+	}
+	
+	private boolean matchSubstring(String uri) {
+		switch(tokenType) {
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+			return uri.toLowerCase().contains(token);
+		default:
+			return false;
+		}
+	}
 }

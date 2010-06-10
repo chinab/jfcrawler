@@ -2,15 +2,18 @@ package org.thuir.forum.template;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.log4j.Logger;
+import org.thuir.forum.template.Vertex.Tag;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Url;
 import org.w3c.dom.Document;
@@ -20,6 +23,7 @@ import org.xml.sax.SAXException;
 
 public class Template {
 	private static Logger logger = Logger.getLogger(Template.class);
+	private static XPath xpath = XPathFactory.newInstance().newXPath();
 	
 	public static void load(
 			Map<String, Template> lib, 
@@ -34,30 +38,29 @@ public class Template {
 				factory.newDocumentBuilder();
 			
 			Document document = builder.parse(input);
-
-			NodeList nodeList = null;
 			
-			tmpl.identify = 
-				((Element)document.getElementsByTagName("forum").item(0))
-				.getAttribute("id");
+			tmpl.identify = xpath.evaluate("//forum[@id]/attribute::id", document);
 			//Node
-			nodeList = document.getElementsByTagName("vertex");
-			for(int i = 0; i < nodeList.getLength(); i++) {
-				Vertex.create(tmpl.vertice, (Element)nodeList.item(i));
-			}
-			for(int i = 0; i < nodeList.getLength(); i++) {
-				Vertex.load(tmpl.vertice, (Element)nodeList.item(i));
-			}
+
+			tmpl.catalog = Vertex.load(Tag.CATALOG, 
+					(Element)xpath.evaluate("//vertex[@id='catalog']", 
+							document, XPathConstants.NODE));
+			tmpl.board   = Vertex.load(Tag.BOARD, 
+					(Element)xpath.evaluate("//vertex[@id='board']", 
+							document, XPathConstants.NODE));
+			tmpl.article = Vertex.load(Tag.BOARD, 
+					(Element)xpath.evaluate("//vertex[@id='article']", 
+							document, XPathConstants.NODE));
+			tmpl.other   = Vertex.load(Tag.OTHER, null);
 			
 			//sites
-			nodeList = document.getElementsByTagName("site");
-			for(int i = 0; i < nodeList.getLength(); i++) {
-				Element s = (Element)nodeList.item(i);
-				Url e = Url.parse(s.getAttribute("entrance"));
-				Url r = Url.parse(s.getAttribute("root"));
-
+			NodeList list = (NodeList)xpath.evaluate(
+					"//sites/site[@url]/attribute::url", document, XPathConstants.NODESET);
+			for(int i = 0; i < list.getLength(); i++) {
+				Url r = Url.parse(list.item(i).getNodeValue());
+				
 				lib.put(r.getHost(), tmpl);
-				root.put(r.getHost(), e.getUrl());
+				root.put(r.getHost(), r.getUrl());
 			}
 		} catch (SAXException e) {
 			logger.error("error when loading template '" + tmpl.identify + "'.", e);
@@ -67,41 +70,39 @@ public class Template {
 			logger.error("error when loading template '" + tmpl.identify + "'.", e);
 		} catch (BadUrlFormatException e) {
 			logger.error("error when loading template '" + tmpl.identify + "'.", e);
+		} catch (XPathExpressionException e) {
+			logger.error("error when loading template '" + tmpl.identify + "'.", e);
 		}
 	}
 	
 	private String identify;
 	
-	private Map<String, Vertex> vertice = null;
-
-	public Template() {
-		vertice = new HashMap<String, Vertex>();
-	}
+	private Vertex catalog = null;
+	private Vertex board   = null;
+	private Vertex article = null;
+	private Vertex other   = null;
+	
+	private Vertex[] vertice = {catalog, board, article, other};
 	
 	public Vertex predict(Url url) {
-		for(Vertex v : vertice.values()) {
+		for(Vertex v : vertice) {
 			if(v.match(url))
 				return v;
 		}
-		return null;
+		return other;
 	}
 	
-	public Vertex predictByTag(Tag tag, Url url) {
-		for(Vertex v : vertice.values()) {
-			if(v.getTag() == tag && v.match(url))
-				return v;
+	public Vertex getVertexByTag(Tag tag) {
+		switch(tag) {
+		case CATALOG:
+			return catalog;
+		case BOARD:
+			return board;
+		case ARTICLE:
+			return article;
+		default:
+			return other;
 		}
-		return null;
-	}
-	
-	public Object[] getVertexByTag(Tag tag) {
-		ArrayList<Vertex> ret = new ArrayList<Vertex>();
-		for(Vertex v : vertice.values()) {
-			if(v.getTag() == tag)
-				ret.add(v);
-		}
-		
-		return ret.toArray();
 	}
 	
 	public String getIdentify() {

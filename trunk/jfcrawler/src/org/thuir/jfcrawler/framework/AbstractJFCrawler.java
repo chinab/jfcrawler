@@ -163,12 +163,12 @@ public abstract class AbstractJFCrawler extends Thread {
 		}
 		double duration = (System.currentTimeMillis() - time) / 1000.0;
 
-		System.err.println(
-				"[catalog:" + Statistic.get("catalog-counter").count() + "]");
-		System.err.println(
-				"[board:" + Statistic.get("board-counter").count() + "]");
-		System.err.println(
-				"[thread:" + Statistic.get("thread-counter").count() + "]");
+//		System.err.println(
+//				"[catalog:" + Statistic.get("catalog-counter").count() + "]");
+//		System.err.println(
+//				"[board:" + Statistic.get("board-counter").count() + "]");
+//		System.err.println(
+//				"[thread:" + Statistic.get("thread-counter").count() + "]");
 
 		System.err.println(
 				"[time:" + duration+ "]");
@@ -179,12 +179,12 @@ public abstract class AbstractJFCrawler extends Thread {
 		"]");
 
 		logger.info("job " + this.jobName + " finished!!");
-		logger.info(
-				"[catalog:" + Statistic.get("catalog-counter").count() + "]");
-		logger.info(
-				"[board:" + Statistic.get("board-counter").count() + "]");
-		logger.info(
-				"[thread:" + Statistic.get("thread-counter").count() + "]");
+//		logger.info(
+//				"[catalog:" + Statistic.get("catalog-counter").count() + "]");
+//		logger.info(
+//				"[board:" + Statistic.get("board-counter").count() + "]");
+//		logger.info(
+//				"[thread:" + Statistic.get("thread-counter").count() + "]");
 
 		logger.info(
 				"[time:" + duration+ "]");
