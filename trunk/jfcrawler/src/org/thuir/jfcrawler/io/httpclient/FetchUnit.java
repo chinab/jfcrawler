@@ -12,6 +12,7 @@ import org.apache.http.impl.client.RedirectLocations;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.thuir.jfcrawler.util.BasicThread;
 import org.thuir.jfcrawler.util.ConfigUtil;
 
@@ -20,6 +21,8 @@ import org.thuir.jfcrawler.util.ConfigUtil;
  *
  */
 public class FetchUnit extends BasicThread {
+	private static Logger logger = Logger.getLogger(FetchUnit.class);
+	
 	private final long INTERVAL =
 		ConfigUtil.getConfig().getInt("basic.thread-interval");		
 
@@ -60,6 +63,7 @@ public class FetchUnit extends BasicThread {
 						|| httpClient == null 
 						|| httpget == null 
 						|| context == null) {
+					logger.error("http fetcher isn't ready");
 					exchange.onExcepted();
 					setIdle(true);
 					continue;
@@ -87,6 +91,8 @@ public class FetchUnit extends BasicThread {
 				}
 			} catch (InterruptedException e) {
 			} catch (IOException e) {
+				logger.error("error while fetching '" + 
+						exchange.getPage().getUrl().toString() + "'", e);
 				exchange.onExcepted();
 			} finally {
 				setIdle(true);
