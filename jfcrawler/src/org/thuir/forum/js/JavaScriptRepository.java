@@ -42,7 +42,6 @@ public class JavaScriptRepository {
 	private static Logger logger = Logger.getLogger(JavaScriptRepository.class);
 
 	private static JavaScriptRepository instance = new JavaScriptRepository();
-	private static ScriptEngineManager manager = new ScriptEngineManager();
 
 	public static JavaScriptRepository getRepository() {
 		return instance;
@@ -77,10 +76,7 @@ public class JavaScriptRepository {
 
 		JsHandler handler = jsCache.get(token);
 		if(handler == null) {
-			ScriptEngine engine = manager.getEngineByName("javascript");
 			try {
-				engine.eval(browserJs);
-
 				HttpContext contextPage = new BasicHttpContext();
 				HttpGet httpget = new HttpGet(token);
 
@@ -92,12 +88,14 @@ public class JavaScriptRepository {
 					new BufferedReader(
 							new InputStreamReader(jsPage.getContent()));
 
-				engine.eval(pageReader);
+				String buf = "";
+				String line = "";
 
-				handler = new JsHandler(engine);
-			} catch (ScriptException e) {
-				logger.error("script errors when generating JsHandler '" + token + "'.", e);
-				return null;
+				while((line = pageReader.readLine()) != null) {
+					buf += line + '\n';
+				}
+
+				handler = new JsHandler(buf);
 			} catch (ClientProtocolException e) {
 				logger.error("error when downloading js file '" + token + "'.", e);
 				return null;
@@ -106,13 +104,37 @@ public class JavaScriptRepository {
 				return null;
 			}
 
-			jsCache.put(token, new JsHandler(engine));
+			jsCache.put(token, handler);
 		}
 
 		return handler;
 	}
 
 	public static class JsHandler { 
+		private static ScriptEngineManager manager = new ScriptEngineManager();
+		private final static String BROWSER_JS_LOC = "./src/org/thuir/forum/js/browser.js";
+		private static String browserJs = "";
+		static {
+			loadBrowserJs();
+		}
+		private static void loadBrowserJs() {
+			try {
+				BufferedReader reader = new BufferedReader(new FileReader(BROWSER_JS_LOC));
+				browserJs = "";
+
+				String line = "";
+				while((line = reader.readLine()) != null) {
+					browserJs += line + "\n";
+				}
+				
+			} catch (FileNotFoundException e) {
+				logger.error("cannot find browser js file", e);
+				browserJs = "";
+			} catch (IOException e) {
+				browserJs = "";
+			}
+		}
+		
 		public static String getToken(Url url, String uri) {
 			try {
 				return Url.parseWithParent(url, uri).getUrl();
@@ -121,39 +143,20 @@ public class JavaScriptRepository {
 			}
 		}
 
-		private ScriptEngine engine = null;
+		private String buf = null;
 
-		JsHandler(ScriptEngine engine) {
-			this.engine = engine;
+		JsHandler(String str) {
+			this.buf = str;
 		}
 
 		public String eval(String script) throws ScriptException {
-			engine.eval("reset()");
+			ScriptEngine engine = manager.getEngineByName("javascript");
+			engine.eval(browserJs);
+			engine.eval(buf);
 			engine.eval(script);
 			return engine.get("printer").toString();
 		}
 	}
 
-	private final static String BROWSER_JS_LOC = "./src/org/thuir/forum/js/browser.js";
-	private static String browserJs = "";
-	static {
-		loadBrowserJs();
-	}
-	private static void loadBrowserJs() {
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(BROWSER_JS_LOC));
-			browserJs = "";
-
-			String line = "";
-			while((line = reader.readLine()) != null) {
-				browserJs += line + "\n";
-			}
-			
-		} catch (FileNotFoundException e) {
-			logger.error("cannot find browser js file", e);
-			browserJs = "";
-		} catch (IOException e) {
-			browserJs = "";
-		}
-	}
+	
 }
