@@ -1,9 +1,6 @@
 package org.thuir.forum.template;
 
-import org.thuir.forum.data.ArticleIdentity;
 import org.thuir.forum.data.ForumUrl;
-import org.thuir.forum.data.Identity;
-import org.thuir.jfcrawler.data.Url;
 import org.w3c.dom.Element;
 
 /**
@@ -14,12 +11,10 @@ public final class Article extends Vertex {
 
 	public Article(Element e) {
 		super(e);
-		tag = Tag.ARTICLE;		
-	}
-
-	@Override
-	public Identity identify(Url url) {
-		return new ArticleIdentity();
+		tag = Tag.ARTICLE;
+		
+		metaId = new ArticleMetaIdentity();
+		metaId.fill(pattern.items);
 	}
 
 	@Override
@@ -27,4 +22,7 @@ public final class Article extends Vertex {
 		return null;
 	}
 	
+	public static class ArticleMetaIdentity extends MetaIdentity {
+		
+	}
 }
