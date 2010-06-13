@@ -46,6 +46,24 @@ public class Url implements Serializable, Comparable<Url> {
 	public int compareTo(Url other) {
 		return url.compareTo(other.url);
 	}
+	
+	protected void clone(Url url) {
+		this.host = url.host;
+		this.url = url.url;
+		this.uri = url.uri;
+		this.protocol = url.protocol;
+		this.host = url.host;
+		this.port = url.port;
+		this.page = url.page;
+		this.path = url.path;
+
+		this.status = url.status;
+		this.code  = url.code;
+		this.visit = url.visit;
+		this.revisitInterval = url.revisitInterval;
+		
+		this.params.putAll(url.params);
+	}
 
 	protected Url() {
 		params = new HashMap<String, String>();

@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.script.ScriptException;
-import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.log4j.Logger;
 import org.thuir.forum.data.ForumUrl;
@@ -21,6 +19,7 @@ import org.thuir.forum.template.Vertex.Tag;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.Url;
+import org.thuir.jfcrawler.framework.Factory;
 import org.thuir.jfcrawler.framework.extractor.HTMLExtractor;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -33,32 +32,31 @@ public class ForumExtractor extends HTMLExtractor {
 	private static Logger logger = 
 		Logger.getLogger(ForumExtractor.class);
 
-	private static XPath xpath = XPathFactory.newInstance().newXPath();
-	
 	private TemplateRepository lib = TemplateRepository.getInstance();
 	private JavaScriptRepository jsRepository = JavaScriptRepository.getRepository();
-	
+
 	private XPathExpression scriptSrcExpr = null;
 	private XPathExpression hrefExpr = null;
 
 	public ForumExtractor() {
 		try {
-			scriptSrcExpr = xpath.compile("//SCRIPT[@src]/attitude::src");
-			hrefExpr = xpath.compile("//A[@href]/attitude::href");
-		} catch(Exception e) {
-			
+			scriptSrcExpr = Factory.getXPathExpression("//SCRIPT[@src]/attribute::src");
+			hrefExpr = Factory.getXPathExpression("//A[@href]/attribute::href");
+		} catch (XPathExpressionException e) {
+			logger.error("error while compiling xpath.", e);
 		}
 	}
-	
+
 	@Override
 	public List<Url> extractUrls(Page page) {
 		ForumUrl url = null;
-		
+
 		if(!(page.getUrl() instanceof ForumUrl)) {
 			url = new ForumUrl(page.getUrl());
 			page.setUrl(url);
+		} else {
+			url = (ForumUrl)page.getUrl();
 		}
-		url = (ForumUrl)page.getUrl();
 
 		Template tmpl = lib.getTemplate(url.getHost());
 
@@ -71,17 +69,17 @@ public class ForumExtractor extends HTMLExtractor {
 		List<Url> ret = new ArrayList<Url>();
 		Document doc = parse(page);
 		int len = 0;
-		
+
 		XPathExpression scriptExpr = vertex.getScriptExpr();
 		if(scriptExpr != null && scriptSrcExpr != null) {
 			String script = "";
 			String content = "";
-			
+
 			JsHandler jsHandler = null;
 			NodeList scriptNodes = null;
 
 			List<JsHandler> js = new ArrayList<JsHandler>();
-			
+
 			try {
 				scriptNodes = (NodeList)scriptSrcExpr.evaluate(doc, XPathConstants.NODESET);
 
@@ -124,14 +122,17 @@ public class ForumExtractor extends HTMLExtractor {
 			for(int i = 0; i < len; i++) {
 				href = nodes.item(i).getNodeValue();
 				ForumUrl u = (ForumUrl)Url.parseWithParent(url, href);
-				
+				Tag temp = null;
+
 				u.setInlinkTag(url.getTag());
-				u.setTag(vertex.checkOutlink(u));
+				if((temp = vertex.checkOutlink(u)) == null)
+					continue;
 				
-				u.setIdentityFromParent(url.getIdentity());
-				
-				if(u.getTag() != Tag.OTHER)
-					ret.add(u);
+				u.setTag(temp);
+				u.setIdentity(tmpl.identify(temp, u));
+				u.getIdentity().synchronize(url.getIdentity());
+
+				ret.add(u);
 			}
 		} catch(BadUrlFormatException e) {
 			logger.error(e);

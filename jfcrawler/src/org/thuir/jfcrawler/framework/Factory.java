@@ -3,6 +3,12 @@ package org.thuir.jfcrawler.framework;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.namespace.QName;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import org.apache.log4j.Logger;
 import org.thuir.jfcrawler.data.Page;
 import org.thuir.jfcrawler.data.Url;
@@ -122,5 +128,17 @@ public class Factory {
 	}
 	public static Object getModule(String name) {
 		return modules.get(name);
+	}
+	
+	private static XPath xpath = XPathFactory.newInstance().newXPath();
+
+	public static XPathExpression getXPathExpression(String expr) 
+	throws XPathExpressionException {
+		return xpath.compile(expr);
+	}
+	
+	public static Object evaluateXPath(String expr, Object doc, QName arg) 
+	throws XPathExpressionException {
+		return xpath.evaluate(expr, doc, arg);
 	}
 }

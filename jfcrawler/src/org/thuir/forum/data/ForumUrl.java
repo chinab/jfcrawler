@@ -20,16 +20,13 @@ public final class ForumUrl extends Url {
 	public Identity getIdentity() {
 		return this.identity;
 	}
-	public void setIdentityFromParent(Identity parent) {
-		this.identity = parent.toChild(this);
-	}
 	
 	public ForumUrl() throws BadUrlFormatException {
 		super();
 	}
 	
 	public ForumUrl(Url url) {
-		
+		this.clone(url);
 	}
 	
 	private Tag inlinkTag = null;

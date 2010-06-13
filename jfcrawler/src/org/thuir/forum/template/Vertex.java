@@ -3,22 +3,23 @@ package org.thuir.forum.template;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathFactory;
+import javax.xml.xpath.XPathExpressionException;
 
+import org.apache.log4j.Logger;
 import org.thuir.forum.data.ForumUrl;
 import org.thuir.forum.data.Identity;
+import org.thuir.forum.template.UrlPattern.UrlItem;
 import org.thuir.jfcrawler.data.Url;
+import org.thuir.jfcrawler.framework.Factory;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 /**
  * @author ruKyzhc
  *
  */
 public abstract class Vertex {
-	protected static XPath xpath = XPathFactory.newInstance().newXPath();
+	private static final Logger logger = Logger.getLogger(Vertex.class);
 	
 	public static enum Tag {
 		CATALOG,
@@ -42,49 +43,52 @@ public abstract class Vertex {
 	
 	protected Tag tag = null;
 	
-	protected final static String DefaultScriptSrcExpr = "//SCRIPT[@src]/attribute::src";
+//	protected final static String DefaultScriptSrcExpr = "//SCRIPT[@src]/attribute::src";
 	protected final static String DefaultScriptExpr = "//SCRIPT/text()";
 	protected XPathExpression scriptExpr = null;
-//	protected XPathExpression scriptSrcExpr = null;
 	
-	protected List<UrlPattern> patterns = null;
-	protected Paging paging  = null;
+//	protected List<UrlPattern> patterns = null;
+	protected UrlPattern pattern = null;
+	protected MetaIdentity metaId = null;
 	
 	public Vertex(Element e) {
 		if(e == null)
 			return;
-		int len = 0;
-		NodeList list = null;
-		
-//		try {
-//			scriptSrcExpr = xpath.compile(DefaultScriptSrcExpr);
-//		} catch (XPathExpressionException e1) {
-//			scriptSrcExpr = null;
-//		}
-		
-		patterns = new ArrayList<UrlPattern>(4);
-		list = e.getElementsByTagName("pattern");
-		len = list.getLength();
-		for(int i = 0; i < len; i++) {
-			patterns.add(new UrlPattern((Element)list.item(i)));
+
+//		patterns = new ArrayList<UrlPattern>();
+
+		//script expression
+		Element script = (Element)e.getElementsByTagName("script").item(0);
+		String xpathExpr = script.getAttribute("xpath");
+		try {
+			if(xpathExpr == null || xpathExpr.length() == 0) {
+				scriptExpr = Factory.getXPathExpression(DefaultScriptExpr);
+			} else {
+				scriptExpr = Factory.getXPathExpression(xpathExpr);
+			}
+		} catch (XPathExpressionException e1) {
+			logger.error("error while compiling script xpath.", e1);
 		}
 		
-		list = e.getElementsByTagName("paging");
-		len = list.getLength();
-		if(len >= 1)
-			paging = new Paging((Element)list.item(0));
+		//pattern
+//		NodeList list = e.getElementsByTagName("pattern");
+//		for(int i = 0; i < list.getLength(); i++) {
+//			patterns.add(UrlPattern.getInstance((Element)list.item(i)));
+//		}
+		pattern = UrlPattern.getInstance(
+				(Element)e.getElementsByTagName("pattern").item(0));
 	}
 
 	public boolean match(Url url) {
-		if(patterns != null) {
-			for(UrlPattern p : patterns) {
-				if(p.match(url.getUri()))
-					return true;
-			}
-		}
-		return false;
+//		for(UrlPattern p : patterns) {
+//			if(!p.match(url.getUri())) {
+//				return false;
+//			}
+//		}
+//		return true;
+		return pattern.match(url.getUri());
 	}
-	
+
 	public Tag getTag() {
 		return tag;
 	}
@@ -97,128 +101,32 @@ public abstract class Vertex {
 		return scriptExpr;
 	}
 	
-	public abstract Identity identify(Url url);
+	public Identity identify(Url url) {
+//		Identity ret = null;
+//		for(UrlPattern p : patterns) {
+//			if(p.match(url.getUri())) {
+//				ret = p.getIdentity(url);
+//				ret.setMeta(this.metaId);
+//			}
+//		}
+//		return ret;
+		Identity ret = pattern.getIdentity(url);
+		if(ret != null)
+			ret.setMeta(metaId);
+		return ret;
+	}
 	
 	public abstract Tag checkOutlink(ForumUrl u);
-
-	/*
-	private static Logger logger = Logger.getLogger(Vertex.class);
-	private static XPath xpath = XPathFactory.newInstance().newXPath();
 	
-	public static void create(Map<String, Vertex> index, Element e) {
-		Vertex v = new Vertex(e.getAttribute("id"));
-		index.put(v.getId(), v);
-	}
-	public static void load(Map<String, Vertex> index, Element e) {
-		String id = e.getAttribute("id");
-		Vertex v = index.get(id);
+	public static abstract class MetaIdentity {
+		protected List<UrlItem> keys = null;
 		
-		try {
-			v.tag = Tag.valueOf(e.getAttribute("classification"));
-		} catch(IllegalArgumentException exception) {
-			v.tag = Tag.UNKNOWN;
+		public MetaIdentity() {
+			keys = new ArrayList<UrlItem>();
 		}
 		
-		String exprStr = e.getAttribute("xpath");
-		if(exprStr.trim().length() == 0) {
-			v.xpathExpr = null;
-		} else {
-			try {
-				v.xpathExpr = xpath.compile(exprStr);
-			} catch (XPathExpressionException e1) {
-				logger.error("error xpath expression '" + exprStr + "'.", e1);
-				v.xpathExpr = null;
-			}
+		public void fill(List<UrlItem> keys) {
+			this.keys.addAll(keys);
 		}
-		
-		String scriptExpr = e.getAttribute("script");
-		if(exprStr.trim().length() == 0) {
-			v.scriptExpr = null;
-		} else {
-			try {
-				v.scriptExpr = xpath.compile(scriptExpr);
-			} catch (XPathExpressionException e1) {
-				logger.error("error script xpath expression '" + scriptExpr + "'.", e1);
-				v.scriptExpr = null;
-			}
-		}
-		
-		NodeList list = null;
-		list = e.getElementsByTagName("pattern");
-		for(int i = 0; i < list.getLength(); i++)
-			v.patterns.add(new UrlPattern((Element)list.item(i)));
-		
-		list = e.getElementsByTagName("child");
-		for(int i = 0; i < list.getLength(); i++) {
-			Vertex child = 
-				index.get(((Element)list.item(i)).getAttribute("ref"));
-			v.children.add(child);
-		}
-		
-		v.paging = 
-			new Paging((Element)e.getElementsByTagName("paging").item(0));
 	}
-	
-	private Tag tag = null;
-
-	private List<Vertex> children = null;
-	private List<UrlPattern> patterns = null;
-	
-	private XPathExpression xpathExpr = null;
-	private XPathExpression scriptExpr = null;
-	
-	private Paging paging = null;
-	private String id = null;
-
-	public Vertex(String id) {
-		children = new ArrayList<Vertex>();
-		patterns = new ArrayList<UrlPattern>();
-		this.id = id;
-	}
-	
-	public String getId() {
-		return id;
-	}
-
-	public List<Vertex> getChildren() {
-		return children;
-	}
-	
-	public List<UrlPattern> getPatterns() {
-		return patterns;
-	}
-	
-	public XPathExpression getXPathExpression() {
-		return xpathExpr;
-	}
-	
-	public XPathExpression getScriptExpression() {
-		return scriptExpr;
-	}
-	
-	public Paging getPaging() {
-		return paging;
-	}
-	
-	public Tag getTag() {
-		return tag;
-	}
-	
-	public boolean match(Url url) {
-		for(UrlPattern p : patterns) {
-			if(!p.match(url.getUri()))
-				return false;
-		}
-		return true;
-	}
-	
-	public Object[] getChildrenByTag(Tag tag) {
-		List<Vertex> ret = new ArrayList<Vertex>();
-		for(Vertex v : children) {
-			if(v.tag == tag)
-				ret.add(v);
-		}
-		return ret.toArray();
-	}
-	*/
 }

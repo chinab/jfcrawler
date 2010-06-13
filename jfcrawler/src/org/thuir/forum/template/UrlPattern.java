@@ -1,66 +1,87 @@
 package org.thuir.forum.template;
 
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.thuir.forum.data.Identity;
+import org.thuir.jfcrawler.data.Url;
 import org.w3c.dom.Element;
 
 /**
  * @author ruKyzhc
  *
  */
-public final class UrlPattern {
+public abstract class UrlPattern {
 	public static enum Type {
 		REGEX,
 		TOKEN,
+		NONE,
 		UNKNOWN,
 	}
 	
-	private Type type = Type.UNKNOWN;
-	
-	private Pattern regex = null;
-	
-	/**
-	 * 0:unknown;<br/>
-	 * 1:${token}-123-1.html;<br/>
-	 * 2:forum/${token}/page.php;<br/>
-	 * 3:${token}.php?bid=1;<br/>
-	 * 4:bbs.php?${token}=1;<br/>
-	 */
-	private int tokenType = 0;
-	private String token = null;
-	
-	public UrlPattern(Element e) {
+	public static UrlPattern getInstance(Element e) {
+		Type type = Type.UNKNOWN;
 		try {
 			type = Type.valueOf(e.getAttribute("type"));
 		} catch(Exception e1) {
-			type = Type.UNKNOWN;
 		}
-	}
-	
-	public boolean match(String uri) {
+		
 		switch(type) {
 		case REGEX:
-			return matchRegex(uri);
+			return new RegexUrlPattern(e);
 		case TOKEN:
-			return matchSubstring(uri);
+			return new TokenUrlPattern(e);
 		default:
-			return false;
+			return new DefaultUrlPattern(e);
 		}
 	}
 	
-	private boolean matchRegex(String uri) {
-		return regex.matcher(uri).matches();
+	protected Type type = Type.UNKNOWN;
+	
+	protected List<UrlItem> items = null;
+	
+	protected UrlPattern(Element e) {	
+		items = new ArrayList<UrlItem>();
 	}
 	
-	private boolean matchSubstring(String uri) {
-		switch(tokenType) {
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-			return uri.toLowerCase().contains(token);
-		default:
-			return false;
+	public List<UrlItem> getUrlItems() {
+		return items;
+	}
+
+	public abstract Identity getIdentity(Url url);
+	
+	public abstract boolean match(String uri);
+	
+	public static abstract class UrlItem {
+		private static Logger logger = Logger.getLogger(UrlItem.class);
+		
+		protected static Map<String, UrlItem> itemLib = new HashMap<String, UrlItem>();
+		
+		protected String id = null;
+		protected UrlItem ref = null;
+		
+		protected UrlItem(Element e) {
+			id = e.getAttribute("id");
+			itemLib.put(id, this);
+			
+			String refStr = e.getAttribute("ref");
+			if(refStr.length() != 0) {
+				ref = itemLib.get(refStr);
+				if(ref == null) {
+					logger.error("unknown ref '" + refStr + "'");
+				}
+			}
+		}
+		
+		public String getId() {
+			return id;
+		}
+		
+		public UrlItem getRef() {
+			return ref;
 		}
 	}
 }

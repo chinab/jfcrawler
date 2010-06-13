@@ -1,9 +1,6 @@
 package org.thuir.forum.template;
 
-import org.thuir.forum.data.BoardIdentity;
 import org.thuir.forum.data.ForumUrl;
-import org.thuir.forum.data.Identity;
-import org.thuir.jfcrawler.data.Url;
 import org.w3c.dom.Element;
 
 /**
@@ -15,16 +12,17 @@ public final class Board extends Vertex {
 	public Board(Element e) {
 		super(e);
 		tag = Tag.BOARD;
-	}
 
-	@Override
-	public Identity identify(Url url) {
-		return new BoardIdentity();
+		metaId = new BoardMetaIdentity();
+		metaId.fill(pattern.items);
 	}
 
 	@Override
 	public Tag checkOutlink(ForumUrl u) {
 		return null;
 	}
-	
+
+	public static class BoardMetaIdentity extends MetaIdentity {
+
+	}
 }
