@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <forum id="newsmth">
 	<sites>
-		<site root="http://www.newsmth.net" 
-			entrance="http://www.newsmth.net/bbsfav.php?x"/>
+		<site url="http://www.newsmth.net/bbssec.php"/>
 	</sites>
 	<sitemap>
-		<vertex id="catalog" classification="CATALOG">
-			<pattern type="REGEX">^bbsfav\.php\?(select=[\d]+&amp;)?x$</pattern>
-			<paging type="NONE"/>
-			<child ref="catalog" xpath=""/>
-			<child ref="board" xpath=""/>
+		<vertex id="catalog" paging="catalog">
+			<pattern type="token" token="bbsboa"/>
 		</vertex>
-		<vertex id="board" classification="BOARD">
-			<pattern type="REGEX">^bbsdoc\.php\?([\S]+&amp;)*board=[\w]+(&amp;[\S]+)*$</pattern>
-			<paging type="NEXT" xpath=""/>
-			<child ref="thread" xpath=""/>
+		<vertex id="board" paging="next">
+			<pattern type="token" token="bbsdoc">
+				<query-item id="bName" query="board" default="board"/>
+				<query-item id="bId"   ref="pFrom"/>
+				<query-item id="bPage" query="page" default="0"/>
+			</pattern>
 		</vertex>
-		<vertex id="thread" classification="THREAD">
-			<pattern type="REGEX">^bbscon\.php\?([\S]+&amp;)*bid=[\d]+(&amp;[\S]+)*&amp;id=[\d]+(&amp;[\S]+)*$</pattern>
-			<paging type="NEXT" xpath=""/>
+		<vertex id="article" paging="none">
+			<pattern type="token" token="bbscon">
+				<query-item id="pId"   query="id" default="0"/>
+				<query-item id="pFrom" query="bid" default="0"/>
+				<query-item id="pPos"  ref="bPage"/>
+			</pattern>
 		</vertex>
 	</sitemap>
 </forum>

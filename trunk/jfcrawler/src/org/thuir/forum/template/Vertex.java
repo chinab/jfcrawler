@@ -7,12 +7,12 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.log4j.Logger;
-import org.thuir.forum.data.ForumUrl;
 import org.thuir.forum.data.Identity;
 import org.thuir.forum.template.UrlPattern.UrlItem;
 import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.Factory;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * @author ruKyzhc
@@ -52,24 +52,33 @@ public abstract class Vertex {
 	protected MetaIdentity metaId = null;
 	
 	public Vertex(Element e) {
-		if(e == null)
-			return;
-
 //		patterns = new ArrayList<UrlPattern>();
-
-		//script expression
-		Element script = (Element)e.getElementsByTagName("script").item(0);
-		String xpathExpr = script.getAttribute("xpath");
-		try {
-			if(xpathExpr == null || xpathExpr.length() == 0) {
-				scriptExpr = Factory.getXPathExpression(DefaultScriptExpr);
-			} else {
-				scriptExpr = Factory.getXPathExpression(xpathExpr);
-			}
-		} catch (XPathExpressionException e1) {
-			logger.error("error while compiling script xpath.", e1);
-		}
+		outlinks = new ArrayList<Vertex>();
+		paging   = Paging.NONE;
 		
+		if(e == null) {
+			return;
+		}
+
+		
+		//script expression
+		NodeList scriptNodes = e.getElementsByTagName("script");
+		if(scriptNodes.getLength() != 0) {
+			Element script = (Element)scriptNodes.item(0);
+			String xpathExpr = script.getAttribute("xpath");
+			try {
+				if(xpathExpr == null || xpathExpr.length() == 0) {
+					scriptExpr = Factory.getXPathExpression(DefaultScriptExpr);
+				} else {
+					scriptExpr = Factory.getXPathExpression(xpathExpr);
+				}
+			} catch (XPathExpressionException e1) {
+				logger.error("error while compiling script xpath.", e1);
+			}
+		} else {
+			scriptExpr = null;
+		}
+
 		//pattern
 //		NodeList list = e.getElementsByTagName("pattern");
 //		for(int i = 0; i < list.getLength(); i++) {
@@ -77,6 +86,11 @@ public abstract class Vertex {
 //		}
 		pattern = UrlPattern.getInstance(
 				(Element)e.getElementsByTagName("pattern").item(0));
+		try {
+			paging = Paging.valueOf(e.getAttribute("paging").toUpperCase());
+		} catch(Exception e1) {
+			paging = Paging.NONE;
+		}
 	}
 
 	public boolean match(Url url) {
@@ -116,7 +130,26 @@ public abstract class Vertex {
 		return ret;
 	}
 	
-	public abstract Tag checkOutlink(ForumUrl u);
+	public Tag checkOutlink(Url u) {
+		for(Vertex outlink : outlinks) {
+			if(outlink.match(u))
+				return outlink.tag;
+		}
+		
+		switch(paging) {
+		case CATALOG:
+		case PAGING:
+		case NEXT: {
+			if(this.match(u))
+				return this.tag;
+		};break;
+		case NONE:
+		default:
+			return null;
+		}
+		
+		return null;
+	}
 	
 	public static abstract class MetaIdentity {
 		protected List<UrlItem> keys = null;
@@ -128,5 +161,24 @@ public abstract class Vertex {
 		public void fill(List<UrlItem> keys) {
 			this.keys.addAll(keys);
 		}
+		
+		@Override
+		public String toString() {
+			return this.keys.toString();
+		}
+	}
+	
+	public static enum Paging {
+		NONE,
+		CATALOG,
+		PAGING,
+		NEXT,
+	}
+	
+	protected List<Vertex> outlinks = null;
+	protected Paging paging = Paging.NONE;
+	
+	public void addOutlinks(Vertex v) {
+		outlinks.add(v);
 	}
 }

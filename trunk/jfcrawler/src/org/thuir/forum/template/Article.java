@@ -1,6 +1,5 @@
 package org.thuir.forum.template;
 
-import org.thuir.forum.data.ForumUrl;
 import org.w3c.dom.Element;
 
 /**
@@ -15,11 +14,6 @@ public final class Article extends Vertex {
 		
 		metaId = new ArticleMetaIdentity();
 		metaId.fill(pattern.items);
-	}
-
-	@Override
-	public Tag checkOutlink(ForumUrl u) {
-		return null;
 	}
 	
 	public static class ArticleMetaIdentity extends MetaIdentity {

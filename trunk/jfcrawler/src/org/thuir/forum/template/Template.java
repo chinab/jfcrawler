@@ -13,6 +13,7 @@ import javax.xml.xpath.XPathExpressionException;
 import org.apache.log4j.Logger;
 import org.thuir.forum.data.ForumUrl;
 import org.thuir.forum.data.Identity;
+import org.thuir.forum.template.UrlPattern.UrlItem;
 import org.thuir.forum.template.Vertex.Tag;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Url;
@@ -49,11 +50,19 @@ public class Template {
 			tmpl.board   = Vertex.load(Tag.BOARD, 
 					(Element)Factory.evaluateXPath("//vertex[@id='board']", 
 							document, XPathConstants.NODE));
-			tmpl.article = Vertex.load(Tag.BOARD, 
+			tmpl.article = Vertex.load(Tag.ARTICLE, 
 					(Element)Factory.evaluateXPath("//vertex[@id='article']", 
 							document, XPathConstants.NODE));
 			tmpl.other   = Vertex.load(Tag.OTHER, null);
 			
+			UrlItem.resolveRef();
+			
+			tmpl.catalog.addOutlinks(tmpl.board);
+			tmpl.board.addOutlinks(tmpl.article);
+			
+			tmpl.other.addOutlinks(tmpl.catalog);
+			tmpl.other.addOutlinks(tmpl.board);
+			tmpl.other.addOutlinks(tmpl.article);
 			//sites
 			NodeList list = (NodeList)Factory.evaluateXPath(
 					"//sites/site[@url]/attribute::url", document, XPathConstants.NODESET);
@@ -83,13 +92,15 @@ public class Template {
 	private Vertex article = null;
 	private Vertex other   = null;
 	
-	private Vertex[] vertice = {catalog, board, article, other};
+//	private Vertex[] vertice = {catalog, board, article, other};
 	
 	public Vertex predict(Url url) {
-		for(Vertex v : vertice) {
-			if(v.match(url))
-				return v;
-		}
+		if(catalog != null && catalog.match(url))
+			return catalog;
+		if(board != null && board.match(url))
+			return board;
+		if(article != null && article.match(url))
+			return article;
 		return other;
 	}
 	

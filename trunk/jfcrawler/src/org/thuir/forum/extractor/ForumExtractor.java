@@ -10,6 +10,7 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.log4j.Logger;
 import org.thuir.forum.data.ForumUrl;
+import org.thuir.forum.data.Identity;
 import org.thuir.forum.js.JavaScriptRepository;
 import org.thuir.forum.js.JavaScriptRepository.JsHandler;
 import org.thuir.forum.template.Template;
@@ -130,7 +131,8 @@ public class ForumExtractor extends HTMLExtractor {
 				
 				u.setTag(temp);
 				u.setIdentity(tmpl.identify(temp, u));
-				u.getIdentity().synchronize(url.getIdentity());
+				
+				Identity.synchronize(u.getIdentity(), url.getIdentity());
 
 				ret.add(u);
 			}
