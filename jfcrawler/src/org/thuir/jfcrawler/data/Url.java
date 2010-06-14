@@ -437,6 +437,7 @@ public class Url implements Serializable, Comparable<Url> {
 	public static final int STATUS_FAILED   = 2;
 	public static final int STATUS_EXCEPTED = 3;
 	public static final int STATUS_EXPIRED  = 4;
+	public static final int STATUS_PENDING  = 5;
 	
 	private int status = 0;
 	private int code   = 0;

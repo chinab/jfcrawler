@@ -26,7 +26,7 @@ public class UrlDB {
 		" VALUES (?, ?, ?, ?)" +
 		" ON DUPLICATE KEY UPDATE url= ?";
 	private static final String SQL_CHECK = 
-		"SELECT code, visit FROM " + table + " WHERE url = ?;";
+		"SELECT code, visit, status FROM " + table + " WHERE url = ?;";
 //	private static final String SQL_SAVE = 
 //		"UPDATE " + table + 
 //		" SET status = ?, code = ?, visit = ? " +
