@@ -27,10 +27,7 @@ public class ForumCrawler extends AbstractJFCrawler {
 	}
 
 	public static void main(String[] args) 
-	throws BadUrlFormatException {
-		File testFile = new File("");
-		System.out.println(testFile.getAbsolutePath());
-		
+	throws BadUrlFormatException {		
 		ForumUrl.registerToUrlFactory();
 		TemplateRepository.load("./template");
 		String job = "newsmth";

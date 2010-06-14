@@ -26,12 +26,11 @@ public class TokenUrlPattern extends UrlPattern {
 		
 		try {
 			NodeList list = (NodeList)Factory.evaluateXPath(
-					"/pattern/query-item[@key]", e, XPathConstants.NODESET);
+					"./query-item[@id]", e, XPathConstants.NODESET);
 			for(int i = 0; i < list.getLength(); i ++) {
 				TokenItem item = new TokenItem((Element)list.item(i));
 				items.add(item);
 			}
-			
 		} catch (XPathExpressionException e1) {
 			logger.error("error while compiling xpath", e1);
 		}
@@ -41,6 +40,9 @@ public class TokenUrlPattern extends UrlPattern {
 	public Identity getIdentity(Url url) {
 		Identity ret = new Identity();
 		for(UrlItem i : items) {
+//			String value = url.getParameter(((TokenItem)i).getQuery());
+//			value = (value == null)?i.defaultValue:value;
+//			ret.put(i, value);
 			ret.put(i, url.getParameter(((TokenItem)i).getQuery()));
 		}
 		return ret;
@@ -56,7 +58,7 @@ public class TokenUrlPattern extends UrlPattern {
 		
 		public TokenItem(Element e) {
 			super(e);
-			if(ref != null) 
+			if(refStr != null) 
 				return;
 			
 			query = e.getAttribute("query");

@@ -28,11 +28,16 @@ public class RegexUrlPattern extends UrlPattern {
 		StringBuffer buf = new StringBuffer(e.getAttribute("regex"));
 		try {
 			NodeList list = (NodeList)Factory.evaluateXPath(
-					"/pattern/regex-item[@id]", e, XPathConstants.NODESET);
+					"./regex-item[@id]", e, XPathConstants.NODESET);
 			for(int i = 0; i < list.getLength(); i ++) {
 				RegexItem item = new RegexItem((Element)list.item(i));
 				item.replaceRegex(buf);
 				items.add(item);
+			}
+			
+			for(UrlItem i : items) {
+				if(i.refStr != null)
+					i.ref = UrlItem.itemLib.get(i.refStr);
 			}
 			
 			pattern = Pattern.compile(buf.toString());
@@ -72,7 +77,7 @@ public class RegexUrlPattern extends UrlPattern {
 		
 		public RegexItem(Element e) {
 			super(e);
-			if(ref != null) 
+			if(refStr != null) 
 				return;
 
 			regexStr = e.getAttribute("regex");
