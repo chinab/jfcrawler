@@ -1,10 +1,12 @@
 package org.thuir.forum.template;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.log4j.Logger;
-import org.thuir.forum.data.Identity;
 import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.Factory;
 import org.w3c.dom.Element;
@@ -26,7 +28,7 @@ public class TokenUrlPattern extends UrlPattern {
 		
 		try {
 			NodeList list = (NodeList)Factory.evaluateXPath(
-					"./query-item[@id]", e, XPathConstants.NODESET);
+					"./query-item[@key]", e, XPathConstants.NODESET);
 			for(int i = 0; i < list.getLength(); i ++) {
 				TokenItem item = new TokenItem((Element)list.item(i));
 				items.add(item);
@@ -36,17 +38,17 @@ public class TokenUrlPattern extends UrlPattern {
 		}
 	}
 
-	@Override
-	public Identity getIdentity(Url url) {
-		Identity ret = new Identity();
-		for(UrlItem i : items) {
-//			String value = url.getParameter(((TokenItem)i).getQuery());
-//			value = (value == null)?i.defaultValue:value;
-//			ret.put(i, value);
-			ret.put(i, url.getParameter(((TokenItem)i).getQuery()));
-		}
-		return ret;
-	}
+//	@Override
+//	public Identity getIdentity(Url url) {
+//		Identity ret = new Identity();
+//		for(UrlItem i : items) {
+////			String value = url.getParameter(((TokenItem)i).getQuery());
+////			value = (value == null)?i.defaultValue:value;
+////			ret.put(i, value);
+//			ret.put(i, url.getParameter(((TokenItem)i).getQuery()));
+//		}
+//		return ret;
+//	}
 	
 	@Override
 	public boolean match(String uri) {
@@ -58,8 +60,8 @@ public class TokenUrlPattern extends UrlPattern {
 		
 		public TokenItem(Element e) {
 			super(e);
-			if(refStr != null) 
-				return;
+//			if(refStr != null) 
+//				return;
 			
 			query = e.getAttribute("query");
 		}
@@ -67,6 +69,15 @@ public class TokenUrlPattern extends UrlPattern {
 		public String getQuery() {
 			return query;
 		}
+	}
+
+	@Override
+	public Map<UrlItem, String> extractItem(Url url) {
+		Map<UrlItem, String> ret = new HashMap<UrlItem, String>();
+		for(UrlItem i : items) {
+			ret.put(i, url.getParameter(((TokenItem)i).getQuery()));
+		}
+		return ret;
 	}
 
 }

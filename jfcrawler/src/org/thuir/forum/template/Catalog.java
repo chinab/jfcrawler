@@ -1,7 +1,5 @@
 package org.thuir.forum.template;
 
-import org.thuir.forum.data.Identity;
-import org.thuir.jfcrawler.data.Url;
 import org.w3c.dom.Element;
 
 /**
@@ -16,9 +14,9 @@ public final class Catalog extends Vertex {
 		
 	}
 
-	@Override
-	public Identity identify(Url url) {
-		return null;
-	}
+//	@Override
+//	public Identity identify(Url url) {
+//		return null;
+//	}
 	
 }
