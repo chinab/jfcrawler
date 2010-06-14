@@ -23,6 +23,7 @@ import junit.framework.TestCase;
  * @author ruKyzhc
  *
  */
+@SuppressWarnings("deprecation")
 public class TestHTMLExtractor extends TestCase {
 	
 	public void testExtractor() throws Exception {

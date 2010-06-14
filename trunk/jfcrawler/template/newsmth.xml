@@ -4,17 +4,19 @@
 		<site url="http://www.newsmth.net/bbssec.php"/>
 	</sites>
 	<sitemap>
-		<vertex id="catalog" paging="catalog">
+		<vertex id="catalog" paging="catalog" outlink="true">
+			<script/>
 			<pattern type="token" token="bbsboa"/>
 		</vertex>
-		<vertex id="board" paging="next">
+		<vertex id="board" paging="next" outlink="true">
+			<script/>
 			<pattern type="token" token="bbsdoc">
 				<query-item id="bName" query="board" default="board"/>
 				<query-item id="bId"   ref="pFrom"/>
 				<query-item id="bPage" query="page" default="0"/>
 			</pattern>
 		</vertex>
-		<vertex id="article" paging="none">
+		<vertex id="article" paging="none" outlink="false">
 			<pattern type="token" token="bbscon">
 				<query-item id="pId"   query="id" default="0"/>
 				<query-item id="pFrom" query="bid" default="0"/>

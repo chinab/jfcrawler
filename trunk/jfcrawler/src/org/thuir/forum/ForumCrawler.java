@@ -1,7 +1,5 @@
 package org.thuir.forum;
 
-import java.io.File;
-
 import org.apache.log4j.Logger;
 import org.thuir.forum.data.ForumUrl;
 import org.thuir.forum.extractor.ForumExtractor;
@@ -12,7 +10,6 @@ import org.thuir.jfcrawler.framework.Factory;
 import org.thuir.jfcrawler.framework.frontier.BlockingQueueFrontier;
 import org.thuir.jfcrawler.framework.processor.DefaultCrawler;
 import org.thuir.jfcrawler.framework.processor.DefaultFetcher;
-import org.thuir.jfcrawler.util.Statistic;
 
 /**
  * @author ruKyzhc
@@ -41,11 +38,7 @@ public class ForumCrawler extends AbstractJFCrawler {
 
 		crawler.addExtractor(new ForumExtractor());
 
-		crawler.addSeed("http://www.newsmth.net/bbsfav.php?x");
-
-		Statistic.create("catalog-counter");
-		Statistic.create("board-counter");
-		Statistic.create("thread-counter");
+		crawler.addSeed("http://www.newsmth.net/bbssec.php");
 		
 		logger.info("crawler " + job + " starts");
 		crawler.start();
