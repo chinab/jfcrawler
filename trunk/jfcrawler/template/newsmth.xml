@@ -11,16 +11,15 @@
 		<vertex id="board" paging="next" outlink="true">
 			<script/>
 			<pattern type="token" token="bbsdoc">
-				<query-item id="bName" query="board" default="board"/>
-				<query-item id="bId"   ref="pFrom"/>
-				<query-item id="bPage" query="page" default="0"/>
+				<query-item key="key" query="board"/>
+				<query-item key="page" query="page"/>
 			</pattern>
 		</vertex>
 		<vertex id="article" paging="none" outlink="false">
 			<pattern type="token" token="bbscon">
-				<query-item id="pId"   query="id" default="0"/>
-				<query-item id="pFrom" query="bid" default="0"/>
-				<query-item id="pPos"  ref="bPage"/>
+				<query-item key="id"   query="id"/>
+				<query-item key="boardId" query="bid"/>
+				<query-item key="page"  ref="bPage"/>
 			</pattern>
 		</vertex>
 	</sitemap>

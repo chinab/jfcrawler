@@ -10,7 +10,6 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.log4j.Logger;
 import org.thuir.forum.data.ForumUrl;
-import org.thuir.forum.data.Identity;
 import org.thuir.forum.js.JavaScriptRepository;
 import org.thuir.forum.js.JavaScriptRepository.JsHandler;
 import org.thuir.forum.template.Template;
@@ -66,8 +65,11 @@ public class ForumExtractor extends HTMLExtractor {
 			vertex = tmpl.predict(url);
 		else
 			vertex = tmpl.getVertexByTag(url.getTag());
-
+		
 		List<Url> ret = new ArrayList<Url>();
+		if(!vertex.hasOutlink())
+			return ret;
+		
 		Document doc = parse(page);
 		int len = 0;
 
@@ -130,9 +132,10 @@ public class ForumExtractor extends HTMLExtractor {
 					continue;
 				
 				u.setTag(temp);
-				u.setIdentity(tmpl.identify(temp, u));
+//				u.setIdentity(tmpl.identify(temp, u));
+				u.setForumInfo(tmpl.getUrlInfo(temp, url));
 				
-				Identity.synchronize(u.getIdentity(), url.getIdentity());
+//				Identity.synchronize(u.getIdentity(), url.getIdentity());
 
 				ret.add(u);
 			}

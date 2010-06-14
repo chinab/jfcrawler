@@ -11,9 +11,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.log4j.Logger;
-import org.thuir.forum.data.ForumUrl;
-import org.thuir.forum.data.Identity;
-import org.thuir.forum.template.UrlPattern.UrlItem;
+import org.thuir.forum.data.Info;
 import org.thuir.forum.template.Vertex.Tag;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Url;
@@ -55,7 +53,7 @@ public class Template {
 							document, XPathConstants.NODE));
 			tmpl.other   = Vertex.load(Tag.OTHER, null);
 			
-			UrlItem.resolveRef();
+//			UrlItem.resolveRef();
 			
 			tmpl.catalog.addOutlinks(tmpl.board);
 			tmpl.board.addOutlinks(tmpl.article);
@@ -121,20 +119,33 @@ public class Template {
 		return identify;
 	}
 	
-	public Identity identify(Tag tag, Url url) {
+//	public Identity identify(Tag tag, Url url) {
+//		switch(tag) {
+//		case CATALOG:
+//			return catalog.identify(url);
+//		case BOARD:
+//			return board.identify(url);
+//		case ARTICLE:
+//			return article.identify(url);
+//		default:
+//			return other.identify(url);
+//		}
+//	}
+	
+	public Info getUrlInfo(Tag tag, Url url) {
 		switch(tag) {
 		case CATALOG:
-			return catalog.identify(url);
+			return catalog.getUrlInfo(url);
 		case BOARD:
-			return board.identify(url);
+			return board.getUrlInfo(url);
 		case ARTICLE:
-			return article.identify(url);
+			return article.getUrlInfo(url);
 		default:
-			return other.identify(url);
+			return other.getUrlInfo(url);
 		}
 	}
 	
-	public ForumUrl generateUrl(Tag tag, Identity id) {
-		return null;
-	}
+//	public ForumUrl generateUrl(Tag tag, Identity id) {
+//		return null;
+//	}
 }

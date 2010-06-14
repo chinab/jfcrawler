@@ -1,24 +1,31 @@
 package org.thuir.forum.data;
 
-import org.apache.log4j.Logger;
 import org.thuir.forum.template.Vertex.Tag;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.data.Url;
 
 public final class ForumUrl extends Url {
-	private static Logger logger = Logger.getLogger(ForumUrl.class);
+//	private static Logger logger = Logger.getLogger(ForumUrl.class);
 	private static final long serialVersionUID = -8806556896198541103L;
 	
 	public static void registerToUrlFactory() {
 		Url.setUrlClass(ForumUrl.class);
 	}
 	
-	private Identity identity = null;
-	public void setIdentity(Identity identity) {
-		this.identity = identity;
+//	private Identity identity = null;
+//	public void setIdentity(Identity identity) {
+//		this.identity = identity;
+//	}
+//	public Identity getIdentity() {
+//		return this.identity;
+//	}
+	
+	private Info forumInfo = null;
+	public void setForumInfo(Info info) {
+		this.forumInfo = info;
 	}
-	public Identity getIdentity() {
-		return this.identity;
+	public Info getForumInfo() {
+		return forumInfo;
 	}
 	
 	public ForumUrl() throws BadUrlFormatException {

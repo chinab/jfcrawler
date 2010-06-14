@@ -2,12 +2,13 @@ package org.thuir.forum.template;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.log4j.Logger;
-import org.thuir.forum.data.Identity;
+import org.thuir.forum.data.Info;
 import org.thuir.forum.template.UrlPattern.UrlItem;
 import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.Factory;
@@ -49,12 +50,25 @@ public abstract class Vertex {
 	
 //	protected List<UrlPattern> patterns = null;
 	protected UrlPattern pattern = null;
-	protected MetaIdentity metaId = null;
+//	protected MetaIdentity metaId = null;
+	protected InfoFactory infoFactory = null;
+	protected boolean     hasOutlink  = true;
 	
 	public Vertex(Element e) {
 //		patterns = new ArrayList<UrlPattern>();
 		outlinks = new ArrayList<Vertex>();
 		paging   = Paging.NONE;
+		
+		try {
+			String outlinkStr = e.getAttribute("outlink");
+			if(outlinkStr.length() == 0) {
+				hasOutlink = true;
+			} else {
+				hasOutlink = Boolean.parseBoolean(outlinkStr);
+			}
+		} catch(Exception e1) {
+			logger.error("invalid value", e1);
+		}
 		
 		if(e == null) {
 			return;
@@ -93,6 +107,9 @@ public abstract class Vertex {
 		}
 	}
 
+	public boolean hasOutlink() {
+		return hasOutlink;
+	}
 	public boolean match(Url url) {
 //		for(UrlPattern p : patterns) {
 //			if(!p.match(url.getUri())) {
@@ -115,19 +132,11 @@ public abstract class Vertex {
 		return scriptExpr;
 	}
 	
-	public Identity identify(Url url) {
-//		Identity ret = null;
-//		for(UrlPattern p : patterns) {
-//			if(p.match(url.getUri())) {
-//				ret = p.getIdentity(url);
-//				ret.setMeta(this.metaId);
-//			}
-//		}
-//		return ret;
-		Identity ret = pattern.getIdentity(url);
-		if(ret != null)
-			ret.setMeta(metaId);
-		return ret;
+	public Info getUrlInfo(Url url) {
+		if(infoFactory == null)
+			return null;
+		else
+			return infoFactory.extractInfo(pattern.extractItem(url));
 	}
 	
 	public Tag checkOutlink(Url u) {
@@ -151,22 +160,22 @@ public abstract class Vertex {
 		return null;
 	}
 	
-	public static abstract class MetaIdentity {
-		protected List<UrlItem> keys = null;
-		
-		public MetaIdentity() {
-			keys = new ArrayList<UrlItem>();
-		}
-		
-		public void fill(List<UrlItem> keys) {
-			this.keys.addAll(keys);
-		}
-		
-		@Override
-		public String toString() {
-			return this.keys.toString();
-		}
-	}
+//	public static abstract class MetaIdentity {
+//		protected List<UrlItem> keys = null;
+//		
+//		public MetaIdentity() {
+//			keys = new ArrayList<UrlItem>();
+//		}
+//		
+//		public void fill(List<UrlItem> keys) {
+//			this.keys.addAll(keys);
+//		}
+//		
+//		@Override
+//		public String toString() {
+//			return this.keys.toString();
+//		}
+//	}
 	
 	public static enum Paging {
 		NONE,
@@ -180,5 +189,15 @@ public abstract class Vertex {
 	
 	public void addOutlinks(Vertex v) {
 		outlinks.add(v);
+	}
+	
+	public abstract static class InfoFactory {
+		protected UrlItem keyRef  = null;
+		protected UrlItem idRef   = null;
+		protected UrlItem pageRef = null;
+		
+		public abstract Info extractInfo(Map<UrlItem, String> values);
+		
+		public abstract void setReference(List<UrlItem> list);
 	}
 }

@@ -3,8 +3,6 @@ package org.thuir.forum.template;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.log4j.Logger;
-import org.thuir.forum.data.Identity;
-import org.thuir.jfcrawler.data.Url;
 import org.thuir.jfcrawler.framework.Factory;
 
 /**
@@ -25,9 +23,9 @@ public final class Other extends Vertex {
 		}
 	}
 
-	@Override
-	public Identity identify(Url url) {
-		return null;
-	}
+//	@Override
+//	public Identity identify(Url url) {
+//		return null;
+//	}
 	
 }
