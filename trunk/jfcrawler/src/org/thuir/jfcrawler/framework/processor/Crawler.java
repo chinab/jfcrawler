@@ -94,10 +94,9 @@ public abstract class Crawler extends BasicThread {
 				setIdle(false);
 
 				writer.write(page);
-				if(urldb != null) {
-					Url url = page.getUrl();
-					urldb.insert(url);
-				}
+				
+				Url tempUrl = page.getUrl();
+				urldb.insert(tempUrl);
 				
 				Statistic.get("download-size-counter")
 				.inc(page.getHtmlContent().length);
@@ -156,6 +155,9 @@ public abstract class Crawler extends BasicThread {
 					if(!forbidden) {
 						if((lastvisit < 0) ||
 								(cur_time - lastvisit > revisit)) {
+							url.setStatus(Url.STATUS_PENDING);
+							url.setVisit(System.currentTimeMillis());
+							urldb.insert(url);
 							frontier.schedule(url);
 							s_c++;
 						}
