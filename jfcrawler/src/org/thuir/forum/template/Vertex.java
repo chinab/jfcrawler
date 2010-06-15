@@ -191,7 +191,7 @@ public abstract class Vertex {
 		outlinks.add(v);
 	}
 	
-	public abstract static class InfoFactory {
+	public abstract static class InfoFactory {		
 		protected UrlItem keyRef  = null;
 		protected UrlItem idRef   = null;
 		protected UrlItem pageRef = null;
@@ -199,5 +199,36 @@ public abstract class Vertex {
 		public abstract Info extractInfo(Map<UrlItem, String> values);
 		
 		public abstract void setReference(List<UrlItem> list);
+		
+		protected boolean setParameters(Info info, Map<UrlItem, String> values) {
+			String token = "";
+			String value = null;
+			try {
+				if(idRef != null && (value = values.get(idRef)) != null) {
+					info.setId(Long.parseLong(value));
+					token += "[" + value + "]";
+				}
+				if(keyRef != null && (value = values.get(keyRef)) != null) {
+					info.setKey(value);
+					token += "[" + value + "]";
+				}
+				if(pageRef != null && (value = values.get(pageRef)) != null) {
+					info.setPage(Integer.parseInt(value));
+					token += "[" + value + "]";
+				}
+				if(token.length() == 0)
+					return false;
+
+				info.setToken(token);
+			} catch(Exception e) {
+				logger.error(e);
+				return false;
+			}
+			return true;
+		}
+
+//		public abstract String getCheckStmt();
+//		
+//		public abstract void setCheckStmt(PreparedStatement stmt, Info info); 
 	}
 }

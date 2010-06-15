@@ -5,6 +5,10 @@ package org.thuir.forum.data;
  *
  */
 public class ArticleInfo extends Info {
+//	public ArticleInfo(InfoFactory factory) {
+//		super(factory);
+//	}
+
 	//basic
 	private String boardKey = "";
 	private long   boardId  = -1;
