@@ -58,6 +58,10 @@ public abstract class Vertex {
 //		patterns = new ArrayList<UrlPattern>();
 		outlinks = new ArrayList<Vertex>();
 		paging   = Paging.NONE;
+
+		if(e == null) {
+			return;
+		}
 		
 		try {
 			String outlinkStr = e.getAttribute("outlink");
@@ -69,11 +73,6 @@ public abstract class Vertex {
 		} catch(Exception e1) {
 			logger.error("invalid value", e1);
 		}
-		
-		if(e == null) {
-			return;
-		}
-
 		
 		//script expression
 		NodeList scriptNodes = e.getElementsByTagName("script");
