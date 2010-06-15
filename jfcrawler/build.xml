@@ -47,6 +47,7 @@
 			<include name="**/*.java"/>
 			<include name="log4j.properties"/>
 			<exclude name="**/.svn/**"/>
+			<exclude name="org/thuir/forum/test/**"/>
 			<exclude name="org/thuir/jfcrawler/test/**"/>
 		</javac>
 		<copy 
@@ -64,6 +65,7 @@
 			classpathref="lib.path.id" >
 			<include name="**/*.java"/>
 			<exclude name="**/.svn/**"/>
+			<exclude name="org/thuir/forum/test/**"/>
 			<exclude name="org/thuir/jfcrawler/test/**"/>
 		</javac>
 		<copy 
