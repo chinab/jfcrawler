@@ -24,7 +24,10 @@ public class UrlDB {
 	private static final String SQL_INSERT = 
 		"INSERT INTO " + table + " (url, status, code, visit)" +
 		" VALUES (?, ?, ?, ?)" +
-		" ON DUPLICATE KEY UPDATE url= ?";
+		" ON DUPLICATE KEY UPDATE " +
+		" status = ?, " +
+		" code   = ?, " +
+		" visit  = ?;";
 	private static final String SQL_CHECK = 
 		"SELECT code, visit, status FROM " + table + " WHERE url = ?;";
 //	private static final String SQL_SAVE = 
@@ -68,12 +71,12 @@ public class UrlDB {
 		"DROP TABLE IF EXISTS " + table + ";" );
 		stmt.executeUpdate(
 				"CREATE TABLE  " + table + " (" +
-				"id     int unsigned NOT NULL AUTO_INCREMENT," +
-				"url    varchar(1023) NOT NULL," +
+//				"id     int unsigned NOT NULL AUTO_INCREMENT," +
+				"url    varchar(255) NOT NULL," +
 				"status int unsigned NOT NULL DEFAULT 0," +
 				"code   int unsigned NOT NULL DEFAULT 0," +
 				"visit  bigint NOT NULL," +
-				"PRIMARY KEY (id)" +
+				"PRIMARY KEY (url)" +
 				") ENGINE=InnoDB DEFAULT CHARSET=gb2312;"
 		);
 		stmt.close();
@@ -119,7 +122,9 @@ public class UrlDB {
 		stmt_insert.setInt(2, url.getStatus());
 		stmt_insert.setInt(3, url.getCode());
 		stmt_insert.setLong(4, url.getVisit());
-		stmt_insert.setString(5, url.getUrl());
+		stmt_insert.setInt(5, url.getStatus());
+		stmt_insert.setInt(6, url.getCode());
+		stmt_insert.setLong(7, url.getVisit());
 		
 		stmt_insert.execute();
 	}
