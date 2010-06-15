@@ -5,8 +5,11 @@ package org.thuir.forum.data;
  *
  */
 public class BoardInfo extends Info {
+//	public BoardInfo(InfoFactory factory) {
+//		super(factory);
+//	}
 	//basic
-	
+
 	//statistic
 	private int articleCount = 0;
 

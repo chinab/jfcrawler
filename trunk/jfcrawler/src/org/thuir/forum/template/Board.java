@@ -3,7 +3,6 @@ package org.thuir.forum.template;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.thuir.forum.data.BoardInfo;
 import org.thuir.forum.data.Info;
 import org.thuir.forum.template.UrlPattern.UrlItem;
@@ -23,27 +22,12 @@ public final class Board extends Vertex {
 		infoFactory.setReference(pattern.getUrlItems());
 	}
 	
-	public static class BoardInfoFactory extends InfoFactory {
-		private static Logger logger = Logger.getLogger(BoardInfoFactory.class);
-		
+	public static class BoardInfoFactory extends InfoFactory {		
 		@Override
 		public Info extractInfo(Map<UrlItem, String> values) {
 			BoardInfo info = new BoardInfo();
-			String value = null;
-			try {
-				if(idRef != null && (value = values.get(idRef)) != null) {
-					info.setId(Long.parseLong(value));
-				}
-				if(keyRef != null && (value = values.get(keyRef)) != null) {
-					info.setKey(value);
-				}
-				if(pageRef != null && (value = values.get(pageRef)) != null) {
-					info.setPage(Integer.parseInt(value));
-				}
-			} catch(Exception e) {
-				logger.error(e);
+			if(!this.setParameters(info, values))
 				return null;
-			}
 			return info;
 		}
 		
@@ -64,6 +48,16 @@ public final class Board extends Vertex {
 				}
 			}
 		}
-		
+
+//		@Override
+//		public String getCheckStmt() {
+//			return null;
+//		}
+//
+//		@Override
+//		public void setCheckStmt(PreparedStatement stmt, Info info) {
+//			
+//		}
+//		
 	}
 }

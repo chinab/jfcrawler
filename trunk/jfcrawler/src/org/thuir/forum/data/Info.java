@@ -6,9 +6,20 @@ package org.thuir.forum.data;
  */
 public abstract class Info {
 	//basic
+//	protected InfoFactory factory = null;
+	
+	protected String token = "";
 	protected String key  = "";
 	protected long   id   = -1;
 	protected int    page = -1;
+	
+//	public Info(InfoFactory factory) {
+//		this.factory = factory;
+//	}
+//	
+//	public InfoFactory getFactory() {
+//		return factory;
+//	}
 	
 	public String getKey() {
 		return key;
@@ -35,5 +46,12 @@ public abstract class Info {
 	@Override
 	public String toString() {
 		return "[key:" + key + "][id:" + id + "][page:" + page + "]";
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+	public String getToken() {
+		return token;
 	}
 }

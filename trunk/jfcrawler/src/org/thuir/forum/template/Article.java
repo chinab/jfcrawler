@@ -33,18 +33,10 @@ public final class Article extends Vertex {
 		@Override
 		public Info extractInfo(Map<UrlItem, String> values) {
 			ArticleInfo info = new ArticleInfo();
+			if(!this.setParameters(info, values))
+				return null;
 			String value = null;
-			try {
-				if(idRef != null && (value = values.get(idRef)) != null) {
-					info.setId(Long.parseLong(value));
-				}
-				if(keyRef != null && (value = values.get(keyRef)) != null) {
-					info.setKey(value);
-				}
-				if(pageRef != null && (value = values.get(pageRef)) != null) {
-					info.setPage(Integer.parseInt(value));
-				}
-				
+			try {				
 				if(boardIdRef != null && (value = values.get(boardIdRef)) != null) {
 					info.setBoardId(Long.parseLong(value));
 				}
@@ -103,6 +95,16 @@ public final class Article extends Vertex {
 				}
 			}
 		}
-		
+
+//		@Override
+//		public String getCheckStmt() {
+//			return null;
+//		}
+//
+//		@Override
+//		public void setCheckStmt(PreparedStatement stmt, Info info) {
+//			
+//		}
+//		
 	}
 }

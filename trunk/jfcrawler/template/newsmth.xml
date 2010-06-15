@@ -17,9 +17,8 @@
 		</vertex>
 		<vertex id="article" paging="none" outlink="false">
 			<pattern type="token" token="bbscon">
-				<query-item key="id"   query="id"/>
+				<query-item key="id" query="id"/>
 				<query-item key="boardId" query="bid"/>
-				<query-item key="page"  ref="bPage"/>
 			</pattern>
 		</vertex>
 	</sitemap>
