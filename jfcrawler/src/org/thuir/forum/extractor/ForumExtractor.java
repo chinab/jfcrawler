@@ -133,7 +133,7 @@ public class ForumExtractor extends HTMLExtractor {
 				
 				u.setTag(temp);
 //				u.setIdentity(tmpl.identify(temp, u));
-				u.setForumInfo(tmpl.getUrlInfo(temp, url));
+				u.setForumInfo(tmpl.getUrlInfo(temp, u));
 				
 //				Identity.synchronize(u.getIdentity(), url.getIdentity());
 

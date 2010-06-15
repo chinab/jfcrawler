@@ -36,16 +36,21 @@ public final class Article extends Vertex {
 			if(!this.setParameters(info, values))
 				return null;
 			String value = null;
+			String token = info.getToken();
 			try {				
 				if(boardIdRef != null && (value = values.get(boardIdRef)) != null) {
 					info.setBoardId(Long.parseLong(value));
+					token += "[" + value + "]";
 				}
 				if(boardKeyRef != null && (value = values.get(boardKeyRef)) != null) {
 					info.setBoardKey(value);
+					token += "[" + value + "]";
 				}
 				if(positionRef != null && (value = values.get(positionRef)) != null) {
 					info.setPosition(Integer.parseInt(value));
+					token += "[" + value + "]";
 				}
+				info.setToken(token);
 			} catch(Exception e) {
 				logger.error(e);
 				return null;
@@ -95,7 +100,7 @@ public final class Article extends Vertex {
 				}
 			}
 		}
-
+		
 //		@Override
 //		public String getCheckStmt() {
 //			return null;

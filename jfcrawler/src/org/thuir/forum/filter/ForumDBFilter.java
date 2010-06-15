@@ -24,33 +24,35 @@ public class ForumDBFilter extends Filter {
 	
 	private Connection conn = null;
 
-	private static final String forum_schema = 
-		ConfigUtil.getConfig().getString("foruminfo");
+	private static final String forum_schema = "foruminfo";
 	private static final String article_table = "articleinfo";
 	private static final String board_table   = "boardinfo";
 	
 	private static final String SQL_INSERT_A = 
-		"INSERT INTO ? " +
-		" (token, id, key, page, boardId, boardKey, position)" +
+		"INSERT INTO " + article_table + 
+		" (token, infoId, infoKey, infoPage, boardId, boardKey, position)" +
 		" VALUES (?, ?, ?, ?, ?, ?, ?)" +
 		" ON DUPLICATE KEY UPDATE " +
-		" id = ?, key = ?, page = ?," +
+		" infoId = ?, infoKey = ?, infoPage = ?," +
 		" boardId = ?, boardKey = ?, position = ?;";
 	private static final String SQL_INSERT_B = 
-		"INSERT INTO ? " + 
-		" (token, id, key, page)" +
+		"INSERT INTO " + board_table + 
+		" (token, infoId, infoKey, infoPage)" +
 		" VALUES (?, ?, ?, ?)" +
 		" ON DUPLICATE KEY UPDATE " +
-		" id = ?, key = ?, page = ?;";
-	private static final String SQL_CHECK =
-		"SELECT * FROM ? WHERE token = ?;";
+		" infoId = ?, infoKey = ?, infoPage = ?;";
+	private static final String SQL_CHECK_A =
+		"SELECT * FROM " + article_table + " WHERE token = ?;";
+	private static final String SQL_CHECK_B =
+		"SELECT * FROM " + board_table + " WHERE token = ?;";
 	private static final String SQL_INSERT_URL =
 		"INSERT INTO urlref (url, token) VALUES (?, ?)" +
 		" ON DUPLICATE KEY UPDATE token = ?;";
 	
 	private PreparedStatement stmt_insert_a = null;
 	private PreparedStatement stmt_insert_b = null;
-	private PreparedStatement stmt_check = null;
+	private PreparedStatement stmt_check_a = null;
+	private PreparedStatement stmt_check_b = null;
 	private PreparedStatement stmt_insert_url = null;
 	
 	
@@ -68,7 +70,8 @@ public class ForumDBFilter extends Filter {
 
 		stmt_insert_a = conn.prepareStatement(SQL_INSERT_A);
 		stmt_insert_b = conn.prepareStatement(SQL_INSERT_B);
-		stmt_check = conn.prepareStatement(SQL_CHECK);
+		stmt_check_a = conn.prepareStatement(SQL_CHECK_A);
+		stmt_check_b = conn.prepareStatement(SQL_CHECK_B);
 		stmt_insert_url = conn.prepareStatement(SQL_INSERT_URL);
 		
 		String create_url_sql =
@@ -83,18 +86,18 @@ public class ForumDBFilter extends Filter {
 		stmt.close();
 	}
 
-	public void initialArticle(String checkA) throws Exception {
+	public void initialArticle() throws Exception {
 		String create_article_sql = 
 			"CREATE TABLE  " + article_table + " (" +
-			"aId      int unsigned NOT NULL AUTO_INCREMENT" +
-			"id       bigint unsigned NOT NULL DFEAULT -1," +
-			"key      varchar(63)," +
-			"page     int unsigned NOT NULL DEFAULT -1," +
+			"token    varchar(255) NOT NULL, " +
+			"infoId   bigint NOT NULL DEFAULT '-1'," +
+			"infoKey  varchar(63) NOT NULL DEFAULT 'null'," +
+			"infoPage int NOT NULL DEFAULT '-1'," +
 			
-			"boardId  bigint unsigned NOT NULL DEFAULT -1," +
-			"boardKey varchar(63)," +
-			"position int unsigned NOT NULL DEFAULT -1," +
-			"PRIMARY KEY (aId)" +
+			"boardId  bigint NOT NULL DEFAULT '-1'," +
+			"boardKey varchar(63) NOT NULL DEFAULT 'null'," +
+			"position int NOT NULL DEFAULT '-1'," +
+			"PRIMARY KEY (token)" +
 			") ENGINE=InnoDB DEFAULT CHARSET=gb2312;";
 		
 		Statement stmt = conn.createStatement();
@@ -103,14 +106,14 @@ public class ForumDBFilter extends Filter {
 		stmt.close();
 	}
 	
-	public void initialBoard(String checkB) throws Exception {
+	public void initialBoard() throws Exception {
 		String create_board_sql = 
 			"CREATE TABLE  " + board_table + " (" +
-			"bId      int unsigned NOT NULL AUTO_INCREMENT" +
-			"id       bigint unsigned NOT NULL DFEAULT -1," +
-			"key      varchar(63)," +
-			"page     int unsigned NOT NULL DEFAULT -1," +
-			"PRIMARY KEY (bId)" +
+			"token    varchar(255) NOT NULL, " +
+			"infoId       bigint NOT NULL DEFAULT '-1'," +
+			"infoKey      varchar(63) NOT NULL DEFAULT 'null'," +
+			"infoPage     int NOT NULL DEFAULT '-1'," +
+			"PRIMARY KEY (token)" +
 			") ENGINE=InnoDB DEFAULT CHARSET=gb2312;";
 		
 		Statement stmt = conn.createStatement();
@@ -119,12 +122,23 @@ public class ForumDBFilter extends Filter {
 		stmt.close();
 	}
 	
+	public ForumDBFilter() {
+		try {
+			this.initial();
+			this.initialArticle();
+			this.initialBoard();
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+	
 	public void insert(Info info, String url) {
 		try {
 			if(info instanceof ArticleInfo) {
 				ArticleInfo aInfo = (ArticleInfo)info;
 
-				stmt_insert_a.setString(1, article_table);
+				stmt_insert_a.setString(1, aInfo.getToken());
+				
 				stmt_insert_a.setLong(2, aInfo.getId());
 				stmt_insert_a.setString(3, aInfo.getKey());
 				stmt_insert_a.setInt(4, aInfo.getPage());
@@ -146,7 +160,8 @@ public class ForumDBFilter extends Filter {
 			if(info instanceof BoardInfo) {
 				BoardInfo bInfo = (BoardInfo)info;
 				
-				stmt_insert_b.setString(1, board_table);
+				stmt_insert_b.setString(1, bInfo.getToken());
+				
 				stmt_insert_b.setLong(2, bInfo.getId());
 				stmt_insert_b.setString(3, bInfo.getKey());
 				stmt_insert_b.setInt(4, bInfo.getPage());
@@ -169,19 +184,24 @@ public class ForumDBFilter extends Filter {
 	
 	public boolean check(Info info) {
 		try {
-			String table = null;
 			if(info instanceof ArticleInfo) {
-				table = article_table;
+				stmt_check_a.setString(1, info.getToken());
+				
+				ResultSet rs = stmt_check_a.executeQuery();
+				if(rs.next())
+					return false;
+
+				return true;
 			}
 			if(info instanceof BoardInfo) {
-				table = board_table;
+				stmt_check_b.setString(1, info.getToken());
+				
+				ResultSet rs = stmt_check_b.executeQuery();
+				if(rs.next())
+					return false;
+
+				return true;
 			}
-			stmt_check.setString(1, table);
-			stmt_check.setString(2, info.getToken());
-			
-			ResultSet rs = stmt_check.executeQuery();
-			if(rs.next())
-				return false;
 		} catch(Exception e) {
 			logger.error(e);
 		}
@@ -192,6 +212,9 @@ public class ForumDBFilter extends Filter {
 	public boolean shouldVisit(Url url) {
 		if(url instanceof ForumUrl) {
 			Info i = ((ForumUrl)url).getForumInfo();
+			if(i == null)
+				return true;
+			
 			boolean isExist = check(i);
 			insert(i, url.getUrl());
 			return isExist;

@@ -51,7 +51,7 @@ public class ArticleInfo extends Info {
 	
 	@Override
 	public String toString() {
-		return super.toString() + 
+		return "[article]" + super.toString() + 
 		"[board.key:" + boardKey + "][board.id:" + boardId + "][position:" + position + "]";
 	}
 }

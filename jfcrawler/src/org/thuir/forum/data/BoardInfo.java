@@ -28,6 +28,6 @@ public class BoardInfo extends Info {
 	
 	@Override
 	public String toString() {
-		return super.toString();
+		return "[board]" + super.toString();
 	}
 }
