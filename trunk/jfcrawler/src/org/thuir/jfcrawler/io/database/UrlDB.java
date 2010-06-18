@@ -15,9 +15,9 @@ public class UrlDB {
 	private Connection conn = null;
 
 	private static final String schema = 
-		ConfigUtil.getConfig().getString("url-database.schema");
+		ConfigUtil.getCrawlerConfig().getString("urldb.schema");
 	private static final String table = 
-		ConfigUtil.getConfig().getString("url-database.table");
+		ConfigUtil.getCrawlerConfig().getString("urldb.table");
 
 	private static final String SQL_LOAD = 
 		"SELECT * FROM " + table + " WHERE url = ?;";
@@ -48,19 +48,17 @@ public class UrlDB {
 
 	public UrlDB() throws Exception {
 		String host = 
-			ConfigUtil.getConfig().getString("url-database.host") + "/" + schema;
+			ConfigUtil.getDatabaseConfig().getString("basic.host") + "/" + schema;
 		String username = 
-			ConfigUtil.getConfig().getString("url-database.user");
+			ConfigUtil.getDatabaseConfig().getString("basic.user");
 		String password = 
-			ConfigUtil.getConfig().getString("url-database.pass");
+			ConfigUtil.getDatabaseConfig().getString("basic.pass");
 
 		Class.forName( "org.gjt.mm.mysql.Driver" ); 
 		conn = DriverManager.getConnection( 
 				host, username, password );
 
 		stmt_load = conn.prepareStatement(SQL_LOAD);
-//		stmt_save = conn.prepareStatement(SQL_SAVE);
-//		stmt_create = conn.prepareStatement(SQL_CREATE);
 		stmt_check = conn.prepareStatement(SQL_CHECK);
 		stmt_insert = conn.prepareStatement(SQL_INSERT);
 	}

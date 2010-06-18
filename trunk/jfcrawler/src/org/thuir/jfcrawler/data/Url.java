@@ -20,7 +20,7 @@ public class Url implements Serializable, Comparable<Url> {
 
 	private static final long serialVersionUID = -207345866948400297L;
 	private static final long DEFAULT_REVISIT = 
-		ConfigUtil.getConfig().getLong("crawler.revisit-interval");
+		ConfigUtil.getCrawlerConfig().getLong("crawler.revisit-interval");
 
 	protected long revisitInterval = DEFAULT_REVISIT;
 

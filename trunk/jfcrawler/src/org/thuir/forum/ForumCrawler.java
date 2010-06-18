@@ -4,11 +4,11 @@ import org.apache.log4j.Logger;
 import org.thuir.forum.data.ForumUrl;
 import org.thuir.forum.extractor.ForumExtractor;
 import org.thuir.forum.filter.ForumDBFilter;
+import org.thuir.forum.frontier.ForumFrontier;
 import org.thuir.forum.template.TemplateRepository;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
 import org.thuir.jfcrawler.framework.AbstractJFCrawler;
 import org.thuir.jfcrawler.framework.Factory;
-import org.thuir.jfcrawler.framework.frontier.BlockingQueueFrontier;
 import org.thuir.jfcrawler.framework.processor.DefaultCrawler;
 import org.thuir.jfcrawler.framework.processor.DefaultFetcher;
 
@@ -31,7 +31,7 @@ public class ForumCrawler extends AbstractJFCrawler {
 		String job = "newsmth";
 		ForumCrawler crawler = new ForumCrawler(job);
 		
-		Factory.registerFrontierClass(BlockingQueueFrontier.class);
+		Factory.registerFrontierClass(ForumFrontier.class);
 
 		crawler.initialize();
 		crawler.initializeFetcher(DefaultFetcher.class);
