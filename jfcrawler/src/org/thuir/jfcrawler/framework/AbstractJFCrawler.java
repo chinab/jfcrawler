@@ -64,7 +64,7 @@ public abstract class AbstractJFCrawler extends Thread {
 
 	public void initializeCrawler(
 			Class<? extends Crawler> T) {
-		int nThread = ConfigUtil.getCrawlerConfig().getInt("basic.crawler-pool-size");
+		int nThread = ConfigUtil.getCrawlerConfig().getInt("crawler.crawler-pool-size");
 		crawlerPoolSize = nThread;
 
 		try {			
@@ -98,7 +98,7 @@ public abstract class AbstractJFCrawler extends Thread {
 		Statistic.create("download-size-counter");
 		long time = System.currentTimeMillis();
 		long jobTimeout = 
-			ConfigUtil.getCrawlerConfig().getLong("basic.job-timeout") * 3600 * 1000;
+			ConfigUtil.getCrawlerConfig().getLong("basic.job-timeout", 0l) * 3600 * 1000;
 
 		for(Crawler p : crawlerPool) {
 			p.start();
@@ -112,17 +112,21 @@ public abstract class AbstractJFCrawler extends Thread {
 						BasicThread.INTERVAL * 20);
 			} catch (InterruptedException e) {
 			}
-			long checkJobTimeout = 
-				System.currentTimeMillis() - time - jobTimeout;
-			if(checkJobTimeout > 0) {
-				System.err.println("job timeout");
-				for(Crawler p : crawlerPool) {
-					p.close();
+			
+			if(jobTimeout != 0l) {
+				long checkJobTimeout = 
+					System.currentTimeMillis() - time - jobTimeout;
+				if(checkJobTimeout > 0) {
+					System.err.println("job timeout");
+					for(Crawler p : crawlerPool) {
+						p.close();
+					}
+					fetcher.close();
+					httpFetcher.close();
+					break;
 				}
-				fetcher.close();
-				httpFetcher.close();
-				break;
 			}
+			
 			System.err.println(
 					"[cache:" + 
 					cache.size() +
