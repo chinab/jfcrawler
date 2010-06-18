@@ -8,7 +8,7 @@
 			<script/>
 			<pattern type="token" token="bbsboa"/>
 		</vertex>
-		<vertex id="board" paging="next" outlink="true">
+		<vertex id="board" paging="prev" outlink="true">
 			<script/>
 			<pattern type="token" token="bbsdoc">
 				<query-item key="key" query="board"/>

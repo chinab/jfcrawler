@@ -44,18 +44,14 @@ public abstract class Vertex {
 	
 	protected Tag tag = null;
 	
-//	protected final static String DefaultScriptSrcExpr = "//SCRIPT[@src]/attribute::src";
 	protected final static String DefaultScriptExpr = "//SCRIPT/text()";
 	protected XPathExpression scriptExpr = null;
 	
-//	protected List<UrlPattern> patterns = null;
 	protected UrlPattern pattern = null;
-//	protected MetaIdentity metaId = null;
 	protected InfoFactory infoFactory = null;
 	protected boolean     hasOutlink  = true;
 	
 	public Vertex(Element e) {
-//		patterns = new ArrayList<UrlPattern>();
 		outlinks = new ArrayList<Vertex>();
 		paging   = Paging.NONE;
 
@@ -93,10 +89,6 @@ public abstract class Vertex {
 		}
 
 		//pattern
-//		NodeList list = e.getElementsByTagName("pattern");
-//		for(int i = 0; i < list.getLength(); i++) {
-//			patterns.add(UrlPattern.getInstance((Element)list.item(i)));
-//		}
 		pattern = UrlPattern.getInstance(
 				(Element)e.getElementsByTagName("pattern").item(0));
 		try {
@@ -110,12 +102,6 @@ public abstract class Vertex {
 		return hasOutlink;
 	}
 	public boolean match(Url url) {
-//		for(UrlPattern p : patterns) {
-//			if(!p.match(url.getUri())) {
-//				return false;
-//			}
-//		}
-//		return true;
 		return pattern.match(url.getUri());
 	}
 
@@ -132,15 +118,18 @@ public abstract class Vertex {
 	}
 	
 	public Info getUrlInfo(Url url) {
-		if(infoFactory == null)
+		if(infoFactory == null) {
 			return null;
-		else
-			return infoFactory.extractInfo(pattern.extractItem(url));
+		} else {
+			Info ret = infoFactory.extractInfo(pattern.extractItem(url));
+			infoFactory.evaluate(paging, ret);
+			return ret;
+		}
 	}
 	
-	public Tag checkOutlink(Url u) {
+	public Tag checkOutlink(Url url) {
 		for(Vertex outlink : outlinks) {
-			if(outlink.match(u))
+			if(outlink.match(url))
 				return outlink.tag;
 		}
 		
@@ -148,7 +137,7 @@ public abstract class Vertex {
 		case CATALOG:
 		case PAGING:
 		case NEXT: {
-			if(this.match(u))
+			if(this.match(url))
 				return this.tag;
 		};break;
 		case NONE:
@@ -159,28 +148,14 @@ public abstract class Vertex {
 		return null;
 	}
 	
-//	public static abstract class MetaIdentity {
-//		protected List<UrlItem> keys = null;
-//		
-//		public MetaIdentity() {
-//			keys = new ArrayList<UrlItem>();
-//		}
-//		
-//		public void fill(List<UrlItem> keys) {
-//			this.keys.addAll(keys);
-//		}
-//		
-//		@Override
-//		public String toString() {
-//			return this.keys.toString();
-//		}
-//	}
-	
 	public static enum Paging {
 		NONE,
+		
 		CATALOG,
 		PAGING,
+		
 		NEXT,
+		PREV,
 	}
 	
 	protected List<Vertex> outlinks = null;
@@ -191,6 +166,8 @@ public abstract class Vertex {
 	}
 	
 	public abstract static class InfoFactory {		
+		protected static final int MAX_PAGING = 1000;
+		
 		protected UrlItem keyRef  = null;
 		protected UrlItem idRef   = null;
 		protected UrlItem pageRef = null;
@@ -198,6 +175,27 @@ public abstract class Vertex {
 		public abstract Info extractInfo(Map<UrlItem, String> values);
 		
 		public abstract void setReference(List<UrlItem> list);
+		
+		public void evaluate(Paging paging, Info info) {
+			int page = info.getPage();
+			if(page == -1) {
+				info.evaluate(0.0);
+				return;
+			} else if(page <= 0) {
+				info.evaluate(1.0);
+				return;
+			}
+			
+			switch(paging) {
+			case PREV:
+				info.evaluate(1.0 / page);
+			case NEXT:
+			case PAGING:
+				info.evaluate(page / (double)MAX_PAGING);
+			default:
+				info.evaluate(0.0);
+			}
+		}
 		
 		protected boolean setParameters(Info info, Map<UrlItem, String> values) {
 			String token = "";
@@ -225,9 +223,5 @@ public abstract class Vertex {
 			}
 			return true;
 		}
-
-//		public abstract String getCheckStmt();
-//		
-//		public abstract void setCheckStmt(PreparedStatement stmt, Info info); 
 	}
 }

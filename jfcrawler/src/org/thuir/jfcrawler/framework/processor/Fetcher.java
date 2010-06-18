@@ -21,10 +21,10 @@ public abstract class Fetcher extends BasicThread implements FetchingListener{
 	private static Logger logger = Logger.getLogger(Fetcher.class);
 
 	private static final long INTERVAL = 
-		ConfigUtil.getConfig().getLong("basic.thread-interval");
+		ConfigUtil.getCrawlerConfig().getLong("basic.thread-interval");
 
 	private static final long ACCESS_INTERVAL = 
-		ConfigUtil.getConfig().getLong("basic.accessing-interval");
+		ConfigUtil.getCrawlerConfig().getLong("basic.accessing-interval");
 
 	protected MultiThreadHttpFetcher fetcher = null;
 

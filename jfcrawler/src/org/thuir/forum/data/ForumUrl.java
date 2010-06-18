@@ -20,6 +20,24 @@ public final class ForumUrl extends Url {
 //		return this.identity;
 //	}
 	
+	
+	@Override
+	public int compareTo(Url other) {
+		if(other == null) {
+			return 1;
+		}
+		
+		if(!(other instanceof ForumUrl)) {
+			return super.compareTo(other);
+		}
+		
+		ForumUrl u = (ForumUrl)other;
+		if(forumInfo == null || u.forumInfo == null)
+			return super.compareTo(other);
+		
+		return forumInfo.compareTo(u.forumInfo);
+	}
+	
 	private Info forumInfo = null;
 	public void setForumInfo(Info info) {
 		this.forumInfo = info;

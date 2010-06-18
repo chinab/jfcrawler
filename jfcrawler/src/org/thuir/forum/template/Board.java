@@ -48,16 +48,5 @@ public final class Board extends Vertex {
 				}
 			}
 		}
-
-//		@Override
-//		public String getCheckStmt() {
-//			return null;
-//		}
-//
-//		@Override
-//		public void setCheckStmt(PreparedStatement stmt, Info info) {
-//			
-//		}
-//		
 	}
 }

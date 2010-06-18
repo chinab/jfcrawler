@@ -15,7 +15,7 @@ import org.thuir.jfcrawler.util.ConfigUtil;
  */
 public class MultiThreadHttpFetcher extends BasicThread{
 	private final static long INTERVAL = 
-		ConfigUtil.getConfig().getLong("basic.thread-interval");
+		ConfigUtil.getCrawlerConfig().getLong("basic.thread-interval");
 	private HttpClient client = null;
 
 	private FetchUnit[] threadPool = null;
@@ -26,10 +26,10 @@ public class MultiThreadHttpFetcher extends BasicThread{
 //	private boolean working = false;
 	
 	protected String userAgent = 
-		ConfigUtil.getConfig().getString("fetcher.user-agent");
+		ConfigUtil.getCrawlerConfig().getString("fetcher.user-agent");
 
 	public MultiThreadHttpFetcher() {
-		nThread = ConfigUtil.getConfig().getInt("fetcher.max-pool-size");
+		nThread = ConfigUtil.getCrawlerConfig().getInt("fetcher.max-pool-size");
 		this.setName("MultiThreadHttpFetcher");
 
 		// initialize httpclient

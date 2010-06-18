@@ -14,24 +14,29 @@ import org.apache.log4j.Logger;
 public class ConfigUtil {
 	private static final Logger logger = 
 		Logger.getLogger(ConfigUtil.class);
-	private static final String CONFIG_FILE = 
-		"./conf/crawlerConfiguration.properties";
 
-	private static Configuration config;
+	private static final String crawlerConfigLoc = "./conf/crawler.xml";
+	private static Configuration crawlerConfig;
+	private static final String databaseConfigLoc = "./conf/database.xml";
+	private static Configuration databaseConfig;
 	
 	private static HashMap<String, Object> properties = 
 		new HashMap<String, Object>();
 
 	static {
 		try {
-			config = new XMLConfiguration("./conf/crawler.xml");
+			crawlerConfig = new XMLConfiguration(crawlerConfigLoc);
+			databaseConfig = new XMLConfiguration(databaseConfigLoc);
 		}catch(ConfigurationException cex) {
-			logger.fatal("Fail to load configuration file '" + CONFIG_FILE + "'");
+			logger.fatal("Fail to load configuration file.", cex);
 		}
 	}
 
-	public static Configuration getConfig() {
-		return config;
+	public static Configuration getCrawlerConfig() {
+		return crawlerConfig;
+	}
+	public static Configuration getDatabaseConfig() {
+		return databaseConfig;
 	}
 	
 	public static void setProperty(String key, Object value) {

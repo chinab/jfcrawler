@@ -24,7 +24,7 @@ public class Page {
 	private Url url = null;
 
 	private byte[] html = null;
-	private String charset = ConfigUtil.getConfig().getString("basic.default-encode");
+	private String charset = ConfigUtil.getCrawlerConfig().getString("basic.default-encode");
 
 	public Page() {
 	}
@@ -72,7 +72,7 @@ public class Page {
 			new BufferedReader(
 					new InputStreamReader(new ByteArrayInputStream(src)));
 		String line = "";
-		String charset = ConfigUtil.getConfig().getString("basic.default-encode");
+		String charset = ConfigUtil.getCrawlerConfig().getString("basic.default-encode");
 		String temp = "";
 		try {
 			while((line = reader.readLine()) != null) {

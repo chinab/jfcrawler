@@ -71,6 +71,38 @@ public final class Article extends Vertex {
 		}
 		
 		@Override
+		public void evaluate(Paging paging, Info info) {
+			if(!(info instanceof ArticleInfo)) {
+				super.evaluate(paging, info);
+				return;
+			}
+			ArticleInfo aInfo = (ArticleInfo)info;
+			
+			double d1 = 1.0 / aInfo.getId();
+			double d2 = 0.0;
+
+			int page = aInfo.getPage();
+			if(page == -1) {
+				d2 = 0.0;
+			} else if(page <= 0) {
+				d2 = 1.0;
+			} else {
+				switch(paging) {
+				case PAGING:
+				case NEXT:
+					d2 = page / (double)MAX_PAGING;
+				case PREV:
+					d2 = 1.0 / aInfo.getPage();
+				default:
+					d2 = 0.0;
+				}
+			}
+			
+			double eval = Math.sqrt(d1 * d1 + d2 * d2);
+			info.evaluate(eval);
+		}
+
+		@Override
 		public void setReference(List<UrlItem> list) {
 			for(UrlItem i : list) {
 				if(i.key.equalsIgnoreCase("id")) {
@@ -100,16 +132,5 @@ public final class Article extends Vertex {
 				}
 			}
 		}
-		
-//		@Override
-//		public String getCheckStmt() {
-//			return null;
-//		}
-//
-//		@Override
-//		public void setCheckStmt(PreparedStatement stmt, Info info) {
-//			
-//		}
-//		
 	}
 }

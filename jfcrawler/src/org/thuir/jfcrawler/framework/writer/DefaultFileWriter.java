@@ -19,7 +19,7 @@ public class DefaultFileWriter extends Writer {
 	@Override
 	public void setRoot(String job) {
 		this.root = 
-			ConfigUtil.getConfig().getString("writer.root") 
+			ConfigUtil.getCrawlerConfig().getString("writer.root") 
 			+ File.separatorChar + job;		
 	}
 	

@@ -25,11 +25,11 @@ public class FetchUnit extends BasicThread {
 	private static Logger logger = Logger.getLogger(FetchUnit.class);
 
 	private final long INTERVAL =
-		ConfigUtil.getConfig().getInt("basic.thread-interval");		
+		ConfigUtil.getCrawlerConfig().getInt("basic.thread-interval");		
 
 	//timer
 	private final long TIMEOUT = 
-		ConfigUtil.getConfig().getInt("fetcher.max-timeout");
+		ConfigUtil.getCrawlerConfig().getInt("fetcher.max-timeout");
 	private long expired = -1l;
 
 	//httpclient

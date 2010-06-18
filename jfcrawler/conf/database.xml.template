@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+	<basic>
+		<host>jdbc:mysql://localhost:3306</host>
+		<user>root</user>
+		<pass></pass>
+	</basic>
+	<urldb>
+		<schema>forumdata</schema>
+		<table>urlstatus</table>
+	</urldb>
+	<foruminfo>
+		<schema>foruminfo</schema>
+		<article-table>article</article-table>
+		<board-table>board</board-table>
+		<urlref-table>urlref</urlref-table>
+	</foruminfo>
+</database>

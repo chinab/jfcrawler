@@ -2,7 +2,7 @@ package org.thuir.jfcrawler.util;
 
 public abstract class BasicThread extends Thread {
 	public final static long INTERVAL = 
-		ConfigUtil.getConfig().getLong("basic.thread-interval");
+		ConfigUtil.getCrawlerConfig().getLong("basic.thread-interval");
 	
 	private boolean alive = true;
 	private boolean idle = false;

@@ -24,9 +24,14 @@ public class ForumDBFilter extends Filter {
 	
 	private Connection conn = null;
 
-	private static final String forum_schema = "foruminfo";
-	private static final String article_table = "articleinfo";
-	private static final String board_table   = "boardinfo";
+	private static final String forum_schema = 
+		ConfigUtil.getDatabaseConfig().getString("foruminfo.schema");
+	private static final String article_table = 
+		ConfigUtil.getDatabaseConfig().getString("foruminfo.article-table");
+	private static final String board_table   = 
+		ConfigUtil.getDatabaseConfig().getString("foruminfo.board-table");
+	private static final String urlref_table  = 
+		ConfigUtil.getDatabaseConfig().getString("foruminfo.urlref-table");
 	
 	private static final String SQL_INSERT_A = 
 		"INSERT INTO " + article_table + 
@@ -46,7 +51,7 @@ public class ForumDBFilter extends Filter {
 	private static final String SQL_CHECK_B =
 		"SELECT * FROM " + board_table + " WHERE token = ?;";
 	private static final String SQL_INSERT_URL =
-		"INSERT INTO urlref (url, token) VALUES (?, ?)" +
+		"INSERT INTO " + urlref_table + " (url, token) VALUES (?, ?)" +
 		" ON DUPLICATE KEY UPDATE token = ?;";
 	
 	private PreparedStatement stmt_insert_a = null;
@@ -58,11 +63,11 @@ public class ForumDBFilter extends Filter {
 	
 	public void initial() throws Exception {
 		String host = 
-			ConfigUtil.getConfig().getString("url-database.host") + "/" + forum_schema;
+			ConfigUtil.getDatabaseConfig().getString("basic.host") + "/" + forum_schema;
 		String username = 
-			ConfigUtil.getConfig().getString("url-database.user");
+			ConfigUtil.getDatabaseConfig().getString("basic.user");
 		String password = 
-			ConfigUtil.getConfig().getString("url-database.pass");
+			ConfigUtil.getDatabaseConfig().getString("basic.pass");
 
 		Class.forName( "org.gjt.mm.mysql.Driver" ); 
 		conn = DriverManager.getConnection( 

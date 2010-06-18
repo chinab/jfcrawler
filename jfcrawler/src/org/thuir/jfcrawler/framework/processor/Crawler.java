@@ -72,7 +72,7 @@ public abstract class Crawler extends BasicThread {
 		super.run();
 		List<Url> urls = new ArrayList<Url>();
 		long revisit = 
-			ConfigUtil.getConfig().getLong("crawler.revisit-interval");
+			ConfigUtil.getCrawlerConfig().getLong("crawler.revisit-interval");
 		
 		int c_c = 0;
 		int s_c = 0;
