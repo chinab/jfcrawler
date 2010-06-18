@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jfcrawler>
 	<basic>
-		<accessing-interval>200</accessing-interval>
+		<accessing-interval>500</accessing-interval>
 		<thread-interval>200</thread-interval>
 		<default-encode>gbk</default-encode>
 	</basic>
@@ -11,10 +11,9 @@
 		<user-agent>jfcrawler(THUIR-bot)</user-agent>
 	</fetcher>
 	<crawler>
-		<crawler-pool-size>5</crawler-pool-size>
 		<revisit-interval>86400000</revisit-interval>
 	</crawler>
 	<writer>
-		<root>jobs/</root>
+		<root>../jobs/</root>
 	</writer>
 </jfcrawler>
