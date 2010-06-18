@@ -1,7 +1,5 @@
 package org.thuir.forum.util;
 
-import java.util.HashMap;
-
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
