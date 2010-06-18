@@ -11,6 +11,7 @@
 		<user-agent>jfcrawler(THUIR-bot)</user-agent>
 	</fetcher>
 	<crawler>
+		<crawler-pool-size>5</crawler-pool-size>
 		<revisit-interval>86400000</revisit-interval>
 	</crawler>
 	<writer>

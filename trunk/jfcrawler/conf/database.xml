@@ -3,7 +3,7 @@
 	<basic>
 		<host>jdbc:mysql://localhost:3306</host>
 		<user>root</user>
-		<pass></pass>
+		<pass>root</pass>
 	</basic>
 	<urldb>
 		<schema>forumdata</schema>
