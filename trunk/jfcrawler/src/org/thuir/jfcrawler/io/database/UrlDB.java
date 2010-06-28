@@ -15,9 +15,9 @@ public class UrlDB {
 	private Connection conn = null;
 
 	private static final String schema = 
-		ConfigUtil.getCrawlerConfig().getString("urldb.schema");
+		ConfigUtil.getDatabaseConfig().getString("urldb.schema");
 	private static final String table = 
-		ConfigUtil.getCrawlerConfig().getString("urldb.table");
+		ConfigUtil.getDatabaseConfig().getString("urldb.table");
 
 	private static final String SQL_LOAD = 
 		"SELECT * FROM " + table + " WHERE url = ?;";
