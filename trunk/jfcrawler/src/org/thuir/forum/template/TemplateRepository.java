@@ -53,6 +53,9 @@ public class TemplateRepository {
 		File[] tmplFiles = location.listFiles();
 		
 		for(File f : tmplFiles) {
+			if(!f.isFile())
+				continue;
+			
 			InputStream in;
 			try {
 				in = new FileInputStream(f);
