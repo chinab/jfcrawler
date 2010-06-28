@@ -76,7 +76,7 @@ public class RegexUrlPattern extends UrlPattern {
 		if(matcher.find()) {
 			for(UrlItem i : items) {
 				RegexItem r = (RegexItem)i;
-				k += r.ignore + 1;
+				k += r.skip + 1;
 
 				ret.put(r, matcher.group(k));
 			}
@@ -91,7 +91,7 @@ public class RegexUrlPattern extends UrlPattern {
 	
 	public static class RegexItem extends UrlItem {
 		private String regexStr = null;
-		private int ignore = 0;
+		private int skip = 0;
 		
 		public RegexItem(Element e) {
 			super(e);
@@ -100,9 +100,9 @@ public class RegexUrlPattern extends UrlPattern {
 
 			regexStr = e.getAttribute("regex");
 			try {
-				ignore = Integer.parseInt(e.getAttribute("ingore"));
+				skip = Integer.parseInt(e.getAttribute("skip"));
 			} catch(Exception e1) {
-				ignore = 0;
+				skip = 0;
 			}
 		}
 		

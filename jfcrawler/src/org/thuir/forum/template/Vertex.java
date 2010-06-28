@@ -46,6 +46,7 @@ public abstract class Vertex {
 	
 	protected final static String DefaultScriptExpr = "//SCRIPT/text()";
 	protected XPathExpression scriptExpr = null;
+	protected XPathExpression hrefExpr = null;
 	
 	protected UrlPattern pattern = null;
 	protected InfoFactory infoFactory = null;
@@ -85,9 +86,30 @@ public abstract class Vertex {
 				logger.error("error while compiling script xpath.", e1);
 			}
 		} else {
+			try {
+				scriptExpr = Factory.getXPathExpression(DefaultScriptExpr);
+			} catch (XPathExpressionException e1) {
+				logger.error("error while compiling script xpath.", e1);
+			}
+		}
+		
+		//href expression
+		NodeList hrefNodes = e.getElementsByTagName("link");
+		if(hrefNodes.getLength() != 0) {
+			Element href = (Element)hrefNodes.item(0);
+			String xpathExpr = href.getAttribute("xpath");
+			try {
+				if(xpathExpr == null || xpathExpr.length() == 0) {
+					hrefExpr = null;
+				} else {
+					scriptExpr = Factory.getXPathExpression(xpathExpr);
+				}
+			} catch (XPathExpressionException e1) {
+				logger.error("error while compiling script xpath.", e1);
+			}
+		} else {
 			scriptExpr = null;
 		}
-
 		//pattern
 		pattern = UrlPattern.getInstance(
 				(Element)e.getElementsByTagName("pattern").item(0));
@@ -115,6 +137,10 @@ public abstract class Vertex {
 	
 	public XPathExpression getScriptExpr() {
 		return scriptExpr;
+	}
+	
+	public XPathExpression getHrefExpr() {
+		return hrefExpr;
 	}
 	
 	public Info getUrlInfo(Url url) {

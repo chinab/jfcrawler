@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<forum id="newsmth">
+<forum id="newsmth" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="schema/template.xsd">
 	<sites>
 		<site url="http://www.newsmth.net/bbssec.php"/>
 	</sites>
 	<sitemap>
 		<vertex id="catalog" paging="catalog" outlink="true">
-			<script/>
+			<script xpath="//SCRIPT/text()"/>
 			<pattern type="token" token="bbsboa"/>
 		</vertex>
 		<vertex id="board" paging="prev" outlink="true">
-			<script/>
+			<script xpath="//SCRIPT/text()"/>
 			<pattern type="token" token="bbsdoc">
 				<query-item key="key" query="board"/>
 				<query-item key="page" query="page"/>

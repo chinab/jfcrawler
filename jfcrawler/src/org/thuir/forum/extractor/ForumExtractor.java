@@ -36,12 +36,12 @@ public class ForumExtractor extends HTMLExtractor {
 	private JavaScriptRepository jsRepository = JavaScriptRepository.getRepository();
 
 	private XPathExpression scriptSrcExpr = null;
-	private XPathExpression hrefExpr = null;
+	private XPathExpression defaultHrefExpr = null;
 
 	public ForumExtractor() {
 		try {
 			scriptSrcExpr = Factory.getXPathExpression("//SCRIPT[@src]/attribute::src");
-			hrefExpr = Factory.getXPathExpression("//A[@href]/attribute::href");
+			defaultHrefExpr = Factory.getXPathExpression("//A[@href]/attribute::href");
 		} catch (XPathExpressionException e) {
 			logger.error("error while compiling xpath.", e);
 		}
@@ -118,6 +118,8 @@ public class ForumExtractor extends HTMLExtractor {
 			}
 		}
 
+		XPathExpression hrefExpr = vertex.getHrefExpr();
+		hrefExpr = (hrefExpr == null)?defaultHrefExpr:hrefExpr;
 		try {
 			NodeList nodes = (NodeList)hrefExpr.evaluate(doc, XPathConstants.NODESET);
 			len = nodes.getLength();
