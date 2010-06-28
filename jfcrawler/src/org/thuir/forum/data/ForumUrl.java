@@ -11,15 +11,16 @@ public final class ForumUrl extends Url {
 	public static void registerToUrlFactory() {
 		Url.setUrlClass(ForumUrl.class);
 	}
+
+	private boolean instant = false;
 	
-//	private Identity identity = null;
-//	public void setIdentity(Identity identity) {
-//		this.identity = identity;
-//	}
-//	public Identity getIdentity() {
-//		return this.identity;
-//	}
+	public void setInstant(boolean i) {
+		this.instant = i;
+	}
 	
+	public boolean isInstant() {
+		return this.instant;
+	}
 	
 	@Override
 	public int compareTo(Url other) {
