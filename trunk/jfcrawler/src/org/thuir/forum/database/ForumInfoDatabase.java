@@ -148,7 +148,7 @@ public class ForumInfoDatabase {
 		}
 	}
 	
-	public void insert(Info info, String url) {
+	public synchronized void insert(Info info, String url) {
 		try {
 			if(info instanceof ArticleInfo) {
 				ArticleInfo aInfo = (ArticleInfo)info;
@@ -198,7 +198,7 @@ public class ForumInfoDatabase {
 		}
 	}
 	
-	public boolean check(Info info) {
+	public synchronized boolean check(Info info) {
 		try {
 			if(info instanceof ArticleInfo) {
 				stmt_check_a.setString(1, info.getToken());

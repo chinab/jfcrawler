@@ -1,6 +1,5 @@
 package org.thuir.forum.filter;
 
-import org.thuir.forum.data.BoardInfo;
 import org.thuir.forum.data.ForumUrl;
 import org.thuir.forum.data.Info;
 import org.thuir.forum.database.ForumInfoDatabase;
