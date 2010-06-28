@@ -134,9 +134,18 @@ public abstract class Vertex {
 		}
 		
 		switch(paging) {
-		case CATALOG:
+		case CATALOG: {
+			if(this.match(url))
+				return this.tag;
+		};break;
 		case PAGING:
 		case NEXT: {
+			//TODO campare pagination
+			if(this.match(url))
+				return this.tag;
+		};break;
+		case PREV: {
+			//TODO campare pagination
 			if(this.match(url))
 				return this.tag;
 		};break;

@@ -1,6 +1,8 @@
 package org.thuir.jfcrawler.framework;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.thuir.jfcrawler.data.BadUrlFormatException;
@@ -38,11 +40,19 @@ public abstract class AbstractJFCrawler extends Thread {
 	protected Cache cache = null;
 
 	protected Frontier frontier = null;
+	
+	protected List<BasicThread> deamons = null;
 
 	public AbstractJFCrawler(String jobName) {
 		this.jobName = jobName;
+		
+		deamons = new ArrayList<BasicThread>();
 	}
 
+	public void addDeamon(BasicThread thread) {
+		deamons.add(thread);
+	}
+	
 	public void initialize() {
 		Factory.initAllModuleWithDefault();
 		cache = Factory.getCacheInstance();
@@ -104,6 +114,10 @@ public abstract class AbstractJFCrawler extends Thread {
 			p.start();
 		}
 		fetcher.start();
+		for(BasicThread t : deamons) {
+			t.start();
+		}
+		
 		int accumulate = 0;
 
 		while(true) {
@@ -130,14 +144,12 @@ public abstract class AbstractJFCrawler extends Thread {
 			System.err.println(
 					"[cache:" + 
 					cache.size() +
-					"][frontier:" + 
-					frontier.size() + 
-			"]");
-			logger.info("[cache:" + 
-					cache.size() +
-					"][frontier:" + 
-					frontier.size() + 
-			"]");
+					"]" + frontier.toString()
+			);
+//			logger.info("[cache:" + 
+//					cache.size() +
+//					"]" + frontier.toString() 
+//			);
 			boolean allIdle = true;
 			for(Crawler p : crawlerPool) {
 				if(!p.idle()) {
@@ -152,6 +164,9 @@ public abstract class AbstractJFCrawler extends Thread {
 					&& allIdle ) {
 				if(accumulate >= 2) {
 					System.err.println("finish");
+					for(BasicThread t : deamons) {
+						t.close();
+					}
 					for(Crawler p : crawlerPool) {
 						p.close();
 					}
@@ -217,5 +232,42 @@ public abstract class AbstractJFCrawler extends Thread {
 			c.addClassifier(l);
 		}
 	}
+
+	public void addExtractor(Class<? extends Extractor> clazz) {
+		try {
+			for(Crawler c : crawlerPool) {
+				c.addExtractor(clazz.newInstance());
+			}
+		} catch (InstantiationException e) {
+			logger.error(e);
+		} catch (IllegalAccessException e) {
+			logger.error(e);
+		}
+	}
+
+	public void addFilter(Class<? extends Filter> clazz) {
+		try {
+			for(Crawler c : crawlerPool) {
+				c.addFilter(clazz.newInstance());
+			}
+		} catch (InstantiationException e) {
+			logger.error(e);
+		} catch (IllegalAccessException e) {
+			logger.error(e);
+		}
+	}
+
+	public void addClassifier(Class<? extends Classifier> clazz) {
+		try {
+			for(Crawler c : crawlerPool) {
+				c.addClassifier(clazz.newInstance());
+			}
+		} catch (InstantiationException e) {
+			logger.error(e);
+		} catch (IllegalAccessException e) {
+			logger.error(e);
+		}
+	}
+
 
 }

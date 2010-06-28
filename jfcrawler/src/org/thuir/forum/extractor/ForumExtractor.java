@@ -136,7 +136,6 @@ public class ForumExtractor extends HTMLExtractor {
 				u.setForumInfo(tmpl.getUrlInfo(temp, u));
 				
 //				Identity.synchronize(u.getIdentity(), url.getIdentity());
-
 				ret.add(u);
 			}
 		} catch(BadUrlFormatException e) {
