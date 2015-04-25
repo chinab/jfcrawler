@@ -1,0 +1,1 @@
+a simple crawler framework, which supports non-blocking io(using jetty httpclient), multi-thread and is easy to extend.
